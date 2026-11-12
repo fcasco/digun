@@ -14,7 +14,7 @@ Styled in **Theme #12 (Retro Terminal Console)** featuring deep CRT phosphor aes
   - Automatically schedules review intervals from Box 1 (1 day) to Box 5 (14 days / Mastered).
   - Four rating choices: `[1] Again` (reset to Box 1), `[2] Hard` (maintain interval), `[3] Good` (advance box), and `[4] Easy` (fast-track +2 boxes).
   - Due card queue detection and session graduation analytics.
-- **22+ Curated Strategic Reframes** across 5 psychological pillars:
+- **46+ Curated Strategic Reframes** across 5 psychological pillars:
   1. *Apologies to Gratitude* (e.g. `"Sorry I'm late"` $\to$ `"Thank you for waiting for me"`)
   2. *Confidence & Assertiveness* (e.g. `"I might be wrong, but..."` $\to$ `"Here's what I understand..."`)
   3. *Diplomatic Disagreement* (e.g. `"You're wrong"` $\to$ `"I see it differently"`)

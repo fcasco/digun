@@ -34,6 +34,14 @@ export const leitnerStorage = {
         this.saveCards(DEFAULT_CARDS);
         return DEFAULT_CARDS;
       }
+      // Auto-merge any newly added default cards into the user's stored deck
+      const existingIds = new Set(parsed.map(c => c.id));
+      const missingDefaults = DEFAULT_CARDS.filter(c => !existingIds.has(c.id));
+      if (missingDefaults.length > 0) {
+        const merged = [...parsed, ...missingDefaults];
+        this.saveCards(merged);
+        return merged;
+      }
       return parsed;
     } catch {
       return DEFAULT_CARDS;

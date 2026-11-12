@@ -243,7 +243,7 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
               className="w-full sm:w-auto px-5 py-2.5 rounded bg-zinc-100 hover:bg-white text-zinc-950 font-bold text-xs tracking-wider transition-colors cursor-pointer flex items-center justify-center gap-2"
             >
               <RefreshCcw className="w-4 h-4 text-amber-600" />
-              <span>DRILL ALL 22+ REFRAMES</span>
+              <span>DRILL ALL {cards.length}+ REFRAMES</span>
             </button>
             <button
               onClick={() => {
