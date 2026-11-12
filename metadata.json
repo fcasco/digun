@@ -1,0 +1,6 @@
+{
+  "name": "Articulation Training: Strategic Reframing Terminal",
+  "description": "Master strategic communication reframes using spaced repetition flashcards, Leitner retention mechanics, speech synthesis, and retro terminal aesthetics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
