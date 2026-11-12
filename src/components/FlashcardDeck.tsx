@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { 
   Volume2, 
   RotateCw, 
-  ArrowRight, 
   Sparkles, 
   Trophy, 
   Layers, 
@@ -59,11 +58,10 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
     if (studyMode === 'due') {
       const now = Date.now();
       const dueCards = pool.filter(c => !c.lastReviewedAt || c.timesReviewed === 0 || new Date(c.nextDueAt).getTime() <= now);
-      // If no cards are strictly due, fallback to lowest boxes first so user is never stuck
       if (dueCards.length > 0) {
         pool = dueCards;
       } else {
-        // Sort by box ascending (prioritize Box 1 & 2)
+        // Fallback to lowest boxes first so user is never stranded
         pool = pool.sort((a, b) => a.box - b.box).slice(0, 10);
       }
     }
@@ -133,7 +131,7 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
       setTimeout(() => soundEffects.playGraduationChime(), 200);
     }
 
-    // If rated 'again', re-append to the end of the current session queue for reinforcement
+    // If rated 'again', re-append to the session queue for reinforcement
     let nextQueue = [...activeQueue];
     if (rating === 'again') {
       nextQueue.push(currentCard);
@@ -144,7 +142,6 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
       setCurrentIndex(prev => prev + 1);
       setIsFlipped(false);
     } else {
-      // Session finished
       setIsSessionFinished(true);
       onSessionComplete({
         ...sessionStats,
@@ -156,7 +153,6 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
   // Keyboard shortcut listener
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Ignore if inside input/textarea
       if (['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement)?.tagName)) return;
 
       if (e.code === 'Space') {
@@ -192,63 +188,61 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
   }, [handleFlip, handleRate, handleSpeak, isFlipped, currentCard]);
 
   // Session summary view
-  if (isSessionFinished || activeQueue.length === 0) {
+  if (isSessionFinished || activeQueue.length === 0 || !currentCard) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-8 font-mono">
-        <div className="border border-emerald-500/40 bg-[#0c1611] rounded-lg p-6 sm:p-8 shadow-2xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-48 h-48 bg-emerald-500/5 blur-3xl pointer-events-none" />
-
+        <div className="border border-zinc-800 bg-zinc-950 rounded-lg p-6 sm:p-8 shadow-2xl relative overflow-hidden">
           {/* Header */}
-          <div className="flex items-center gap-3 text-emerald-400 mb-4">
-            <Trophy className="w-6 h-6 glow-emerald" />
-            <h2 className="text-xl sm:text-2xl font-bold tracking-wider glow-emerald">
+          <div className="flex items-center gap-3 text-zinc-100 mb-4">
+            <Trophy className="w-5 h-5 text-amber-400" />
+            <h2 className="text-xl sm:text-2xl font-bold tracking-wider text-zinc-100">
               SESSION DISPATCH: COMPLETE
             </h2>
           </div>
 
-          <p className="text-sm text-[#8fa397] mb-6 leading-relaxed">
-            Spaced repetition cycle executed. Your neuromuscular speech circuits and subconscious communication defaults have been updated through deliberate reframing.
+          <p className="text-sm text-zinc-400 mb-6 leading-relaxed">
+            Spaced repetition cycle executed. Your neuromuscular speech circuits and subconscious communication defaults have been reinforced through deliberate reframing.
           </p>
 
-          {/* Metrics grid */}
+          {/* Metrics grid (Monochrome with accent focus) */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
-            <div className="border border-[#1d3126] bg-[#09100c] p-3 rounded text-center">
-              <div className="text-xs text-[#708579] mb-1">TOTAL DRILLS</div>
-              <div className="text-2xl font-bold text-emerald-400 tabular-nums">
+            <div className="border border-zinc-800 bg-zinc-900/50 p-3 rounded text-center">
+              <div className="text-xs text-zinc-500 mb-1">TOTAL DRILLS</div>
+              <div className="text-2xl font-bold text-zinc-100 tabular-nums">
                 {sessionStats.cardsReviewed}
               </div>
             </div>
-            <div className="border border-[#1d3126] bg-[#09100c] p-3 rounded text-center">
-              <div className="text-xs text-[#708579] mb-1">ADVANCED [BOX+]</div>
-              <div className="text-2xl font-bold text-sky-400 tabular-nums">
+            <div className="border border-zinc-800 bg-zinc-900/50 p-3 rounded text-center">
+              <div className="text-xs text-zinc-500 mb-1">ADVANCED [BOX+]</div>
+              <div className="text-2xl font-bold text-amber-400 tabular-nums">
                 {sessionStats.goodCount + sessionStats.easyCount}
               </div>
             </div>
-            <div className="border border-[#1d3126] bg-[#09100c] p-3 rounded text-center">
-              <div className="text-xs text-[#708579] mb-1">REPEATS [AGAIN]</div>
-              <div className="text-2xl font-bold text-amber-400 tabular-nums">
+            <div className="border border-zinc-800 bg-zinc-900/50 p-3 rounded text-center">
+              <div className="text-xs text-zinc-500 mb-1">REPEATS [AGAIN]</div>
+              <div className="text-2xl font-bold text-zinc-400 tabular-nums">
                 {sessionStats.againCount}
               </div>
             </div>
-            <div className="border border-[#1d3126] bg-[#09100c] p-3 rounded text-center">
-              <div className="text-xs text-[#708579] mb-1">BOX 5 GRADUATES</div>
-              <div className="text-2xl font-bold text-fuchsia-400 tabular-nums">
+            <div className="border border-zinc-800 bg-zinc-900/50 p-3 rounded text-center">
+              <div className="text-xs text-zinc-500 mb-1">BOX 5 GRADUATES</div>
+              <div className="text-2xl font-bold text-zinc-100 tabular-nums">
                 {sessionStats.promotedToBox5}
               </div>
             </div>
           </div>
 
           {/* Action CTAs */}
-          <div className="flex flex-col sm:flex-row items-center gap-3 pt-4 border-t border-[#1a2c22]">
+          <div className="flex flex-col sm:flex-row items-center gap-3 pt-4 border-t border-zinc-800">
             <button
               onClick={() => {
                 soundEffects.playKeyClick();
                 setStudyMode('all');
                 buildQueue();
               }}
-              className="w-full sm:w-auto px-5 py-2.5 rounded bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs tracking-wider transition-colors cursor-pointer flex items-center justify-center gap-2 glow-box-emerald"
+              className="w-full sm:w-auto px-5 py-2.5 rounded bg-zinc-100 hover:bg-white text-zinc-950 font-bold text-xs tracking-wider transition-colors cursor-pointer flex items-center justify-center gap-2"
             >
-              <RefreshCcw className="w-4 h-4" />
+              <RefreshCcw className="w-4 h-4 text-amber-600" />
               <span>DRILL ALL 22+ REFRAMES</span>
             </button>
             <button
@@ -256,7 +250,7 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
                 soundEffects.playKeyClick();
                 onOpenVault();
               }}
-              className="w-full sm:w-auto px-5 py-2.5 rounded border border-[#243d2f] hover:border-emerald-500/50 bg-[#0e1813] text-emerald-300 hover:text-emerald-200 text-xs tracking-wider transition-colors cursor-pointer flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-5 py-2.5 rounded border border-zinc-700 hover:border-zinc-500 bg-zinc-900 text-zinc-200 text-xs tracking-wider transition-colors cursor-pointer flex items-center justify-center gap-2"
             >
               <Layers className="w-4 h-4" />
               <span>INSPECT LEITNER VAULT</span>
@@ -271,11 +265,11 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-6 font-mono">
-      {/* HUD Toolbar: Mode Selection, Category Filter, and Rate Speed */}
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-5 border border-[#1b2c22] bg-[#09110d] p-3 rounded">
+      {/* HUD Toolbar: Monochrome with single-line controls */}
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-5 border border-zinc-800/90 bg-zinc-950 p-3 rounded">
         {/* Left: Study Mode & Queue Stats */}
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1 bg-[#0f1b15] p-0.5 rounded border border-[#1e3025]">
+          <div className="flex items-center gap-1 bg-zinc-900 p-0.5 rounded border border-zinc-800">
             <button
               onClick={() => {
                 soundEffects.playKeyClick();
@@ -283,8 +277,8 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
               }}
               className={`px-2.5 py-1 text-xs rounded transition-colors cursor-pointer ${
                 studyMode === 'due'
-                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
-                  : 'text-[#7d9185] hover:text-emerald-400'
+                  ? 'bg-zinc-800 text-zinc-100 border border-zinc-700'
+                  : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
               DUE CARDS
@@ -296,31 +290,31 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
               }}
               className={`px-2.5 py-1 text-xs rounded transition-colors cursor-pointer ${
                 studyMode === 'all'
-                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
-                  : 'text-[#7d9185] hover:text-emerald-400'
+                  ? 'bg-zinc-800 text-zinc-100 border border-zinc-700'
+                  : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
               FREE DRILL
             </button>
           </div>
 
-          <div className="text-xs text-[#718579] hidden sm:block">
-            CARD <span className="text-emerald-400 font-bold tabular-nums">{currentIndex + 1}</span> / {activeQueue.length}
+          <div className="text-xs text-zinc-400 hidden sm:block">
+            CARD <span className="text-zinc-100 font-bold tabular-nums">{currentIndex + 1}</span> / {activeQueue.length}
           </div>
         </div>
 
         {/* Right: Filter Category & Speech Rate */}
         <div className="flex items-center gap-2">
           {/* Category Selector */}
-          <div className="flex items-center gap-1.5 text-xs text-[#82968a]">
-            <SlidersHorizontal className="w-3.5 h-3.5 text-[#5e7467]" />
+          <div className="flex items-center gap-1.5 text-xs text-zinc-400">
+            <SlidersHorizontal className="w-3.5 h-3.5 text-zinc-500" />
             <select
               value={filterCategory}
               onChange={(e) => {
                 soundEffects.playKeyClick();
                 setFilterCategory(e.target.value);
               }}
-              className="bg-[#0e1713] border border-[#203428] text-xs text-[#9eb5a8] rounded px-2 py-1 focus:outline-none focus:border-emerald-500 cursor-pointer"
+              className="bg-zinc-900 border border-zinc-800 text-xs text-zinc-300 rounded px-2 py-1 focus:outline-none focus:border-zinc-600 cursor-pointer"
             >
               <option value="all">ALL CATEGORIES</option>
               {CATEGORIES.map(cat => (
@@ -336,17 +330,17 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
               setSpeechRate(prev => (prev === 0.8 ? 1.0 : prev === 1.0 ? 1.2 : 0.8));
             }}
             title="Adjust Speech Cadence"
-            className="text-[11px] px-2 py-1 rounded border border-[#203428] bg-[#0e1713] text-[#8fa396] hover:text-emerald-300 hover:border-emerald-500/40 transition-colors cursor-pointer whitespace-nowrap"
+            className="text-[11px] px-2 py-1 rounded border border-zinc-800 bg-zinc-900 text-zinc-300 hover:text-white hover:border-zinc-700 transition-colors cursor-pointer whitespace-nowrap"
           >
-            VOICE: <span className="text-emerald-400">{speechRate}x</span>
+            VOICE: <span className="text-zinc-100 font-bold">{speechRate}x</span>
           </button>
         </div>
       </div>
 
-      {/* Progress Track */}
-      <div className="w-full bg-[#101b15] h-1.5 rounded-full overflow-hidden mb-6 border border-[#1b2b22]">
+      {/* Progress Track (Monochrome) */}
+      <div className="w-full bg-zinc-900 h-1.5 rounded-full overflow-hidden mb-6 border border-zinc-800">
         <div
-          className="bg-emerald-500 h-full transition-all duration-300 glow-emerald"
+          className="bg-zinc-300 h-full transition-all duration-300"
           style={{ width: `${progressPercent}%` }}
         />
       </div>
@@ -360,35 +354,33 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
           }`}
         >
           {/* ================= CARD FRONT (Danger Phrase & Scenario Context) ================= */}
-          <div className="absolute inset-0 w-full h-full rounded-lg border-2 border-[#203629] hover:border-emerald-500/40 bg-gradient-to-b from-[#0b1410] to-[#070c09] p-6 sm:p-8 flex flex-col justify-between backface-hidden shadow-2xl transition-all">
+          <div className="absolute inset-0 w-full h-full rounded-lg border border-zinc-800 hover:border-zinc-600 bg-zinc-950 p-6 sm:p-8 flex flex-col justify-between backface-hidden shadow-2xl transition-all">
             
-            {/* Top metadata strip: Unboxed text separated by dots/brackets (Anti-slop) */}
-            <div className="flex items-center justify-between text-xs text-[#718679] border-b border-[#18281f] pb-3">
+            {/* Top metadata strip (Zero-pill clean typography) */}
+            <div className="flex items-center justify-between text-xs text-zinc-400 border-b border-zinc-850 pb-3">
               <div className="flex items-center gap-2">
-                <span className="text-emerald-400 font-bold">[BOX {currentCard.box}]</span>
+                <span className="text-zinc-100 font-bold">[BOX {currentCard.box}]</span>
                 <span>·</span>
                 <span>{currentCard.categoryLabel.toUpperCase()}</span>
                 <span>·</span>
                 <span className="hidden sm:inline">STREAK: {currentCard.streak}</span>
               </div>
-              <div className="flex items-center gap-1.5 text-amber-400/90">
-                <span className="w-2 h-2 rounded-full bg-amber-400/70" />
+              <div className="flex items-center gap-1.5 text-zinc-400 text-[11px]">
+                <span className="w-1.5 h-1.5 rounded-full bg-zinc-500" />
                 <span>TRIGGER STATE</span>
               </div>
             </div>
 
             {/* Middle: Scenario & Danger Phrase */}
             <div className="py-4 my-auto">
-              {/* Context prompt */}
-              <div className="text-xs uppercase tracking-wider text-[#698072] mb-3">
+              <div className="text-xs uppercase tracking-wider text-zinc-500 mb-3">
                 SITUATION / CONVERSATIONAL TRIGGER:
               </div>
-              <div className="text-sm sm:text-base text-[#c1d1c8] mb-6 leading-relaxed italic border-l-2 border-amber-500/40 pl-3">
+              <div className="text-sm sm:text-base text-zinc-300 mb-6 leading-relaxed italic border-l-2 border-zinc-700 pl-3">
                 "{currentCard.context}"
               </div>
 
-              {/* The Danger Phrase */}
-              <div className="text-xs uppercase tracking-wider text-amber-400/90 mb-2 font-bold flex items-center justify-between">
+              <div className="text-xs uppercase tracking-wider text-zinc-400 mb-2 font-bold flex items-center justify-between">
                 <span>DON'T SAY (DANGER PHRASE):</span>
                 <button
                   type="button"
@@ -396,26 +388,26 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
                     e.stopPropagation();
                     handleSpeak(currentCard.dangerPhrase);
                   }}
-                  className="text-amber-400 hover:text-amber-300 p-1 rounded hover:bg-amber-950/40 transition-colors"
+                  className="text-zinc-400 hover:text-white p-1 rounded hover:bg-zinc-900 transition-colors"
                   title="Listen to trigger phrase"
                 >
                   <Volume2 className="w-4 h-4" />
                 </button>
               </div>
-              <div className="text-2xl sm:text-3xl font-bold text-amber-300 tracking-wide font-mono glow-amber leading-snug">
+              <div className="text-2xl sm:text-3xl font-bold text-zinc-100 tracking-wide font-mono leading-snug">
                 "{currentCard.dangerPhrase}"
               </div>
             </div>
 
             {/* Bottom prompt to flip */}
-            <div className="pt-4 border-t border-[#18281f] flex items-center justify-between text-xs text-[#6e8577]">
+            <div className="pt-4 border-t border-zinc-850 flex items-center justify-between text-xs text-zinc-500">
               <div className="flex items-center gap-2">
-                <span className="px-1.5 py-0.5 rounded bg-[#13221a] text-emerald-400 border border-emerald-500/30 text-[10px]">
+                <span className="px-1.5 py-0.5 rounded bg-zinc-900 text-zinc-300 border border-zinc-750 text-[10px]">
                   SPACE
                 </span>
                 <span>PRESS SPACEBAR OR CLICK TO REVEAL REFRAME</span>
               </div>
-              <div className="flex items-center gap-1 text-emerald-400 hover:text-emerald-300">
+              <div className="flex items-center gap-1 text-zinc-300 hover:text-white">
                 <span>REVEAL</span>
                 <RotateCw className="w-3.5 h-3.5" />
               </div>
@@ -424,14 +416,14 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
           </div>
 
           {/* ================= CARD BACK (Power Reframe, Psychology, Delivery) ================= */}
-          <div className="absolute inset-0 w-full h-full rounded-lg border-2 border-emerald-500/50 bg-gradient-to-b from-[#0c1812] to-[#070e0a] p-6 sm:p-8 flex flex-col justify-between backface-hidden rotate-y-180 shadow-2xl transition-all glow-box-emerald">
+          <div className="absolute inset-0 w-full h-full rounded-lg border border-zinc-700 bg-zinc-950 p-6 sm:p-8 flex flex-col justify-between backface-hidden rotate-y-180 shadow-2xl transition-all">
             
             {/* Top metadata strip */}
-            <div className="flex items-center justify-between text-xs text-[#718679] border-b border-[#1c3325] pb-3">
+            <div className="flex items-center justify-between text-xs text-zinc-400 border-b border-zinc-850 pb-3">
               <div className="flex items-center gap-2">
-                <span className="text-emerald-400 font-bold">[BOX {currentCard.box}]</span>
+                <span className="text-zinc-100 font-bold">[BOX {currentCard.box}]</span>
                 <span>·</span>
-                <span className="text-emerald-300">{currentCard.psychologicalShift.toUpperCase()}</span>
+                <span className="text-zinc-300">{currentCard.psychologicalShift.toUpperCase()}</span>
               </div>
               
               <div className="flex items-center gap-2">
@@ -443,8 +435,8 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
                   }}
                   className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-xs transition-colors cursor-pointer border ${
                     isSpeaking 
-                      ? 'bg-emerald-500 text-slate-950 border-emerald-400 font-bold'
-                      : 'bg-[#12241b] text-emerald-300 border-emerald-500/40 hover:bg-[#193225]'
+                      ? 'bg-zinc-100 text-zinc-950 border-white font-bold'
+                      : 'bg-zinc-900 text-zinc-200 border-zinc-750 hover:bg-zinc-800'
                   }`}
                   title="Listen to Strategic Pronunciation [A]"
                 >
@@ -456,53 +448,55 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
 
             {/* Middle: Power Phrase, Psychological Rationale, Delivery Tip */}
             <div className="py-2 my-auto">
-              <div className="text-xs uppercase tracking-wider text-emerald-400 font-bold mb-1.5">
-                SAY INSTEAD (POWER REFRAME):
+              {/* Say Instead with focused amber accent title */}
+              <div className="text-xs uppercase tracking-wider text-amber-400 font-bold mb-1.5 flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                <span>SAY INSTEAD (POWER REFRAME):</span>
               </div>
-              <div className="text-2xl sm:text-3xl font-bold text-emerald-300 tracking-wide font-mono glow-emerald mb-4 leading-snug">
+              <div className="text-2xl sm:text-3xl font-bold text-white tracking-wide font-mono mb-4 leading-snug">
                 "{currentCard.powerPhrase}"
               </div>
 
-              {/* Rationale & Psychological Mechanism */}
-              <div className="mb-3 bg-[#0a130f] border border-[#1b3124] p-3 rounded">
-                <div className="text-[11px] uppercase tracking-wider text-emerald-400 font-bold mb-1 flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5" />
+              {/* Rationale & Psychological Mechanism (Clean monochrome card) */}
+              <div className="mb-3 bg-zinc-900/60 border border-zinc-800 p-3 rounded">
+                <div className="text-[11px] uppercase tracking-wider text-zinc-300 font-bold mb-1 flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-zinc-400" />
                   <span>THE PSYCHOLOGICAL MECHANISM (THE "WHY"):</span>
                 </div>
-                <p className="text-xs text-[#a9c0b2] leading-relaxed">
+                <p className="text-xs text-zinc-300 leading-relaxed">
                   {currentCard.rationale}
                 </p>
               </div>
 
               {/* Delivery and Cadence Advice */}
-              <div className="bg-[#0a130f] border border-[#1b3124] p-3 rounded">
-                <div className="text-[11px] uppercase tracking-wider text-sky-400 font-bold mb-1 flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
+              <div className="bg-zinc-900/60 border border-zinc-800 p-3 rounded">
+                <div className="text-[11px] uppercase tracking-wider text-zinc-300 font-bold mb-1 flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-zinc-400" />
                   <span>DELIVERY & VOCAL CADENCE:</span>
                 </div>
-                <p className="text-xs text-[#a9c0b2] leading-relaxed">
+                <p className="text-xs text-zinc-300 leading-relaxed">
                   {currentCard.deliveryTip}
                 </p>
               </div>
             </div>
 
             {/* Bottom: Instructions */}
-            <div className="pt-2 border-t border-[#1c3325] flex items-center justify-between text-xs text-[#718679]">
+            <div className="pt-2 border-t border-zinc-850 flex items-center justify-between text-xs text-zinc-500">
               <span>GRADE YOUR RECALL READINESS BELOW</span>
-              <span className="text-emerald-400 font-mono">[HOTKEYS 1–4]</span>
+              <span className="text-zinc-300 font-mono">[HOTKEYS 1–4]</span>
             </div>
 
           </div>
         </div>
       </div>
 
-      {/* Leitner Rating Decision Console (Shows after flip, or can be triggered anytime) */}
-      <div className="border border-[#1e3226] bg-[#0a130f] p-4 rounded-lg">
-        <div className="flex items-center justify-between text-xs text-[#758a7d] mb-3">
-          <span className="font-bold uppercase tracking-wider text-emerald-400/90">
+      {/* Leitner Rating Decision Console (Clean monochrome buttons with subtle accent focus) */}
+      <div className="border border-zinc-800 bg-zinc-950 p-4 rounded-lg">
+        <div className="flex items-center justify-between text-xs text-zinc-400 mb-3">
+          <span className="font-bold uppercase tracking-wider text-zinc-200">
             LEITNER RETENTION RATING:
           </span>
-          <span className="text-[11px]">
+          <span className="text-[11px] text-zinc-500">
             {isFlipped ? 'CHOOSE RETENTION QUALITY' : 'FLIP CARD [SPACE] BEFORE RATING'}
           </span>
         </div>
@@ -511,13 +505,13 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
           {/* Rating 1: Again */}
           <button
             onClick={() => handleRate('again')}
-            className="px-3 py-2.5 rounded border border-rose-900/60 bg-[#170e10] hover:bg-rose-950/80 hover:border-rose-500 text-rose-400 text-xs font-mono font-medium tracking-wide transition-all cursor-pointer flex flex-col items-center gap-1 text-center group"
+            className="px-3 py-2.5 rounded border border-zinc-800 bg-zinc-900/60 hover:bg-zinc-900 hover:border-zinc-600 text-zinc-300 text-xs font-mono font-medium tracking-wide transition-all cursor-pointer flex flex-col items-center gap-1 text-center group"
           >
             <div className="flex items-center gap-1.5 font-bold">
-              <span className="text-[10px] px-1 py-0.2 rounded bg-rose-950 border border-rose-800 text-rose-300">1</span>
+              <span className="text-[10px] px-1 py-0.2 rounded bg-zinc-800 border border-zinc-700 text-zinc-200">1</span>
               <span>AGAIN</span>
             </div>
-            <span className="text-[10px] text-rose-500/80 group-hover:text-rose-400">
+            <span className="text-[10px] text-zinc-500 group-hover:text-zinc-400">
               Reset to Box 1 (1d)
             </span>
           </button>
@@ -525,41 +519,41 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
           {/* Rating 2: Hard */}
           <button
             onClick={() => handleRate('hard')}
-            className="px-3 py-2.5 rounded border border-amber-900/60 bg-[#16120b] hover:bg-amber-950/80 hover:border-amber-500 text-amber-400 text-xs font-mono font-medium tracking-wide transition-all cursor-pointer flex flex-col items-center gap-1 text-center group"
+            className="px-3 py-2.5 rounded border border-zinc-800 bg-zinc-900/60 hover:bg-zinc-900 hover:border-zinc-600 text-zinc-300 text-xs font-mono font-medium tracking-wide transition-all cursor-pointer flex flex-col items-center gap-1 text-center group"
           >
             <div className="flex items-center gap-1.5 font-bold">
-              <span className="text-[10px] px-1 py-0.2 rounded bg-amber-950 border border-amber-800 text-amber-300">2</span>
+              <span className="text-[10px] px-1 py-0.2 rounded bg-zinc-800 border border-zinc-700 text-zinc-200">2</span>
               <span>HARD</span>
             </div>
-            <span className="text-[10px] text-amber-500/80 group-hover:text-amber-400">
-              Maintain Box ({currentCard.intervalDays}d)
+            <span className="text-[10px] text-zinc-500 group-hover:text-zinc-400">
+              Maintain ({currentCard.intervalDays}d)
             </span>
           </button>
 
           {/* Rating 3: Good */}
           <button
             onClick={() => handleRate('good')}
-            className="px-3 py-2.5 rounded border border-emerald-900/60 bg-[#0e1712] hover:bg-emerald-950/80 hover:border-emerald-500 text-emerald-400 text-xs font-mono font-medium tracking-wide transition-all cursor-pointer flex flex-col items-center gap-1 text-center group"
+            className="px-3 py-2.5 rounded border border-zinc-750 bg-zinc-900 hover:bg-zinc-850 hover:border-zinc-500 text-zinc-100 text-xs font-mono font-medium tracking-wide transition-all cursor-pointer flex flex-col items-center gap-1 text-center group"
           >
             <div className="flex items-center gap-1.5 font-bold">
-              <span className="text-[10px] px-1 py-0.2 rounded bg-emerald-950 border border-emerald-800 text-emerald-300">3</span>
+              <span className="text-[10px] px-1 py-0.2 rounded bg-zinc-800 border border-zinc-600 text-white">3</span>
               <span>GOOD</span>
             </div>
-            <span className="text-[10px] text-emerald-500/80 group-hover:text-emerald-400">
-              Advance Box +1 ({Math.min(5, currentCard.box + 1) * 2}d)
+            <span className="text-[10px] text-zinc-400 group-hover:text-zinc-300">
+              Advance +1 ({Math.min(5, currentCard.box + 1) * 2}d)
             </span>
           </button>
 
           {/* Rating 4: Easy */}
           <button
             onClick={() => handleRate('easy')}
-            className="px-3 py-2.5 rounded border border-sky-900/60 bg-[#0c1518] hover:bg-sky-950/80 hover:border-sky-500 text-sky-400 text-xs font-mono font-medium tracking-wide transition-all cursor-pointer flex flex-col items-center gap-1 text-center group"
+            className="px-3 py-2.5 rounded border border-zinc-750 bg-zinc-900 hover:bg-zinc-850 hover:border-zinc-500 text-zinc-100 text-xs font-mono font-medium tracking-wide transition-all cursor-pointer flex flex-col items-center gap-1 text-center group"
           >
             <div className="flex items-center gap-1.5 font-bold">
-              <span className="text-[10px] px-1 py-0.2 rounded bg-sky-950 border border-sky-800 text-sky-300">4</span>
+              <span className="text-[10px] px-1 py-0.2 rounded bg-zinc-800 border border-zinc-600 text-white">4</span>
               <span>EASY</span>
             </div>
-            <span className="text-[10px] text-sky-500/80 group-hover:text-sky-400">
+            <span className="text-[10px] text-zinc-400 group-hover:text-zinc-300">
               Fast-track +2 Boxes
             </span>
           </button>

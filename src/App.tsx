@@ -89,7 +89,7 @@ export default function App() {
   }, []);
 
   return (
-    <div className={`min-h-screen bg-[#070b09] text-[#d4ded8] flex flex-col relative selection:bg-emerald-500/30 selection:text-emerald-200 ${
+    <div className={`min-h-screen bg-[#09090b] text-[#e4e4e7] flex flex-col relative selection:bg-zinc-800 selection:text-zinc-100 ${
       isCrtScanlinesEnabled ? 'crt-scanlines' : ''
     }`}>
       {/* Top Bar Contract adhering to Header specifications */}
@@ -133,26 +133,26 @@ export default function App() {
       </main>
 
       {/* Bottom Status & Theme Information Footer */}
-      <footer className="border-t border-[#16251d] bg-[#060a08] py-4 px-4 text-xs font-mono text-[#62776a]">
+      <footer className="border-t border-zinc-800/80 bg-zinc-950 py-4 px-4 text-xs font-mono text-zinc-500">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
-          <div className="flex items-center gap-2">
-            <span className="text-emerald-500 font-bold">THEME #12:</span>
-            <span>RETRO TERMINAL CONSOLE</span>
+          <div className="flex items-center gap-2 text-zinc-400">
+            <span className="text-zinc-200 font-bold">THEME #12:</span>
+            <span>MONOCHROME RETRO TERMINAL</span>
             <span>·</span>
             <span>RESPONSIBILITY EXCHANGE THEORY</span>
           </div>
 
-          <div className="flex items-center gap-4 text-[11px]">
+          <div className="flex items-center gap-4 text-[11px] text-zinc-500">
             <button
               onClick={() => setIsCrtScanlinesEnabled(prev => !prev)}
-              className="text-[#788e81] hover:text-emerald-300 cursor-pointer underline decoration-dotted"
+              className="text-zinc-400 hover:text-zinc-200 cursor-pointer underline decoration-dotted"
             >
               SCANLINES: {isCrtScanlinesEnabled ? 'ON' : 'OFF'}
             </button>
             <span className="hidden sm:inline">·</span>
             <span>LEITNER SYSTEM: 5 ACTIVE BOXES</span>
             <span className="hidden sm:inline">·</span>
-            <span className="text-emerald-400">
+            <span className="text-amber-400 font-bold">
               STREAK: {globalStats?.currentStreakDays ?? 1}D
             </span>
           </div>

@@ -9,26 +9,18 @@
 
   body {
     font-family: var(--font-mono);
-    background-color: #070b09;
-    color: #d4ded8;
+    background-color: #09090b;
+    color: #e4e4e7;
   }
 }
 
-/* Phosphor and terminal glow effects */
-.glow-emerald {
-  text-shadow: 0 0 10px rgba(16, 185, 129, 0.45), 0 0 20px rgba(16, 185, 129, 0.2);
+/* Subtle accent glow for focused focal elements */
+.accent-glow {
+  text-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
 }
 
-.glow-amber {
-  text-shadow: 0 0 10px rgba(245, 158, 11, 0.45), 0 0 20px rgba(245, 158, 11, 0.2);
-}
-
-.glow-box-emerald {
-  box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.25), inset 0 0 15px rgba(16, 185, 129, 0.05);
-}
-
-.glow-box-amber {
-  box-shadow: 0 0 25px -5px rgba(245, 158, 11, 0.25), inset 0 0 15px rgba(245, 158, 11, 0.05);
+.accent-box-glow {
+  box-shadow: 0 0 20px -3px rgba(245, 158, 11, 0.15), inset 0 0 12px rgba(245, 158, 11, 0.05);
 }
 
 /* Subtle CRT scanlines */
@@ -37,8 +29,8 @@
     to bottom,
     rgba(255,255,255,0),
     rgba(255,255,255,0) 50%,
-    rgba(0, 0, 0, 0.25) 50%,
-    rgba(0, 0, 0, 0.25)
+    rgba(0, 0, 0, 0.3) 50%,
+    rgba(0, 0, 0, 0.3)
   );
   background-size: 100% 4px;
 }
@@ -61,21 +53,21 @@
   transform: rotateY(180deg);
 }
 
-/* Custom terminal scrollbars */
+/* Monochrome terminal scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #090e0b;
+  background: #09090b;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e2b24;
+  background: #27272a;
   border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #2b3d33;
+  background: #3f3f46;
 }
