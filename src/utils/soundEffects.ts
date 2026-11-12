@@ -6,9 +6,13 @@
 let audioCtx: AudioContext | null = null;
 let isMuted = false;
 
-// Initialize mute state from localStorage
+// Initialize mute state from localStorage safely
 if (typeof window !== 'undefined') {
-  isMuted = localStorage.getItem('articulation_muted') === 'true';
+  try {
+    isMuted = localStorage.getItem('articulation_muted') === 'true';
+  } catch {
+    isMuted = false;
+  }
 }
 
 function getAudioContext(): AudioContext | null {
@@ -33,7 +37,11 @@ export const soundEffects = {
   setMuted(muted: boolean) {
     isMuted = muted;
     if (typeof window !== 'undefined') {
-      localStorage.setItem('articulation_muted', muted ? 'true' : 'false');
+      try {
+        localStorage.setItem('articulation_muted', muted ? 'true' : 'false');
+      } catch {
+        // Ignored in restricted environments
+      }
     }
   },
 

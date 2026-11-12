@@ -10,19 +10,23 @@ import { leitnerStorage, GlobalStats } from './utils/leitnerStorage';
 import { soundEffects } from './utils/soundEffects';
 
 export default function App() {
-  const [cards, setCards] = useState<ReframeCard[]>([]);
-  const [globalStats, setGlobalStats] = useState<GlobalStats | null>(null);
+  const [cards, setCards] = useState<ReframeCard[]>(() => {
+    try {
+      return leitnerStorage.loadCards();
+    } catch {
+      return [];
+    }
+  });
+  const [globalStats, setGlobalStats] = useState<GlobalStats>(() => {
+    try {
+      return leitnerStorage.loadStats();
+    } catch {
+      return { totalReviews: 0, completedSessions: 0, currentStreakDays: 1, lastActiveDate: new Date().toISOString() };
+    }
+  });
   const [currentTab, setCurrentTab] = useState<'flashcards' | 'quiz' | 'vault' | 'psychology'>('flashcards');
   const [isShortcutsOpen, setIsShortcutsOpen] = useState<boolean>(false);
   const [isCrtScanlinesEnabled, setIsCrtScanlinesEnabled] = useState<boolean>(true);
-
-  // Initialize data on mount
-  useEffect(() => {
-    const loadedCards = leitnerStorage.loadCards();
-    const loadedStats = leitnerStorage.loadStats();
-    setCards(loadedCards);
-    setGlobalStats(loadedStats);
-  }, []);
 
   // Calculate due count
   const dueCount = React.useMemo(() => {
