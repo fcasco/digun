@@ -5,22 +5,83 @@
   :root {
     --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-serif: 'Cormorant Garamond', Georgia, Cambria, serif;
   }
 
   body {
+    font-family: var(--font-sans);
+    background-color: #070709;
+    color: #F5F0E6;
+  }
+
+  html[data-theme="terminal"] body {
     font-family: var(--font-mono);
     background-color: #09090b;
     color: #e4e4e7;
   }
+
+  html[data-theme="neobrutalism"] body {
+    font-family: var(--font-sans);
+    background-color: #FFFDF5;
+    color: #09090b;
+  }
+
+  html[data-theme="obsidian"] body {
+    font-family: var(--font-sans);
+    background-color: #070709;
+    color: #F5F0E6;
+  }
 }
 
-/* Subtle accent glow for focused focal elements */
+.font-luxury {
+  font-family: var(--font-serif);
+}
+
+/* Luxury Obsidian & Warm Brass surfaces */
+.obsidian-surface {
+  background: linear-gradient(180deg, #101014 0%, #0B0B0E 100%);
+  box-shadow: 0 24px 48px -18px rgba(0, 0, 0, 0.85), inset 0 1px 0 0 rgba(212, 175, 55, 0.14);
+}
+
+.brass-hairline-glow {
+  box-shadow: 0 0 28px -10px rgba(212, 175, 55, 0.22), inset 0 1px 0 0 rgba(229, 199, 123, 0.18);
+}
+
+/* Subtle accent glow for focused focal elements (Terminal theme) */
 .accent-glow {
   text-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
 }
 
 .accent-box-glow {
   box-shadow: 0 0 20px -3px rgba(245, 158, 11, 0.15), inset 0 0 12px rgba(245, 158, 11, 0.05);
+}
+
+/* Neo-Brutalist hard offset shadows & crisp press states */
+.brutal-shadow {
+  box-shadow: 4px 4px 0px 0px #000000;
+}
+
+.brutal-shadow-lg {
+  box-shadow: 6px 6px 0px 0px #000000;
+}
+
+.brutal-shadow-sm {
+  box-shadow: 2px 2px 0px 0px #000000;
+}
+
+.brutal-btn {
+  box-shadow: 3px 3px 0px 0px #000000;
+  transition: transform 120ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 120ms cubic-bezier(0.16, 1, 0.3, 1), background-color 120ms ease;
+}
+
+.brutal-btn:hover:not(:disabled) {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px 0px #000000;
+}
+
+.brutal-btn:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px 0px #000000;
 }
 
 /* Subtle CRT scanlines */
@@ -70,4 +131,38 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: #3f3f46;
+}
+
+/* Luxury Obsidian & Warm Brass scrollbars */
+html[data-theme="obsidian"] ::-webkit-scrollbar-track {
+  background: #070709;
+}
+
+html[data-theme="obsidian"] ::-webkit-scrollbar-thumb {
+  background: #362D1D;
+  border-radius: 1px;
+}
+
+html[data-theme="obsidian"] ::-webkit-scrollbar-thumb:hover {
+  background: #C5A059;
+}
+
+/* Neo-Brutalism scrollbars */
+html[data-theme="neobrutalism"] ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+html[data-theme="neobrutalism"] ::-webkit-scrollbar-track {
+  background: #FFFDF5;
+  border-left: 2px solid #000000;
+}
+
+html[data-theme="neobrutalism"] ::-webkit-scrollbar-thumb {
+  background: #000000;
+  border-radius: 0px;
+}
+
+html[data-theme="neobrutalism"] ::-webkit-scrollbar-thumb:hover {
+  background: #27272a;
 }

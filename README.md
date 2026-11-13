@@ -14,7 +14,7 @@ Styled in **Theme #12 (Retro Terminal Console)** featuring deep CRT phosphor aes
   - Automatically schedules review intervals from Box 1 (1 day) to Box 5 (14 days / Mastered).
   - Four rating choices: `[1] Again` (reset to Box 1), `[2] Hard` (maintain interval), `[3] Good` (advance box), and `[4] Easy` (fast-track +2 boxes).
   - Due card queue detection and session graduation analytics.
-- **46+ Curated Strategic Reframes** across 5 psychological pillars:
+- **70+ Curated Strategic Reframes** across 5 psychological pillars:
   1. *Apologies to Gratitude* (e.g. `"Sorry I'm late"` $\to$ `"Thank you for waiting for me"`)
   2. *Confidence & Assertiveness* (e.g. `"I might be wrong, but..."` $\to$ `"Here's what I understand..."`)
   3. *Diplomatic Disagreement* (e.g. `"You're wrong"` $\to$ `"I see it differently"`)
@@ -22,7 +22,7 @@ Styled in **Theme #12 (Retro Terminal Console)** featuring deep CRT phosphor aes
   5. *Graceful Praise Acceptance* (e.g. `"Oh, it was a bargain / nothing"` $\to$ `"Thank you"`)
 - **Speech Synthesis (TTS)**: Instant voice articulation playback via the browser's Web Speech API with rate controls (0.8x, 1.0x, 1.2x) to model vocal cadence and downward inflections.
 - **Tactile Terminal Acoustics**: Procedural Web Audio API synthesizer generating authentic mechanical keyboard clicks, relay card flips, and chord chimes (muteable with state persistence).
-- **Interactive Scenario Drills**: "Spot the Power Reframe" challenge mode testing situational judgment with real-time psychological debriefs.
+- **16 Interactive Scenario Drills**: "Spot the Power Reframe" challenge mode with category filters, shuffle, and real-time psychological debriefs.
 - **Leitner Vault & Custom Cards**: Visual 5-box distribution matrix, search filter, drawer inspector, custom reframe card creator, and JSON backup export/import.
 - **Keyboard Shortcuts**: Complete hands-on-keyboard support (`Space` to flip, `1`–`4` to grade, `A` to speak, `[?]` for command cheat sheet).
 

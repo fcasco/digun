@@ -1,6 +1,7 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
+import { ThemeProvider } from './context/ThemeContext';
 import './index.css';
 
 interface Props {
@@ -60,7 +61,9 @@ class TerminalErrorBoundary extends Component<Props, State> {
 createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <TerminalErrorBoundary>
-      <App />
+      <ThemeProvider>
+        <App />
+      </ThemeProvider>
     </TerminalErrorBoundary>
   </React.StrictMode>
 );
