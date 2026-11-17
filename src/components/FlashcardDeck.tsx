@@ -29,7 +29,7 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
   onSessionComplete,
   onOpenVault,
 }) => {
-  const { isBrutal, isObsidian } = useTheme();
+  const { isNordic, isGlass, isBrutal, isObsidian } = useTheme();
 
   // Session queue state
   const [filterCategory, setFilterCategory] = useState<string>('all');
@@ -224,10 +224,14 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
   // Session summary view
   if (isSessionFinished || activeQueue.length === 0 || !currentCard) {
     return (
-      <div className={`max-w-3xl mx-auto px-4 py-8 ${isBrutal || isObsidian ? 'font-sans' : 'font-mono'}`}>
+      <div className={`max-w-3xl mx-auto px-4 py-8 ${isBrutal || isObsidian || isGlass || isNordic ? 'font-sans' : 'font-mono'}`}>
         <div
           className={
-            isBrutal
+            isNordic
+              ? 'nordic-card-elevated border border-[#DDD7C8] rounded-2xl p-6 sm:p-8 relative overflow-hidden'
+              : isGlass
+              ? 'glass-panel-elevated border border-white/25 rounded-2xl p-6 sm:p-8 relative overflow-hidden'
+              : isBrutal
               ? 'border-2 border-black bg-white p-6 sm:p-8 brutal-shadow-lg relative overflow-hidden'
               : isObsidian
               ? 'border border-[#D4AF37]/30 obsidian-surface p-6 sm:p-8 relative overflow-hidden'
@@ -236,12 +240,16 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
         >
           {/* Header */}
           <div className="flex items-center gap-3 mb-4">
-            <div className={isBrutal ? 'p-2 bg-[#FFE500] border-2 border-black text-black' : ''}>
-              <Trophy className={isBrutal ? 'w-5 h-5 text-black' : isObsidian ? 'w-5 h-5 text-[#D4AF37]' : 'w-5 h-5 text-amber-400'} />
+            <div className={isNordic ? 'p-2 rounded-xl bg-[#E7EFEA] border border-[#B8CBBF] text-[#3B5948]' : isBrutal ? 'p-2 bg-[#FFE500] border-2 border-black text-black' : isGlass ? 'p-2 rounded-xl bg-sky-400/15 border border-sky-300/35 text-sky-300' : ''}>
+              <Trophy className={isNordic ? 'w-5 h-5 text-[#527360]' : isGlass ? 'w-5 h-5 text-sky-300' : isBrutal ? 'w-5 h-5 text-black' : isObsidian ? 'w-5 h-5 text-[#D4AF37]' : 'w-5 h-5 text-amber-400'} />
             </div>
             <h2
               className={
-                isBrutal
+                isNordic
+                  ? 'text-xl sm:text-2xl font-bold tracking-tight text-[#242E28]'
+                  : isGlass
+                  ? 'text-xl sm:text-2xl font-bold tracking-tight text-white'
+                  : isBrutal
                   ? 'text-xl sm:text-2xl font-black tracking-tight text-black'
                   : isObsidian
                   ? 'font-luxury text-2xl sm:text-3xl font-semibold tracking-wide text-[#F5F0E6]'
@@ -252,7 +260,7 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
             </h2>
           </div>
 
-          <p className={isBrutal ? 'text-sm text-zinc-700 font-medium mb-6 leading-relaxed' : isObsidian ? 'text-sm text-[#A39E93] mb-6 leading-relaxed' : 'text-sm text-zinc-400 mb-6 leading-relaxed'}>
+          <p className={isNordic ? 'text-sm text-[#4E5A53] mb-6 leading-relaxed' : isGlass ? 'text-sm text-slate-300 mb-6 leading-relaxed' : isBrutal ? 'text-sm text-zinc-700 font-medium mb-6 leading-relaxed' : isObsidian ? 'text-sm text-[#A39E93] mb-6 leading-relaxed' : 'text-sm text-zinc-400 mb-6 leading-relaxed'}>
             Spaced repetition cycle executed. Your neuromuscular speech circuits and subconscious communication defaults have been reinforced through deliberate reframing.
           </p>
 
@@ -260,72 +268,88 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
             <div
               className={
-                isBrutal
+                isNordic
+                  ? 'nordic-well border border-[#E2DDD0] rounded-xl p-3.5 text-center'
+                  : isGlass
+                  ? 'glass-well border border-white/15 rounded-xl p-3.5 text-center'
+                  : isBrutal
                   ? 'border-2 border-black bg-[#F4F1EA] p-3 text-center brutal-shadow-sm'
                   : isObsidian
                   ? 'border border-[#2A241A] bg-[#070709] p-3.5 text-center'
                   : 'border border-zinc-800 bg-zinc-900/50 p-3 rounded text-center'
               }
             >
-              <div className={isBrutal ? 'text-xs font-extrabold text-zinc-700 mb-1' : isObsidian ? 'text-[10px] uppercase tracking-[0.16em] text-[#8E877A] mb-1' : 'text-xs text-zinc-500 mb-1'}>
+              <div className={isNordic ? 'text-[10px] font-semibold uppercase tracking-wider text-[#5C6962] mb-1' : isGlass ? 'text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1' : isBrutal ? 'text-xs font-extrabold text-zinc-700 mb-1' : isObsidian ? 'text-[10px] uppercase tracking-[0.16em] text-[#8E877A] mb-1' : 'text-xs text-zinc-500 mb-1'}>
                 TOTAL DRILLS
               </div>
-              <div className={isBrutal ? 'text-2xl font-black text-black tabular-nums' : isObsidian ? 'text-2xl font-mono font-semibold text-[#F5F0E6] tabular-nums' : 'text-2xl font-bold text-zinc-100 tabular-nums'}>
+              <div className={isNordic ? 'text-2xl font-bold font-mono text-[#242E28] tabular-nums' : isGlass ? 'text-2xl font-bold font-mono text-white tabular-nums' : isBrutal ? 'text-2xl font-black text-black tabular-nums' : isObsidian ? 'text-2xl font-mono font-semibold text-[#F5F0E6] tabular-nums' : 'text-2xl font-bold text-zinc-100 tabular-nums'}>
                 {sessionStats.cardsReviewed}
               </div>
             </div>
             <div
               className={
-                isBrutal
+                isNordic
+                  ? 'border border-[#B8CBBF] bg-[#E7EFEA] rounded-xl p-3.5 text-center'
+                  : isGlass
+                  ? 'border border-sky-300/40 bg-sky-950/35 rounded-xl p-3.5 text-center'
+                  : isBrutal
                   ? 'border-2 border-black bg-[#FFE500] p-3 text-center brutal-shadow-sm'
                   : isObsidian
                   ? 'border border-[#D4AF37]/40 bg-[#14110C] p-3.5 text-center'
                   : 'border border-zinc-800 bg-zinc-900/50 p-3 rounded text-center'
               }
             >
-              <div className={isBrutal ? 'text-xs font-extrabold text-black mb-1' : isObsidian ? 'text-[10px] uppercase tracking-[0.16em] text-[#C5A059] mb-1' : 'text-xs text-zinc-500 mb-1'}>
+              <div className={isNordic ? 'text-[10px] font-semibold uppercase tracking-wider text-[#2D4739] mb-1' : isGlass ? 'text-[10px] font-semibold uppercase tracking-wider text-sky-200 mb-1' : isBrutal ? 'text-xs font-extrabold text-black mb-1' : isObsidian ? 'text-[10px] uppercase tracking-[0.16em] text-[#C5A059] mb-1' : 'text-xs text-zinc-500 mb-1'}>
                 ADVANCED [BOX+]
               </div>
-              <div className={isBrutal ? 'text-2xl font-black text-black tabular-nums' : isObsidian ? 'text-2xl font-mono font-semibold text-[#E5C77B] tabular-nums' : 'text-2xl font-bold text-amber-400 tabular-nums'}>
+              <div className={isNordic ? 'text-2xl font-bold font-mono text-[#3B5948] tabular-nums' : isGlass ? 'text-2xl font-bold font-mono text-sky-300 tabular-nums' : isBrutal ? 'text-2xl font-black text-black tabular-nums' : isObsidian ? 'text-2xl font-mono font-semibold text-[#E5C77B] tabular-nums' : 'text-2xl font-bold text-amber-400 tabular-nums'}>
                 {sessionStats.goodCount + sessionStats.easyCount}
               </div>
             </div>
             <div
               className={
-                isBrutal
+                isNordic
+                  ? 'border border-[#E4C5B9] bg-[#FAF0EC] rounded-xl p-3.5 text-center'
+                  : isGlass
+                  ? 'glass-well border border-white/15 rounded-xl p-3.5 text-center'
+                  : isBrutal
                   ? 'border-2 border-black bg-[#FFE4E6] p-3 text-center brutal-shadow-sm'
                   : isObsidian
                   ? 'border border-[#2A241A] bg-[#070709] p-3.5 text-center'
                   : 'border border-zinc-800 bg-zinc-900/50 p-3 rounded text-center'
               }
             >
-              <div className={isBrutal ? 'text-xs font-extrabold text-black mb-1' : isObsidian ? 'text-[10px] uppercase tracking-[0.16em] text-[#8E877A] mb-1' : 'text-xs text-zinc-500 mb-1'}>
+              <div className={isNordic ? 'text-[10px] font-semibold uppercase tracking-wider text-[#964B36] mb-1' : isGlass ? 'text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1' : isBrutal ? 'text-xs font-extrabold text-black mb-1' : isObsidian ? 'text-[10px] uppercase tracking-[0.16em] text-[#8E877A] mb-1' : 'text-xs text-zinc-500 mb-1'}>
                 REPEATS [AGAIN]
               </div>
-              <div className={isBrutal ? 'text-2xl font-black text-black tabular-nums' : isObsidian ? 'text-2xl font-mono font-semibold text-[#A39E93] tabular-nums' : 'text-2xl font-bold text-zinc-400 tabular-nums'}>
+              <div className={isNordic ? 'text-2xl font-bold font-mono text-[#7D3B29] tabular-nums' : isGlass ? 'text-2xl font-bold font-mono text-rose-200 tabular-nums' : isBrutal ? 'text-2xl font-black text-black tabular-nums' : isObsidian ? 'text-2xl font-mono font-semibold text-[#A39E93] tabular-nums' : 'text-2xl font-bold text-zinc-400 tabular-nums'}>
                 {sessionStats.againCount}
               </div>
             </div>
             <div
               className={
-                isBrutal
+                isNordic
+                  ? 'border border-[#DFD3BE] bg-[#F5EFE4] rounded-xl p-3.5 text-center'
+                  : isGlass
+                  ? 'glass-well border border-white/15 rounded-xl p-3.5 text-center'
+                  : isBrutal
                   ? 'border-2 border-black bg-[#86EFAC] p-3 text-center brutal-shadow-sm'
                   : isObsidian
                   ? 'border border-[#2A241A] bg-[#070709] p-3.5 text-center'
                   : 'border border-zinc-800 bg-zinc-900/50 p-3 rounded text-center'
               }
             >
-              <div className={isBrutal ? 'text-xs font-extrabold text-black mb-1' : isObsidian ? 'text-[10px] uppercase tracking-[0.16em] text-[#8E877A] mb-1' : 'text-xs text-zinc-500 mb-1'}>
+              <div className={isNordic ? 'text-[10px] font-semibold uppercase tracking-wider text-[#614F35] mb-1' : isGlass ? 'text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1' : isBrutal ? 'text-xs font-extrabold text-black mb-1' : isObsidian ? 'text-[10px] uppercase tracking-[0.16em] text-[#8E877A] mb-1' : 'text-xs text-zinc-500 mb-1'}>
                 BOX 5 GRADUATES
               </div>
-              <div className={isBrutal ? 'text-2xl font-black text-black tabular-nums' : isObsidian ? 'text-2xl font-mono font-semibold text-[#F5F0E6] tabular-nums' : 'text-2xl font-bold text-zinc-100 tabular-nums'}>
+              <div className={isNordic ? 'text-2xl font-bold font-mono text-[#242E28] tabular-nums' : isGlass ? 'text-2xl font-bold font-mono text-white tabular-nums' : isBrutal ? 'text-2xl font-black text-black tabular-nums' : isObsidian ? 'text-2xl font-mono font-semibold text-[#F5F0E6] tabular-nums' : 'text-2xl font-bold text-zinc-100 tabular-nums'}>
                 {sessionStats.promotedToBox5}
               </div>
             </div>
           </div>
 
           {/* Action CTAs */}
-          <div className={`flex flex-col sm:flex-row items-center gap-3 pt-4 ${isBrutal ? 'border-t-2 border-black' : isObsidian ? 'border-t border-[#2A241A]' : 'border-t border-zinc-800'}`}>
+          <div className={`flex flex-col sm:flex-row items-center gap-3 pt-4 ${isNordic ? 'border-t border-[#E4DFD4]' : isGlass ? 'border-t border-white/15' : isBrutal ? 'border-t-2 border-black' : isObsidian ? 'border-t border-[#2A241A]' : 'border-t border-zinc-800'}`}>
             <button
               onClick={() => {
                 soundEffects.playKeyClick();
@@ -333,14 +357,18 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
                 buildQueue();
               }}
               className={
-                isBrutal
+                isNordic
+                  ? 'w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[#527360] hover:bg-[#425F4E] text-[#FDFBF7] border border-[#425F4E] font-semibold text-xs tracking-wide transition-all cursor-pointer flex items-center justify-center gap-2 shadow-sm'
+                  : isGlass
+                  ? 'w-full sm:w-auto px-5 py-2.5 rounded-xl bg-sky-400 hover:bg-sky-300 text-slate-950 border border-sky-300 font-semibold text-xs tracking-wide transition-all cursor-pointer flex items-center justify-center gap-2 shadow-lg shadow-sky-500/20'
+                  : isBrutal
                   ? 'w-full sm:w-auto px-5 py-2.5 bg-[#FFE500] hover:bg-[#FACC15] text-black border-2 border-black font-black text-xs tracking-wide cursor-pointer flex items-center justify-center gap-2 brutal-btn'
                   : isObsidian
                   ? 'w-full sm:w-auto px-5 py-2.5 bg-[#D4AF37] hover:bg-[#E5C77B] text-[#070709] border border-[#E5C77B] font-semibold text-[11px] uppercase tracking-[0.16em] transition-colors cursor-pointer flex items-center justify-center gap-2'
                   : 'w-full sm:w-auto px-5 py-2.5 rounded bg-zinc-100 hover:bg-white text-zinc-950 font-bold text-xs tracking-wider transition-colors cursor-pointer flex items-center justify-center gap-2'
               }
             >
-              <RefreshCcw className={isBrutal ? 'w-4 h-4 text-black' : isObsidian ? 'w-4 h-4 text-[#070709]' : 'w-4 h-4 text-amber-600'} />
+              <RefreshCcw className={isNordic ? 'w-4 h-4 text-[#FDFBF7]' : isGlass ? 'w-4 h-4 text-slate-950' : isBrutal ? 'w-4 h-4 text-black' : isObsidian ? 'w-4 h-4 text-[#070709]' : 'w-4 h-4 text-amber-600'} />
               <span>DRILL ALL {cards.length}+ REFRAMES</span>
             </button>
             <button
@@ -349,7 +377,11 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
                 onOpenVault();
               }}
               className={
-                isBrutal
+                isNordic
+                  ? 'w-full sm:w-auto px-5 py-2.5 rounded-xl nordic-well border border-[#DDD7C8] hover:border-[#527360]/50 text-[#242E28] font-medium text-xs tracking-wide transition-all cursor-pointer flex items-center justify-center gap-2'
+                  : isGlass
+                  ? 'w-full sm:w-auto px-5 py-2.5 rounded-xl glass-well border border-white/20 hover:border-white/35 text-white font-medium text-xs tracking-wide transition-all cursor-pointer flex items-center justify-center gap-2'
+                  : isBrutal
                   ? 'w-full sm:w-auto px-5 py-2.5 bg-white hover:bg-[#F4F1EA] text-black border-2 border-black font-extrabold text-xs tracking-wide cursor-pointer flex items-center justify-center gap-2 brutal-btn'
                   : isObsidian
                   ? 'w-full sm:w-auto px-5 py-2.5 border border-[#2A241A] hover:border-[#D4AF37]/50 bg-[#070709] text-[#F5F0E6] text-[11px] uppercase tracking-[0.16em] transition-colors cursor-pointer flex items-center justify-center gap-2'
@@ -369,11 +401,15 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
   const activePhraseText = isFlipped ? currentCard.powerPhrase : currentCard.dangerPhrase;
 
   return (
-    <div className={`max-w-4xl mx-auto px-4 py-6 ${isBrutal || isObsidian ? 'font-sans' : 'font-mono'}`}>
+    <div className={`max-w-4xl mx-auto px-4 py-6 ${isBrutal || isObsidian || isGlass || isNordic ? 'font-sans' : 'font-mono'}`}>
       {/* HUD Toolbar */}
       <div
         className={
-          isBrutal
+          isNordic
+            ? 'flex flex-wrap items-center justify-between gap-3 mb-5 border border-[#E4DFD4] nordic-card rounded-2xl p-3'
+            : isGlass
+            ? 'flex flex-wrap items-center justify-between gap-3 mb-5 border border-white/20 glass-panel rounded-2xl p-3'
+            : isBrutal
             ? 'flex flex-wrap items-center justify-between gap-3 mb-5 border-2 border-black bg-white p-3 brutal-shadow'
             : isObsidian
             ? 'flex flex-wrap items-center justify-between gap-3 mb-5 border border-[#2A241A] obsidian-surface p-3'
@@ -384,7 +420,11 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
         <div className="flex items-center gap-3">
           <div
             className={
-              isBrutal
+              isNordic
+                ? 'flex items-center gap-1 nordic-well p-0.5 rounded-xl border border-[#DDD7C8]'
+                : isGlass
+                ? 'flex items-center gap-1 glass-well p-0.5 rounded-xl border border-white/15'
+                : isBrutal
                 ? 'flex items-center gap-1 bg-[#F4F1EA] p-0.5 border-2 border-black'
                 : isObsidian
                 ? 'flex items-center gap-1 bg-[#070709] p-0.5 border border-[#2A241A]'
@@ -397,7 +437,19 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
                 setStudyMode('due');
               }}
               className={
-                isBrutal
+                isNordic
+                  ? `px-3 py-1 text-xs rounded-lg transition-all cursor-pointer whitespace-nowrap ${
+                      studyMode === 'due'
+                        ? 'bg-[#527360] text-[#FDFBF7] font-semibold shadow-sm'
+                        : 'text-[#4E5A53] hover:text-[#242E28]'
+                    }`
+                  : isGlass
+                  ? `px-2.5 py-1 text-xs rounded-lg transition-all cursor-pointer whitespace-nowrap ${
+                      studyMode === 'due'
+                        ? 'bg-sky-400 text-slate-950 font-semibold shadow-sm'
+                        : 'text-slate-300 hover:text-white'
+                    }`
+                  : isBrutal
                   ? `px-2.5 py-1 text-xs font-extrabold transition-colors cursor-pointer whitespace-nowrap ${
                       studyMode === 'due'
                         ? 'bg-[#FFE500] text-black border border-black'
@@ -424,7 +476,19 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
                 setStudyMode('all');
               }}
               className={
-                isBrutal
+                isNordic
+                  ? `px-3 py-1 text-xs rounded-lg transition-all cursor-pointer whitespace-nowrap ${
+                      studyMode === 'all'
+                        ? 'bg-[#527360] text-[#FDFBF7] font-semibold shadow-sm'
+                        : 'text-[#4E5A53] hover:text-[#242E28]'
+                    }`
+                  : isGlass
+                  ? `px-2.5 py-1 text-xs rounded-lg transition-all cursor-pointer whitespace-nowrap ${
+                      studyMode === 'all'
+                        ? 'bg-sky-400 text-slate-950 font-semibold shadow-sm'
+                        : 'text-slate-300 hover:text-white'
+                    }`
+                  : isBrutal
                   ? `px-2.5 py-1 text-xs font-extrabold transition-colors cursor-pointer whitespace-nowrap ${
                       studyMode === 'all'
                         ? 'bg-[#FFE500] text-black border border-black'
@@ -449,7 +513,11 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
 
           <div
             className={
-              isBrutal
+              isNordic
+                ? 'text-xs text-[#5C6962] hidden sm:block whitespace-nowrap'
+                : isGlass
+                ? 'text-xs text-slate-300 hidden sm:block whitespace-nowrap'
+                : isBrutal
                 ? 'text-xs text-zinc-700 font-bold hidden sm:block whitespace-nowrap'
                 : isObsidian
                 ? 'text-[11px] uppercase tracking-[0.16em] text-[#A39E93] hidden sm:block whitespace-nowrap'
@@ -457,7 +525,7 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
             }
           >
             CARD{' '}
-            <span className={isBrutal ? 'text-black font-black tabular-nums' : isObsidian ? 'text-[#E5C77B] font-mono font-semibold tabular-nums' : 'text-zinc-100 font-bold tabular-nums'}>
+            <span className={isNordic ? 'text-[#242E28] font-mono font-semibold tabular-nums' : isGlass ? 'text-sky-300 font-mono font-semibold tabular-nums' : isBrutal ? 'text-black font-black tabular-nums' : isObsidian ? 'text-[#E5C77B] font-mono font-semibold tabular-nums' : 'text-zinc-100 font-bold tabular-nums'}>
               {currentIndex + 1}
             </span>{' '}
             / <span className="font-mono tabular-nums">{activeQueue.length}</span>
@@ -467,8 +535,8 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
         {/* Right: Filter Category, Speak Control & Speech Rate */}
         <div className="flex flex-wrap items-center gap-2">
           {/* Category Selector */}
-          <div className={isBrutal ? 'flex items-center gap-1.5 text-xs text-black' : isObsidian ? 'flex items-center gap-1.5 text-xs text-[#A39E93]' : 'flex items-center gap-1.5 text-xs text-zinc-400'}>
-            <SlidersHorizontal className={isBrutal ? 'w-3.5 h-3.5 text-black' : isObsidian ? 'w-3.5 h-3.5 text-[#C5A059]' : 'w-3.5 h-3.5 text-zinc-500'} />
+          <div className={isNordic ? 'flex items-center gap-1.5 text-xs text-[#4E5A53]' : isGlass ? 'flex items-center gap-1.5 text-xs text-slate-300' : isBrutal ? 'flex items-center gap-1.5 text-xs text-black' : isObsidian ? 'flex items-center gap-1.5 text-xs text-[#A39E93]' : 'flex items-center gap-1.5 text-xs text-zinc-400'}>
+            <SlidersHorizontal className={isNordic ? 'w-3.5 h-3.5 text-[#527360]' : isGlass ? 'w-3.5 h-3.5 text-sky-300' : isBrutal ? 'w-3.5 h-3.5 text-black' : isObsidian ? 'w-3.5 h-3.5 text-[#C5A059]' : 'w-3.5 h-3.5 text-zinc-500'} />
             <select
               value={filterCategory}
               onChange={(e) => {
@@ -477,16 +545,20 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
                 e.currentTarget.blur();
               }}
               className={
-                isBrutal
+                isNordic
+                  ? 'nordic-well border border-[#DDD7C8] focus:border-[#527360] text-xs font-medium text-[#242E28] rounded-xl px-2.5 py-1.5 focus:outline-none cursor-pointer'
+                  : isGlass
+                  ? 'glass-well border border-white/15 focus:border-sky-300/60 text-xs font-medium text-slate-100 rounded-xl px-2.5 py-1.5 focus:outline-none cursor-pointer'
+                  : isBrutal
                   ? 'bg-white border-2 border-black text-xs font-bold text-black px-2 py-1 focus:outline-none cursor-pointer'
                   : isObsidian
                   ? 'bg-[#070709] border border-[#2A241A] focus:border-[#D4AF37]/60 text-[11px] uppercase tracking-[0.12em] text-[#F5F0E6] px-2.5 py-1 focus:outline-none cursor-pointer'
                   : 'bg-zinc-900 border border-zinc-800 text-xs text-zinc-300 rounded px-2 py-1 focus:outline-none focus:border-zinc-600 cursor-pointer'
               }
             >
-              <option value="all">ALL CATEGORIES</option>
+              <option value="all" className={isNordic ? 'bg-[#FDFBF7] text-[#242E28]' : isGlass ? 'bg-[#0B192C] text-slate-100' : ''}>ALL CATEGORIES</option>
               {CATEGORIES.map(cat => (
-                <option key={cat.id} value={cat.id}>{cat.name.toUpperCase()}</option>
+                <option key={cat.id} value={cat.id} className={isNordic ? 'bg-[#FDFBF7] text-[#242E28]' : isGlass ? 'bg-[#0B192C] text-slate-100' : ''}>{cat.name.toUpperCase()}</option>
               ))}
             </select>
           </div>
@@ -497,7 +569,19 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
             onClick={() => handleSpeak(activePhraseText)}
             title="Speak active phrase [A]"
             className={
-              isBrutal
+              isNordic
+                ? `text-[11px] px-3 py-1.5 rounded-xl border transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 font-medium ${
+                    isSpeaking
+                      ? 'bg-[#527360] text-[#FDFBF7] border-[#425F4E] font-semibold shadow-sm'
+                      : 'bg-[#E7EFEA] text-[#2D4739] border-[#B8CBBF] hover:bg-[#DAE7DF]'
+                  }`
+                : isGlass
+                ? `text-[11px] px-3 py-1.5 rounded-xl border transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 font-medium ${
+                    isSpeaking
+                      ? 'bg-sky-400 text-slate-950 border-sky-300 font-semibold shadow-sm'
+                      : 'bg-white/10 text-sky-200 border-white/20 hover:bg-white/15 hover:border-sky-300/40'
+                  }`
+                : isBrutal
                 ? `text-[11px] px-2.5 py-1 border-2 border-black font-black cursor-pointer whitespace-nowrap flex items-center gap-1.5 brutal-btn ${
                     isSpeaking
                       ? 'bg-[#FFE500] text-black'
@@ -516,7 +600,7 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
                   }`
             }
           >
-            {isSpeaking ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className={isBrutal ? 'w-3.5 h-3.5 text-black' : isObsidian ? 'w-3.5 h-3.5 text-[#D4AF37]' : 'w-3.5 h-3.5 text-amber-400'} />}
+            {isSpeaking ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className={isNordic ? 'w-3.5 h-3.5 text-[#3B5948]' : isGlass ? 'w-3.5 h-3.5 text-sky-300' : isBrutal ? 'w-3.5 h-3.5 text-black' : isObsidian ? 'w-3.5 h-3.5 text-[#D4AF37]' : 'w-3.5 h-3.5 text-amber-400'} />}
             <span>{isSpeaking ? 'STOP [A]' : 'SPEAK [A]'}</span>
           </button>
 
@@ -529,14 +613,18 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
             }}
             title="Adjust Speech Cadence"
             className={
-              isBrutal
+              isNordic
+                ? 'text-[11px] px-2.5 py-1.5 rounded-xl nordic-well border border-[#DDD7C8] text-[#4E5A53] hover:text-[#242E28] hover:border-[#B8CBBF] transition-all cursor-pointer whitespace-nowrap'
+                : isGlass
+                ? 'text-[11px] px-2.5 py-1.5 rounded-xl glass-well border border-white/15 text-slate-200 hover:text-white hover:border-white/30 transition-all cursor-pointer whitespace-nowrap'
+                : isBrutal
                 ? 'text-[11px] px-2 py-1 border-2 border-black bg-white text-black hover:bg-[#FEF9C3] font-bold cursor-pointer whitespace-nowrap brutal-btn'
                 : isObsidian
                 ? 'text-[11px] px-2.5 py-1 border border-[#2A241A] bg-[#070709] text-[#A39E93] hover:text-[#F5F0E6] hover:border-[#D4AF37]/40 uppercase tracking-[0.14em] transition-colors cursor-pointer whitespace-nowrap'
                 : 'text-[11px] px-2 py-1 rounded border border-zinc-800 bg-zinc-900 text-zinc-300 hover:text-white hover:border-zinc-700 transition-colors cursor-pointer whitespace-nowrap'
             }
           >
-            VOICE: <span className={isBrutal ? 'text-black font-black' : isObsidian ? 'text-[#E5C77B] font-mono font-semibold' : 'text-zinc-100 font-bold'}>{speechRate}x</span>
+            VOICE: <span className={isNordic ? 'text-[#2D4739] font-mono font-semibold' : isGlass ? 'text-sky-300 font-mono font-semibold' : isBrutal ? 'text-black font-black' : isObsidian ? 'text-[#E5C77B] font-mono font-semibold' : 'text-zinc-100 font-bold'}>{speechRate}x</span>
           </button>
         </div>
       </div>
@@ -545,7 +633,11 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
       {speechNotice && (
         <div
           className={
-            isBrutal
+            isNordic
+              ? 'mb-4 px-3.5 py-2.5 rounded-xl border border-[#DFD3BE] bg-[#F5EFE4] text-xs text-[#614F35] flex items-center justify-between gap-3'
+              : isGlass
+              ? 'mb-4 px-3.5 py-2.5 rounded-xl border border-sky-300/40 glass-panel text-xs text-sky-200 flex items-center justify-between gap-3'
+              : isBrutal
               ? 'mb-4 px-3 py-2 border-2 border-black bg-[#FFE500] text-xs font-bold text-black flex items-center justify-between gap-3 brutal-shadow-sm'
               : isObsidian
               ? 'mb-4 px-3.5 py-2 border border-[#D4AF37]/50 bg-[#14110C] text-xs text-[#E5C77B] flex items-center justify-between gap-3'
@@ -556,7 +648,7 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
           <button
             type="button"
             onClick={() => setSpeechNotice(null)}
-            className={isBrutal ? 'text-black underline font-black cursor-pointer shrink-0' : isObsidian ? 'text-[#A39E93] hover:text-[#F5F0E6] uppercase tracking-[0.12em] cursor-pointer shrink-0' : 'text-zinc-400 hover:text-zinc-200 cursor-pointer shrink-0'}
+            className={isNordic ? 'text-[#3B5948] hover:text-[#242E28] font-semibold cursor-pointer shrink-0' : isGlass ? 'text-sky-300 hover:text-white font-semibold cursor-pointer shrink-0' : isBrutal ? 'text-black underline font-black cursor-pointer shrink-0' : isObsidian ? 'text-[#A39E93] hover:text-[#F5F0E6] uppercase tracking-[0.12em] cursor-pointer shrink-0' : 'text-zinc-400 hover:text-zinc-200 cursor-pointer shrink-0'}
           >
             DISMISS
           </button>
@@ -566,7 +658,11 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
       {/* Progress Track */}
       <div
         className={
-          isBrutal
+          isNordic
+            ? 'w-full nordic-well h-1.5 rounded-full overflow-hidden mb-6 border border-[#E2DDD0]'
+            : isGlass
+            ? 'w-full glass-well h-1.5 rounded-full overflow-hidden mb-6 border border-white/15'
+            : isBrutal
             ? 'w-full bg-white h-3 overflow-hidden mb-6 border-2 border-black brutal-shadow-sm'
             : isObsidian
             ? 'w-full bg-[#0B0B0E] h-1 overflow-hidden mb-6 border border-[#2A241A]'
@@ -575,7 +671,11 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
       >
         <div
           className={
-            isBrutal
+            isNordic
+              ? 'bg-[#527360] h-full transition-all duration-300'
+              : isGlass
+              ? 'bg-sky-400 h-full transition-all duration-300'
+              : isBrutal
               ? 'bg-[#FFE500] h-full border-r-2 border-black transition-all duration-300'
               : isObsidian
               ? 'bg-[#D4AF37] h-full transition-all duration-300'
@@ -590,13 +690,21 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
         <div 
           onClick={handleFlip}
           className={`grid w-full min-h-[420px] transition-transform duration-500 transform-style-3d cursor-pointer relative select-none ${
-            isBrutal || isObsidian ? '' : 'rounded-lg'
+            isGlass || isNordic ? 'rounded-2xl' : isBrutal || isObsidian ? '' : 'rounded-lg'
           } ${isFlipped ? 'rotate-y-180' : ''}`}
         >
           {/* ================= CARD FRONT (Danger Phrase & Scenario Context) ================= */}
           <div
             className={
-              isBrutal
+              isNordic
+                ? `[grid-area:1/1] w-full min-h-[420px] rounded-2xl border border-[#DDD7C8] hover:border-[#B8CBBF] nordic-card p-6 sm:p-9 flex flex-col justify-between backface-hidden transition-all ${
+                    isFlipped ? 'pointer-events-none' : 'pointer-events-auto'
+                  }`
+                : isGlass
+                ? `[grid-area:1/1] w-full min-h-[420px] rounded-2xl border border-white/25 hover:border-sky-300/45 glass-panel p-6 sm:p-9 flex flex-col justify-between backface-hidden transition-all ${
+                    isFlipped ? 'pointer-events-none' : 'pointer-events-auto'
+                  }`
+                : isBrutal
                 ? `[grid-area:1/1] w-full min-h-[420px] border-2 border-black bg-white p-6 sm:p-8 flex flex-col justify-between backface-hidden brutal-shadow-lg transition-all ${
                     isFlipped ? 'pointer-events-none' : 'pointer-events-auto'
                   }`
@@ -613,7 +721,11 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
             {/* Top metadata strip */}
             <div
               className={
-                isBrutal
+                isNordic
+                  ? 'flex items-center justify-between text-[11px] uppercase tracking-wider text-[#5C6962] border-b border-[#E4DFD4] pb-3.5'
+                  : isGlass
+                  ? 'flex items-center justify-between text-[11px] uppercase tracking-wider text-slate-300 border-b border-white/15 pb-3.5'
+                  : isBrutal
                   ? 'flex items-center justify-between text-xs text-zinc-700 font-bold border-b-2 border-black pb-3'
                   : isObsidian
                   ? 'flex items-center justify-between text-[11px] uppercase tracking-[0.16em] text-[#A39E93] border-b border-[#2A241A] pb-3.5'
@@ -621,11 +733,11 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
               }
             >
               <div className="flex items-center gap-2 font-mono">
-                <span className={isBrutal ? 'bg-[#FFE500] text-black border border-black px-1.5 py-0.5 font-black' : isObsidian ? 'text-[#D4AF37] font-semibold' : 'text-zinc-100 font-bold'}>
+                <span className={isNordic ? 'text-[#3B5948] font-semibold' : isGlass ? 'text-sky-300 font-semibold' : isBrutal ? 'bg-[#FFE500] text-black border border-black px-1.5 py-0.5 font-black' : isObsidian ? 'text-[#D4AF37] font-semibold' : 'text-zinc-100 font-bold'}>
                   [BOX {currentCard.box}]
                 </span>
                 <span>·</span>
-                <span className={isBrutal ? 'text-black font-extrabold' : isObsidian ? 'text-[#DDD6C8]' : ''}>
+                <span className={isNordic ? 'text-[#242E28] font-sans font-medium' : isGlass ? 'text-slate-100 font-sans font-medium' : isBrutal ? 'text-black font-extrabold' : isObsidian ? 'text-[#DDD6C8]' : ''}>
                   {currentCard.categoryLabel.toUpperCase()}
                 </span>
                 <span>·</span>
@@ -638,7 +750,19 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
                   handleSpeak(currentCard.dangerPhrase);
                 }}
                 className={
-                  isBrutal
+                  isNordic
+                    ? `flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[11px] font-medium transition-all cursor-pointer border ${
+                        isSpeaking && !isFlipped
+                          ? 'bg-[#527360] text-[#FDFBF7] border-[#425F4E] font-semibold'
+                          : 'bg-[#E7EFEA] text-[#2D4739] border-[#B8CBBF] hover:bg-[#DAE7DF]'
+                      }`
+                    : isGlass
+                    ? `flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[11px] font-medium transition-all cursor-pointer border ${
+                        isSpeaking && !isFlipped
+                          ? 'bg-sky-400 text-slate-950 border-sky-300 font-semibold'
+                          : 'bg-white/10 text-sky-200 border-white/20 hover:bg-white/15 hover:border-sky-300/40'
+                      }`
+                    : isBrutal
                     ? `flex items-center gap-1.5 px-2.5 py-1 text-xs font-black transition-colors cursor-pointer border-2 border-black brutal-btn ${
                         isSpeaking && !isFlipped
                           ? 'bg-[#FFE500] text-black'
@@ -667,7 +791,11 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
             <div className="py-5 my-auto">
               <div
                 className={
-                  isBrutal
+                  isNordic
+                    ? 'text-[11px] uppercase tracking-[0.14em] text-[#5C6962] font-semibold mb-3'
+                    : isGlass
+                    ? 'text-[11px] uppercase tracking-[0.14em] text-slate-400 font-semibold mb-3'
+                    : isBrutal
                     ? 'text-xs uppercase tracking-wider text-zinc-700 font-extrabold mb-3'
                     : isObsidian
                     ? 'text-[11px] uppercase tracking-[0.18em] text-[#8E877A] mb-3'
@@ -678,7 +806,11 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
               </div>
               <div
                 className={
-                  isBrutal
+                  isNordic
+                    ? 'text-sm sm:text-base text-[#4E5A53] mb-6 leading-relaxed italic nordic-well border border-[#E2DDD0] rounded-xl p-4'
+                    : isGlass
+                    ? 'text-sm sm:text-base text-slate-200 mb-6 leading-relaxed italic glass-well border border-white/12 rounded-xl p-4'
+                    : isBrutal
                     ? 'text-sm sm:text-base text-zinc-900 font-semibold mb-6 leading-relaxed bg-[#F4F1EA] border-2 border-black p-3.5'
                     : isObsidian
                     ? 'text-sm sm:text-base text-[#C7C1B5] mb-6 leading-relaxed italic bg-[#070709] border border-[#2A241A] p-4'
@@ -690,7 +822,11 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
 
               <div
                 className={
-                  isBrutal
+                  isNordic
+                    ? 'text-[11px] uppercase tracking-[0.14em] text-[#964B36] mb-2 font-semibold'
+                    : isGlass
+                    ? 'text-[11px] uppercase tracking-[0.14em] text-rose-200 mb-2 font-semibold'
+                    : isBrutal
                     ? 'inline-block bg-[#FDA4AF] border-2 border-black px-2 py-0.5 text-xs uppercase tracking-wider text-black mb-2 font-black'
                     : isObsidian
                     ? 'text-[11px] uppercase tracking-[0.18em] text-[#E8A5A5] mb-2 font-semibold'
@@ -701,7 +837,11 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
               </div>
               <div
                 className={
-                  isBrutal
+                  isNordic
+                    ? 'text-2xl sm:text-3xl font-bold text-[#242E28] tracking-tight leading-snug'
+                    : isGlass
+                    ? 'text-2xl sm:text-3xl font-bold text-white tracking-tight leading-snug'
+                    : isBrutal
                     ? 'text-2xl sm:text-3xl font-black text-black tracking-tight leading-snug'
                     : isObsidian
                     ? 'font-luxury text-3xl sm:text-4xl font-semibold text-[#F5F0E6] leading-snug'
@@ -715,7 +855,11 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
             {/* Bottom prompt to flip */}
             <div
               className={
-                isBrutal
+                isNordic
+                  ? 'pt-4 border-t border-[#E4DFD4] flex items-center justify-between text-[11px] uppercase tracking-wider text-[#5C6962]'
+                  : isGlass
+                  ? 'pt-4 border-t border-white/15 flex items-center justify-between text-[11px] uppercase tracking-wider text-slate-300'
+                  : isBrutal
                   ? 'pt-4 border-t-2 border-black flex items-center justify-between text-xs font-bold text-zinc-800'
                   : isObsidian
                   ? 'pt-4 border-t border-[#2A241A] flex items-center justify-between text-[11px] uppercase tracking-[0.16em] text-[#8E877A]'
@@ -725,7 +869,11 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
               <div className="flex items-center gap-2">
                 <span
                   className={
-                    isBrutal
+                    isNordic
+                      ? 'px-2 py-0.5 rounded-md bg-[#E7EFEA] text-[#2D4739] border border-[#B8CBBF] font-mono text-[10px] font-semibold'
+                      : isGlass
+                      ? 'px-2 py-0.5 rounded-md bg-white/10 text-sky-200 border border-white/25 font-mono text-[10px]'
+                      : isBrutal
                       ? 'px-2 py-0.5 bg-[#FFE500] text-black border-2 border-black font-black text-[10px] font-mono'
                       : isObsidian
                       ? 'px-2 py-0.5 bg-[#121216] text-[#E5C77B] border border-[#D4AF37]/35 font-mono text-[10px]'
@@ -736,7 +884,7 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
                 </span>
                 <span>PRESS SPACEBAR OR CLICK TO REVEAL REFRAME</span>
               </div>
-              <div className={isBrutal ? 'flex items-center gap-1 text-black font-black' : isObsidian ? 'flex items-center gap-1.5 text-[#E5C77B] font-semibold' : 'flex items-center gap-1 text-zinc-300 hover:text-white'}>
+              <div className={isNordic ? 'flex items-center gap-1.5 text-[#3B5948] font-semibold' : isGlass ? 'flex items-center gap-1.5 text-sky-300 font-semibold' : isBrutal ? 'flex items-center gap-1 text-black font-black' : isObsidian ? 'flex items-center gap-1.5 text-[#E5C77B] font-semibold' : 'flex items-center gap-1 text-zinc-300 hover:text-white'}>
                 <span>REVEAL</span>
                 <RotateCw className="w-3.5 h-3.5" />
               </div>
@@ -747,7 +895,15 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
           {/* ================= CARD BACK (Power Reframe, Psychology, Delivery) ================= */}
           <div
             className={
-              isBrutal
+              isNordic
+                ? `[grid-area:1/1] w-full min-h-[420px] rounded-2xl border border-[#B8CBBF] nordic-card-elevated p-6 sm:p-9 flex flex-col justify-between backface-hidden rotate-y-180 transition-all ${
+                    isFlipped ? 'pointer-events-auto' : 'pointer-events-none'
+                  }`
+                : isGlass
+                ? `[grid-area:1/1] w-full min-h-[420px] rounded-2xl border border-sky-300/40 glass-panel-elevated p-6 sm:p-9 flex flex-col justify-between backface-hidden rotate-y-180 transition-all ${
+                    isFlipped ? 'pointer-events-auto' : 'pointer-events-none'
+                  }`
+                : isBrutal
                 ? `[grid-area:1/1] w-full min-h-[420px] border-2 border-black bg-[#FEF9C3] p-6 sm:p-8 flex flex-col justify-between backface-hidden rotate-y-180 brutal-shadow-lg transition-all ${
                     isFlipped ? 'pointer-events-auto' : 'pointer-events-none'
                   }`
@@ -764,7 +920,11 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
             {/* Top metadata strip */}
             <div
               className={
-                isBrutal
+                isNordic
+                  ? 'flex items-center justify-between text-[11px] uppercase tracking-wider text-[#5C6962] border-b border-[#E4DFD4] pb-3.5 gap-2'
+                  : isGlass
+                  ? 'flex items-center justify-between text-[11px] uppercase tracking-wider text-slate-300 border-b border-white/15 pb-3.5 gap-2'
+                  : isBrutal
                   ? 'flex items-center justify-between text-xs text-black font-bold border-b-2 border-black pb-3 gap-2'
                   : isObsidian
                   ? 'flex items-center justify-between text-[11px] uppercase tracking-[0.16em] text-[#A39E93] border-b border-[#2A241A] pb-3.5 gap-2'
@@ -772,11 +932,11 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
               }
             >
               <div className="flex items-center gap-2 min-w-0 font-mono">
-                <span className={isBrutal ? 'bg-white border border-black px-1.5 py-0.5 text-black font-black shrink-0' : isObsidian ? 'text-[#D4AF37] font-semibold shrink-0' : 'text-zinc-100 font-bold shrink-0'}>
+                <span className={isNordic ? 'text-[#3B5948] font-semibold shrink-0' : isGlass ? 'text-sky-300 font-semibold shrink-0' : isBrutal ? 'bg-white border border-black px-1.5 py-0.5 text-black font-black shrink-0' : isObsidian ? 'text-[#D4AF37] font-semibold shrink-0' : 'text-zinc-100 font-bold shrink-0'}>
                   [BOX {currentCard.box}]
                 </span>
                 <span className="shrink-0">·</span>
-                <span className={isBrutal ? 'text-black font-extrabold truncate' : isObsidian ? 'text-[#DDD6C8] truncate font-sans' : 'text-zinc-300 truncate'}>
+                <span className={isNordic ? 'text-[#242E28] truncate font-sans font-medium' : isGlass ? 'text-slate-100 truncate font-sans font-medium' : isBrutal ? 'text-black font-extrabold truncate' : isObsidian ? 'text-[#DDD6C8] truncate font-sans' : 'text-zinc-300 truncate'}>
                   {currentCard.psychologicalShift.toUpperCase()}
                 </span>
               </div>
@@ -789,7 +949,19 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
                     handleSpeak(currentCard.powerPhrase);
                   }}
                   className={
-                    isBrutal
+                    isNordic
+                      ? `flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[11px] font-medium transition-all cursor-pointer border whitespace-nowrap ${
+                          isSpeaking && isFlipped
+                            ? 'bg-[#527360] text-[#FDFBF7] border-[#425F4E] font-semibold'
+                            : 'bg-[#E7EFEA] text-[#2D4739] border-[#B8CBBF] hover:bg-[#DAE7DF]'
+                        }`
+                      : isGlass
+                      ? `flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[11px] font-medium transition-all cursor-pointer border whitespace-nowrap ${
+                          isSpeaking && isFlipped
+                            ? 'bg-sky-400 text-slate-950 border-sky-300 font-semibold'
+                            : 'bg-white/10 text-sky-200 border-white/20 hover:bg-white/15 hover:border-sky-300/40'
+                        }`
+                      : isBrutal
                       ? `flex items-center gap-1.5 px-2.5 py-1 text-xs font-black transition-colors cursor-pointer border-2 border-black whitespace-nowrap brutal-btn ${
                           isSpeaking && isFlipped
                             ? 'bg-[#FFE500] text-black'
@@ -809,7 +981,7 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
                   }
                   title="Listen to Strategic Pronunciation [A]"
                 >
-                  <Volume2 className={isBrutal ? 'w-3.5 h-3.5 text-black' : isObsidian ? 'w-3.5 h-3.5 text-[#D4AF37]' : 'w-3.5 h-3.5 text-amber-400'} />
+                  <Volume2 className={isNordic ? 'w-3.5 h-3.5 text-current' : isGlass ? 'w-3.5 h-3.5 text-current' : isBrutal ? 'w-3.5 h-3.5 text-black' : isObsidian ? 'w-3.5 h-3.5 text-[#D4AF37]' : 'w-3.5 h-3.5 text-amber-400'} />
                   <span>{isSpeaking && isFlipped ? 'SPEAKING...' : 'SPEAK [A]'}</span>
                 </button>
               </div>
@@ -820,19 +992,27 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
               {/* Say Instead */}
               <div
                 className={
-                  isBrutal
+                  isNordic
+                    ? 'text-[11px] uppercase tracking-[0.16em] text-[#3B5948] font-semibold mb-2'
+                    : isGlass
+                    ? 'text-[11px] uppercase tracking-[0.16em] text-sky-300 font-semibold mb-2'
+                    : isBrutal
                     ? 'inline-flex items-center gap-1.5 bg-[#86EFAC] border-2 border-black px-2 py-0.5 text-xs uppercase tracking-wider text-black font-black mb-2'
                     : isObsidian
                     ? 'text-[11px] uppercase tracking-[0.2em] text-[#E5C77B] font-semibold mb-2'
                     : 'text-xs uppercase tracking-wider text-amber-400 font-bold mb-1.5 flex items-center gap-1.5'
                 }
               >
-                {!isObsidian && <span className={isBrutal ? 'w-2 h-2 bg-black' : 'w-1.5 h-1.5 rounded-full bg-amber-400'} />}
+                {!isObsidian && !isGlass && !isNordic && <span className={isBrutal ? 'w-2 h-2 bg-black' : 'w-1.5 h-1.5 rounded-full bg-amber-400'} />}
                 <span>SAY INSTEAD (POWER REFRAME):</span>
               </div>
               <div
                 className={
-                  isBrutal
+                  isNordic
+                    ? 'text-2xl sm:text-3xl font-bold text-[#242E28] tracking-tight mb-5 leading-snug'
+                    : isGlass
+                    ? 'text-2xl sm:text-3xl font-bold text-white tracking-tight mb-5 leading-snug'
+                    : isBrutal
                     ? 'text-2xl sm:text-3xl font-black text-black tracking-tight mb-4 leading-snug'
                     : isObsidian
                     ? 'font-luxury text-3xl sm:text-4xl font-semibold text-[#F3E5AB] mb-5 leading-snug'
@@ -845,7 +1025,11 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
               {/* Rationale & Psychological Mechanism */}
               <div
                 className={
-                  isBrutal
+                  isNordic
+                    ? 'mb-3 nordic-well border border-[#E2DDD0] rounded-xl p-3.5'
+                    : isGlass
+                    ? 'mb-3 glass-well border border-white/12 rounded-xl p-3.5'
+                    : isBrutal
                     ? 'mb-3 bg-white border-2 border-black p-3 brutal-shadow-sm'
                     : isObsidian
                     ? 'mb-3 bg-[#070709]/80 border border-[#2A241A] p-3.5'
@@ -854,17 +1038,21 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
               >
                 <div
                   className={
-                    isBrutal
+                    isNordic
+                      ? 'text-[11px] uppercase tracking-wider text-[#3B5948] font-semibold mb-1.5 flex items-center gap-1.5'
+                      : isGlass
+                      ? 'text-[11px] uppercase tracking-wider text-sky-200 font-semibold mb-1.5 flex items-center gap-1.5'
+                      : isBrutal
                       ? 'text-[11px] uppercase tracking-wider text-black font-black mb-1 flex items-center gap-1.5'
                       : isObsidian
                       ? 'text-[11px] uppercase tracking-[0.16em] text-[#E5C77B] font-semibold mb-1.5 flex items-center gap-1.5'
                       : 'text-[11px] uppercase tracking-wider text-zinc-300 font-bold mb-1 flex items-center gap-1.5'
                   }
                 >
-                  <Sparkles className={isBrutal ? 'w-3.5 h-3.5 text-black' : isObsidian ? 'w-3.5 h-3.5 text-[#D4AF37]' : 'w-3.5 h-3.5 text-zinc-400'} />
+                  <Sparkles className={isNordic ? 'w-3.5 h-3.5 text-[#527360]' : isGlass ? 'w-3.5 h-3.5 text-sky-300' : isBrutal ? 'w-3.5 h-3.5 text-black' : isObsidian ? 'w-3.5 h-3.5 text-[#D4AF37]' : 'w-3.5 h-3.5 text-zinc-400'} />
                   <span>THE PSYCHOLOGICAL MECHANISM (THE "WHY"):</span>
                 </div>
-                <p className={isBrutal ? 'text-xs text-zinc-900 font-medium leading-relaxed' : isObsidian ? 'text-xs text-[#DDD6C8] leading-relaxed' : 'text-xs text-zinc-300 leading-relaxed'}>
+                <p className={isNordic ? 'text-xs text-[#4E5A53] leading-relaxed' : isGlass ? 'text-xs text-slate-200 leading-relaxed' : isBrutal ? 'text-xs text-zinc-900 font-medium leading-relaxed' : isObsidian ? 'text-xs text-[#DDD6C8] leading-relaxed' : 'text-xs text-zinc-300 leading-relaxed'}>
                   {currentCard.rationale}
                 </p>
               </div>
@@ -872,7 +1060,11 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
               {/* Delivery and Cadence Advice */}
               <div
                 className={
-                  isBrutal
+                  isNordic
+                    ? 'bg-[#E7EFEA]/65 border border-[#B8CBBF] rounded-xl p-3.5'
+                    : isGlass
+                    ? 'glass-well border border-white/12 rounded-xl p-3.5'
+                    : isBrutal
                     ? 'bg-white border-2 border-black p-3 brutal-shadow-sm'
                     : isObsidian
                     ? 'bg-[#070709]/80 border border-[#2A241A] p-3.5'
@@ -881,17 +1073,21 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
               >
                 <div
                   className={
-                    isBrutal
+                    isNordic
+                      ? 'text-[11px] uppercase tracking-wider text-[#2D4739] font-semibold mb-1.5 flex items-center gap-1.5'
+                      : isGlass
+                      ? 'text-[11px] uppercase tracking-wider text-sky-200 font-semibold mb-1.5 flex items-center gap-1.5'
+                      : isBrutal
                       ? 'text-[11px] uppercase tracking-wider text-black font-black mb-1 flex items-center gap-1.5'
                       : isObsidian
                       ? 'text-[11px] uppercase tracking-[0.16em] text-[#E5C77B] font-semibold mb-1.5 flex items-center gap-1.5'
                       : 'text-[11px] uppercase tracking-wider text-zinc-300 font-bold mb-1 flex items-center gap-1.5'
                   }
                 >
-                  <CheckCircle2 className={isBrutal ? 'w-3.5 h-3.5 text-black' : isObsidian ? 'w-3.5 h-3.5 text-[#D4AF37]' : 'w-3.5 h-3.5 text-zinc-400'} />
+                  <CheckCircle2 className={isNordic ? 'w-3.5 h-3.5 text-[#527360]' : isGlass ? 'w-3.5 h-3.5 text-sky-300' : isBrutal ? 'w-3.5 h-3.5 text-black' : isObsidian ? 'w-3.5 h-3.5 text-[#D4AF37]' : 'w-3.5 h-3.5 text-zinc-400'} />
                   <span>DELIVERY & VOCAL CADENCE:</span>
                 </div>
-                <p className={isBrutal ? 'text-xs text-zinc-900 font-medium leading-relaxed' : isObsidian ? 'text-xs text-[#DDD6C8] leading-relaxed' : 'text-xs text-zinc-300 leading-relaxed'}>
+                <p className={isNordic ? 'text-xs text-[#242E28] leading-relaxed' : isGlass ? 'text-xs text-slate-200 leading-relaxed' : isBrutal ? 'text-xs text-zinc-900 font-medium leading-relaxed' : isObsidian ? 'text-xs text-[#DDD6C8] leading-relaxed' : 'text-xs text-zinc-300 leading-relaxed'}>
                   {currentCard.deliveryTip}
                 </p>
               </div>
@@ -900,7 +1096,11 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
             {/* Bottom: Instructions */}
             <div
               className={
-                isBrutal
+                isNordic
+                  ? 'pt-3 border-t border-[#E4DFD4] flex items-center justify-between text-[11px] uppercase tracking-wider text-[#5C6962]'
+                  : isGlass
+                  ? 'pt-3 border-t border-white/15 flex items-center justify-between text-[11px] uppercase tracking-wider text-slate-300'
+                  : isBrutal
                   ? 'pt-2 border-t-2 border-black flex items-center justify-between text-xs font-bold text-zinc-900'
                   : isObsidian
                   ? 'pt-3 border-t border-[#2A241A] flex items-center justify-between text-[11px] uppercase tracking-[0.16em] text-[#8E877A]'
@@ -908,7 +1108,7 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
               }
             >
               <span>GRADE YOUR RECALL READINESS BELOW</span>
-              <span className={isBrutal ? 'text-black font-black font-mono' : isObsidian ? 'text-[#E5C77B] font-mono' : 'text-zinc-300 font-mono'}>[HOTKEYS 1–4]</span>
+              <span className={isNordic ? 'text-[#3B5948] font-mono font-semibold' : isGlass ? 'text-sky-300 font-mono font-semibold' : isBrutal ? 'text-black font-black font-mono' : isObsidian ? 'text-[#E5C77B] font-mono' : 'text-zinc-300 font-mono'}>[HOTKEYS 1–4]</span>
             </div>
 
           </div>
@@ -918,7 +1118,11 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
       {/* Leitner Rating Decision Console */}
       <div
         className={
-          isBrutal
+          isNordic
+            ? 'border border-[#DDD7C8] nordic-card rounded-2xl p-4'
+            : isGlass
+            ? 'border border-white/20 glass-panel rounded-2xl p-4'
+            : isBrutal
             ? 'border-2 border-black bg-white p-4 brutal-shadow'
             : isObsidian
             ? 'border border-[#2A241A] obsidian-surface p-4'
@@ -927,17 +1131,21 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
       >
         <div
           className={
-            isBrutal
+            isNordic
+              ? 'flex items-center justify-between text-[11px] uppercase tracking-wider text-[#5C6962] mb-3'
+              : isGlass
+              ? 'flex items-center justify-between text-[11px] uppercase tracking-wider text-slate-300 mb-3'
+              : isBrutal
               ? 'flex items-center justify-between text-xs text-zinc-700 mb-3'
               : isObsidian
               ? 'flex items-center justify-between text-[11px] uppercase tracking-[0.16em] text-[#A39E93] mb-3'
               : 'flex items-center justify-between text-xs text-zinc-400 mb-3'
           }
         >
-          <span className={isBrutal ? 'font-black uppercase tracking-wider text-black' : isObsidian ? 'font-semibold text-[#F5F0E6]' : 'font-bold uppercase tracking-wider text-zinc-200'}>
+          <span className={isNordic ? 'font-semibold text-[#242E28]' : isGlass ? 'font-semibold text-white' : isBrutal ? 'font-black uppercase tracking-wider text-black' : isObsidian ? 'font-semibold text-[#F5F0E6]' : 'font-bold uppercase tracking-wider text-zinc-200'}>
             LEITNER RETENTION RATING:
           </span>
-          <span className={isBrutal ? 'text-[11px] font-bold text-zinc-700' : isObsidian ? 'text-[11px] text-[#8E877A]' : 'text-[11px] text-zinc-500'}>
+          <span className={isNordic ? 'text-[11px] text-[#5C6962]' : isGlass ? 'text-[11px] text-slate-400' : isBrutal ? 'text-[11px] font-bold text-zinc-700' : isObsidian ? 'text-[11px] text-[#8E877A]' : 'text-[11px] text-zinc-500'}>
             {isFlipped ? 'CHOOSE RETENTION QUALITY' : 'FLIP CARD [SPACE] BEFORE RATING'}
           </span>
         </div>
@@ -947,7 +1155,11 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
           <button
             onClick={() => handleRate('again')}
             className={
-              isBrutal
+              isNordic
+                ? 'px-3 py-2.5 rounded-xl border border-[#E4C5B9] bg-[#FAF0EC] hover:bg-[#F3E1DA] hover:border-[#D4A797] text-[#7D3B29] text-xs font-medium tracking-wide transition-all cursor-pointer flex flex-col items-center gap-1 text-center group'
+                : isGlass
+                ? 'px-3 py-2.5 rounded-xl border border-rose-300/25 bg-rose-950/35 hover:bg-rose-950/55 hover:border-rose-300/55 text-rose-100 text-xs font-medium tracking-wide transition-all cursor-pointer flex flex-col items-center gap-1 text-center group'
+                : isBrutal
                 ? 'px-3 py-2.5 border-2 border-black bg-[#FDA4AF] hover:bg-[#FB7185] text-black text-xs font-black tracking-wide cursor-pointer flex flex-col items-center gap-1 text-center brutal-btn'
                 : isObsidian
                 ? 'px-3 py-2.5 border border-[#3D2225] bg-[#140D0E] hover:border-[#E8A5A5]/60 text-[#E8A5A5] text-xs font-medium tracking-[0.12em] transition-all cursor-pointer flex flex-col items-center gap-1 text-center group'
@@ -955,10 +1167,10 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
             }
           >
             <div className="flex items-center gap-1.5 font-semibold">
-              <span className={isBrutal ? 'text-[10px] px-1.5 py-0.5 bg-white border border-black text-black font-mono font-black' : isObsidian ? 'text-[10px] px-1.5 py-0.5 bg-[#070709] border border-[#3D2225] text-[#E8A5A5] font-mono' : 'text-[10px] px-1 py-0.2 rounded bg-zinc-800 border border-zinc-700 text-zinc-200'}>1</span>
+              <span className={isNordic ? 'text-[10px] px-1.5 py-0.5 rounded-md bg-white border border-[#E4C5B9] text-[#7D3B29] font-mono' : isGlass ? 'text-[10px] px-1.5 py-0.5 rounded-md bg-rose-950/70 border border-rose-300/35 text-rose-200 font-mono' : isBrutal ? 'text-[10px] px-1.5 py-0.5 bg-white border border-black text-black font-mono font-black' : isObsidian ? 'text-[10px] px-1.5 py-0.5 bg-[#070709] border border-[#3D2225] text-[#E8A5A5] font-mono' : 'text-[10px] px-1 py-0.2 rounded bg-zinc-800 border border-zinc-700 text-zinc-200'}>1</span>
               <span>AGAIN</span>
             </div>
-            <span className={isBrutal ? 'text-[10px] font-bold text-zinc-900' : isObsidian ? 'text-[10px] text-[#A39E93] tracking-normal' : 'text-[10px] text-zinc-500 group-hover:text-zinc-400'}>
+            <span className={isNordic ? 'text-[10px] text-[#964B36]' : isGlass ? 'text-[10px] text-rose-200/80' : isBrutal ? 'text-[10px] font-bold text-zinc-900' : isObsidian ? 'text-[10px] text-[#A39E93] tracking-normal' : 'text-[10px] text-zinc-500 group-hover:text-zinc-400'}>
               Reset to Box 1 (1d)
             </span>
           </button>
@@ -967,7 +1179,11 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
           <button
             onClick={() => handleRate('hard')}
             className={
-              isBrutal
+              isNordic
+                ? 'px-3 py-2.5 rounded-xl nordic-well border border-[#DDD7C8] hover:bg-[#E7E2D6] hover:border-[#C9C2B0] text-[#242E28] text-xs font-medium tracking-wide transition-all cursor-pointer flex flex-col items-center gap-1 text-center group'
+                : isGlass
+                ? 'px-3 py-2.5 rounded-xl glass-well border border-white/15 hover:border-white/35 text-slate-100 text-xs font-medium tracking-wide transition-all cursor-pointer flex flex-col items-center gap-1 text-center group'
+                : isBrutal
                 ? 'px-3 py-2.5 border-2 border-black bg-[#FFE500] hover:bg-[#FACC15] text-black text-xs font-black tracking-wide cursor-pointer flex flex-col items-center gap-1 text-center brutal-btn'
                 : isObsidian
                 ? 'px-3 py-2.5 border border-[#2A241A] bg-[#0B0B0E] hover:border-[#D4AF37]/45 text-[#DDD6C8] text-xs font-medium tracking-[0.12em] transition-all cursor-pointer flex flex-col items-center gap-1 text-center group'
@@ -975,10 +1191,10 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
             }
           >
             <div className="flex items-center gap-1.5 font-semibold">
-              <span className={isBrutal ? 'text-[10px] px-1.5 py-0.5 bg-white border border-black text-black font-mono font-black' : isObsidian ? 'text-[10px] px-1.5 py-0.5 bg-[#121216] border border-[#2A241A] text-[#C5A059] font-mono' : 'text-[10px] px-1 py-0.2 rounded bg-zinc-800 border border-zinc-700 text-zinc-200'}>2</span>
+              <span className={isNordic ? 'text-[10px] px-1.5 py-0.5 rounded-md bg-white border border-[#DDD7C8] text-[#4E5A53] font-mono' : isGlass ? 'text-[10px] px-1.5 py-0.5 rounded-md bg-white/10 border border-white/25 text-slate-200 font-mono' : isBrutal ? 'text-[10px] px-1.5 py-0.5 bg-white border border-black text-black font-mono font-black' : isObsidian ? 'text-[10px] px-1.5 py-0.5 bg-[#121216] border border-[#2A241A] text-[#C5A059] font-mono' : 'text-[10px] px-1 py-0.2 rounded bg-zinc-800 border border-zinc-700 text-zinc-200'}>2</span>
               <span>HARD</span>
             </div>
-            <span className={isBrutal ? 'text-[10px] font-bold text-zinc-900' : isObsidian ? 'text-[10px] text-[#8E877A] group-hover:text-[#A39E93] tracking-normal' : 'text-[10px] text-zinc-500 group-hover:text-zinc-400'}>
+            <span className={isNordic ? 'text-[10px] text-[#5C6962] group-hover:text-[#242E28]' : isGlass ? 'text-[10px] text-slate-300 group-hover:text-white' : isBrutal ? 'text-[10px] font-bold text-zinc-900' : isObsidian ? 'text-[10px] text-[#8E877A] group-hover:text-[#A39E93] tracking-normal' : 'text-[10px] text-zinc-500 group-hover:text-zinc-400'}>
               Maintain ({currentCard.intervalDays}d)
             </span>
           </button>
@@ -987,7 +1203,11 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
           <button
             onClick={() => handleRate('good')}
             className={
-              isBrutal
+              isNordic
+                ? 'px-3 py-2.5 rounded-xl border border-[#B8CBBF] bg-[#E7EFEA] hover:bg-[#DAE7DF] hover:border-[#8EAE9B] text-[#2D4739] text-xs font-semibold tracking-wide transition-all cursor-pointer flex flex-col items-center gap-1 text-center group'
+                : isGlass
+                ? 'px-3 py-2.5 rounded-xl border border-sky-300/40 bg-sky-950/35 hover:bg-sky-950/55 hover:border-sky-300/70 text-sky-100 text-xs font-semibold tracking-wide transition-all cursor-pointer flex flex-col items-center gap-1 text-center group'
+                : isBrutal
                 ? 'px-3 py-2.5 border-2 border-black bg-[#86EFAC] hover:bg-[#4ADE80] text-black text-xs font-black tracking-wide cursor-pointer flex flex-col items-center gap-1 text-center brutal-btn'
                 : isObsidian
                 ? 'px-3 py-2.5 border border-[#D4AF37]/40 bg-[#14110C] hover:border-[#D4AF37] text-[#E5C77B] text-xs font-semibold tracking-[0.12em] transition-all cursor-pointer flex flex-col items-center gap-1 text-center group'
@@ -995,10 +1215,10 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
             }
           >
             <div className="flex items-center gap-1.5 font-semibold">
-              <span className={isBrutal ? 'text-[10px] px-1.5 py-0.5 bg-white border border-black text-black font-mono font-black' : isObsidian ? 'text-[10px] px-1.5 py-0.5 bg-[#070709] border border-[#D4AF37]/45 text-[#E5C77B] font-mono' : 'text-[10px] px-1 py-0.2 rounded bg-zinc-800 border border-zinc-600 text-white'}>3</span>
+              <span className={isNordic ? 'text-[10px] px-1.5 py-0.5 rounded-md bg-white border border-[#B8CBBF] text-[#2D4739] font-mono' : isGlass ? 'text-[10px] px-1.5 py-0.5 rounded-md bg-white/10 border border-sky-300/40 text-sky-200 font-mono' : isBrutal ? 'text-[10px] px-1.5 py-0.5 bg-white border border-black text-black font-mono font-black' : isObsidian ? 'text-[10px] px-1.5 py-0.5 bg-[#070709] border border-[#D4AF37]/45 text-[#E5C77B] font-mono' : 'text-[10px] px-1 py-0.2 rounded bg-zinc-800 border border-zinc-600 text-white'}>3</span>
               <span>GOOD</span>
             </div>
-            <span className={isBrutal ? 'text-[10px] font-bold text-zinc-900' : isObsidian ? 'text-[10px] text-[#A39E93] group-hover:text-[#DDD6C8] tracking-normal font-normal' : 'text-[10px] text-zinc-400 group-hover:text-zinc-300'}>
+            <span className={isNordic ? 'text-[10px] text-[#3B5948] font-normal' : isGlass ? 'text-[10px] text-sky-200/80 group-hover:text-sky-100 font-normal' : isBrutal ? 'text-[10px] font-bold text-zinc-900' : isObsidian ? 'text-[10px] text-[#A39E93] group-hover:text-[#DDD6C8] tracking-normal font-normal' : 'text-[10px] text-zinc-400 group-hover:text-zinc-300'}>
               Advance +1 ({Math.min(5, currentCard.box + 1) * 2}d)
             </span>
           </button>
@@ -1007,7 +1227,11 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
           <button
             onClick={() => handleRate('easy')}
             className={
-              isBrutal
+              isNordic
+                ? 'px-3 py-2.5 rounded-xl border border-[#425F4E] bg-[#527360] hover:bg-[#425F4E] text-[#FDFBF7] text-xs font-semibold tracking-wide transition-all cursor-pointer flex flex-col items-center gap-1 text-center group shadow-sm'
+                : isGlass
+                ? 'px-3 py-2.5 rounded-xl border border-sky-300/65 bg-sky-400/20 hover:bg-sky-400 hover:text-slate-950 text-sky-100 text-xs font-semibold tracking-wide transition-all cursor-pointer flex flex-col items-center gap-1 text-center group'
+                : isBrutal
                 ? 'px-3 py-2.5 border-2 border-black bg-[#7DD3FC] hover:bg-[#38BDF8] text-black text-xs font-black tracking-wide cursor-pointer flex flex-col items-center gap-1 text-center brutal-btn'
                 : isObsidian
                 ? 'px-3 py-2.5 border border-[#D4AF37]/70 bg-[#1C170F] hover:bg-[#D4AF37] hover:text-[#070709] text-[#F3E5AB] text-xs font-semibold tracking-[0.12em] transition-all cursor-pointer flex flex-col items-center gap-1 text-center group'
@@ -1015,10 +1239,10 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
             }
           >
             <div className="flex items-center gap-1.5 font-semibold">
-              <span className={isBrutal ? 'text-[10px] px-1.5 py-0.5 bg-white border border-black text-black font-mono font-black' : isObsidian ? 'text-[10px] px-1.5 py-0.5 bg-[#070709] border border-[#D4AF37]/60 text-[#F3E5AB] group-hover:border-[#070709] font-mono' : 'text-[10px] px-1 py-0.2 rounded bg-zinc-800 border border-zinc-600 text-white'}>4</span>
+              <span className={isNordic ? 'text-[10px] px-1.5 py-0.5 rounded-md bg-[#FDFBF7]/15 border border-[#FDFBF7]/35 text-[#FDFBF7] font-mono' : isGlass ? 'text-[10px] px-1.5 py-0.5 rounded-md bg-white/10 border border-sky-300/50 text-sky-100 group-hover:bg-slate-950/20 group-hover:border-slate-950/40 group-hover:text-slate-950 font-mono' : isBrutal ? 'text-[10px] px-1.5 py-0.5 bg-white border border-black text-black font-mono font-black' : isObsidian ? 'text-[10px] px-1.5 py-0.5 bg-[#070709] border border-[#D4AF37]/60 text-[#F3E5AB] group-hover:border-[#070709] font-mono' : 'text-[10px] px-1 py-0.2 rounded bg-zinc-800 border border-zinc-600 text-white'}>4</span>
               <span>EASY</span>
             </div>
-            <span className={isBrutal ? 'text-[10px] font-bold text-zinc-900' : isObsidian ? 'text-[10px] text-[#C5A059] group-hover:text-[#070709] tracking-normal font-normal' : 'text-[10px] text-zinc-400 group-hover:text-zinc-300'}>
+            <span className={isNordic ? 'text-[10px] text-[#E7EFEA] font-normal' : isGlass ? 'text-[10px] text-sky-200 group-hover:text-slate-900 font-normal' : isBrutal ? 'text-[10px] font-bold text-zinc-900' : isObsidian ? 'text-[10px] text-[#C5A059] group-hover:text-[#070709] tracking-normal font-normal' : 'text-[10px] text-zinc-400 group-hover:text-zinc-300'}>
               Fast-track +2 Boxes
             </span>
           </button>

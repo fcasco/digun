@@ -1342,7 +1342,7 @@ export const UI_THEMES_LIST: UIThemeInfo[] = [
     name: "Glassmorphism / Frosted Glass",
     description: "Translucent card backdrops with backdrop-blur, subtle white border highlights, and floating layers.",
     keyCharacteristics: ["CSS backdrop-filter", "Translucent white scrims", "Soft gradient meshes", "Layered elevation"],
-    isChosen: false,
+    isChosen: true,
   },
   {
     rank: 4,
@@ -1396,9 +1396,9 @@ export const UI_THEMES_LIST: UIThemeInfo[] = [
   {
     rank: 11,
     name: "Nordic Organic Pastel",
-    description: "Muted sage green, sand beige, clay terracotta, rounded stone silhouettes, and tranquil wellness aesthetics.",
-    keyCharacteristics: ["Earthy pastel neutrals", "Organic soft contours", "Uncluttered breathing room", "Calming presence"],
-    isChosen: false,
+    description: "Muted sage green, warm linen sand, clay terracotta blush, soft rounded silhouettes, and tranquil clarity.",
+    keyCharacteristics: ["Warm linen & sage palette", "Organic soft contours", "Uncluttered breathing room", "Calming presence"],
+    isChosen: true,
   },
   {
     rank: 12,

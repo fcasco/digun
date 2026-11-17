@@ -34,7 +34,7 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
   onResetDeck,
   onExportJson,
 }) => {
-  const { isBrutal, isObsidian } = useTheme();
+  const { isGlass, isBrutal, isObsidian, isNordic } = useTheme();
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedBoxFilter, setSelectedBoxFilter] = useState<number | 'all'>('all');
@@ -116,11 +116,15 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
   };
 
   return (
-    <div className={`max-w-5xl mx-auto px-4 py-6 ${isBrutal || isObsidian ? 'font-sans' : 'font-mono'}`}>
+    <div className={`max-w-5xl mx-auto px-4 py-6 ${isBrutal || isObsidian || isGlass || isNordic ? 'font-sans' : 'font-mono'}`}>
       {/* Header & Vault Summary */}
       <div
         className={
-          isBrutal
+          isNordic
+            ? 'border border-[#DDD7C8] nordic-card rounded-2xl p-5 sm:p-6 mb-6'
+            : isGlass
+            ? 'border border-white/20 glass-panel rounded-2xl p-5 sm:p-6 mb-6'
+            : isBrutal
             ? 'border-2 border-black bg-white p-5 sm:p-6 mb-6 brutal-shadow-lg'
             : isObsidian
             ? 'border border-[#D4AF37]/25 obsidian-surface p-5 sm:p-6 mb-6'
@@ -130,10 +134,14 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <Layers className={isBrutal ? 'w-5 h-5 text-black' : isObsidian ? 'w-5 h-5 text-[#D4AF37]' : 'w-5 h-5 text-amber-400'} />
+              <Layers className={isNordic ? 'w-5 h-5 text-[#527360]' : isGlass ? 'w-5 h-5 text-sky-300' : isBrutal ? 'w-5 h-5 text-black' : isObsidian ? 'w-5 h-5 text-[#D4AF37]' : 'w-5 h-5 text-amber-400'} />
               <h2
                 className={
-                  isBrutal
+                  isNordic
+                    ? 'text-lg sm:text-xl font-bold tracking-tight text-[#242E28]'
+                    : isGlass
+                    ? 'text-lg sm:text-xl font-bold tracking-tight text-white'
+                    : isBrutal
                     ? 'text-lg sm:text-xl font-black tracking-tight text-black'
                     : isObsidian
                     ? 'font-luxury text-2xl sm:text-3xl font-semibold tracking-wide text-[#F5F0E6]'
@@ -143,7 +151,7 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                 LEITNER RETENTION VAULT
               </h2>
             </div>
-            <p className={isBrutal ? 'text-xs text-zinc-700 font-medium' : isObsidian ? 'text-xs text-[#A39E93]' : 'text-xs text-zinc-400'}>
+            <p className={isNordic ? 'text-xs text-[#4E5A53]' : isGlass ? 'text-xs text-slate-300' : isBrutal ? 'text-xs text-zinc-700 font-medium' : isObsidian ? 'text-xs text-[#A39E93]' : 'text-xs text-zinc-400'}>
               Systematic 5-tier spaced repetition storage. Cards migrate to higher intervals as recall strengthens over time.
             </p>
           </div>
@@ -155,14 +163,18 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                 setIsAddModalOpen(true);
               }}
               className={
-                isBrutal
+                isNordic
+                  ? 'px-4 py-2 rounded-xl bg-[#527360] hover:bg-[#425F4E] text-[#FDFBF7] border border-[#425F4E] text-xs font-semibold tracking-wide transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap shadow-sm'
+                  : isGlass
+                  ? 'px-4 py-2 rounded-xl bg-sky-400 hover:bg-sky-300 text-slate-950 border border-sky-300 text-xs font-semibold tracking-wide transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap shadow-lg shadow-sky-500/20'
+                  : isBrutal
                   ? 'px-3.5 py-2 bg-[#FFE500] hover:bg-[#FACC15] text-black border-2 border-black text-xs font-black cursor-pointer flex items-center gap-1.5 whitespace-nowrap brutal-btn'
                   : isObsidian
                   ? 'px-4 py-2 bg-[#D4AF37] hover:bg-[#E5C77B] text-[#070709] border border-[#E5C77B] text-[11px] font-semibold uppercase tracking-[0.16em] transition-colors cursor-pointer flex items-center gap-1.5 whitespace-nowrap'
                   : 'px-3.5 py-2 rounded bg-zinc-100 hover:bg-white text-zinc-950 text-xs font-bold transition-colors cursor-pointer flex items-center gap-1.5 whitespace-nowrap shadow-sm'
               }
             >
-              <Plus className={isBrutal ? 'w-4 h-4 text-black' : isObsidian ? 'w-4 h-4 text-[#070709]' : 'w-4 h-4 text-amber-600'} />
+              <Plus className={isNordic ? 'w-4 h-4 text-[#FDFBF7]' : isGlass ? 'w-4 h-4 text-slate-950' : isBrutal ? 'w-4 h-4 text-black' : isObsidian ? 'w-4 h-4 text-[#070709]' : 'w-4 h-4 text-amber-600'} />
               <span>ADD REFRAME</span>
             </button>
             <button
@@ -172,7 +184,11 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
               }}
               title="Export backup JSON"
               className={
-                isBrutal
+                isNordic
+                  ? 'p-2 rounded-xl nordic-well border border-[#DDD7C8] text-[#4E5A53] hover:text-[#242E28] hover:border-[#B8CBBF] text-xs transition-all cursor-pointer'
+                  : isGlass
+                  ? 'p-2 rounded-xl glass-well border border-white/20 text-slate-200 hover:text-white hover:border-sky-300/45 text-xs transition-all cursor-pointer'
+                  : isBrutal
                   ? 'p-2 border-2 border-black bg-white text-black hover:bg-[#F4F1EA] text-xs font-bold cursor-pointer brutal-btn'
                   : isObsidian
                   ? 'p-2 border border-[#2A241A] bg-[#070709] text-[#A39E93] hover:text-[#E5C77B] hover:border-[#D4AF37]/40 text-xs transition-colors cursor-pointer'
@@ -200,7 +216,19 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                   setSelectedBoxFilter(prev => prev === boxNum ? 'all' : boxNum);
                 }}
                 className={
-                  isBrutal
+                  isNordic
+                    ? `p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                        isSelected
+                          ? 'bg-[#E7EFEA] border-[#527360] shadow-sm'
+                          : 'nordic-well border-[#E2DDD0] hover:border-[#B8CBBF]'
+                      }`
+                    : isGlass
+                    ? `p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                        isSelected
+                          ? 'glass-panel-elevated border-sky-300/65'
+                          : 'glass-well border-white/15 hover:border-sky-300/40'
+                      }`
+                    : isBrutal
                     ? `p-3 border-2 border-black text-left cursor-pointer brutal-btn ${
                         isSelected
                           ? `${brutalBoxColors[boxNum]} ring-2 ring-black`
@@ -222,7 +250,11 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                 <div className="flex items-center justify-between text-[11px] mb-1">
                   <span
                     className={
-                      isBrutal
+                      isNordic
+                        ? `font-mono uppercase tracking-wider ${isSelected ? 'text-[#2D4739] font-semibold' : 'text-[#242E28] font-medium'}`
+                        : isGlass
+                        ? `font-mono uppercase tracking-wider ${isSelected ? 'text-sky-300 font-semibold' : 'text-slate-200 font-medium'}`
+                        : isBrutal
                         ? 'font-black text-black'
                         : isObsidian
                         ? `font-mono uppercase tracking-wider ${isSelected ? 'text-[#E5C77B] font-semibold' : 'text-[#DDD6C8]'}`
@@ -231,14 +263,14 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                   >
                     BOX {boxNum}
                   </span>
-                  <span className={isBrutal ? 'text-[10px] font-bold text-zinc-700 font-mono' : isObsidian ? 'text-[10px] font-mono text-[#8E877A]' : 'text-[10px] text-zinc-500'}>
+                  <span className={isNordic ? 'text-[10px] font-mono text-[#5C6962]' : isGlass ? 'text-[10px] font-mono text-slate-400' : isBrutal ? 'text-[10px] font-bold text-zinc-700 font-mono' : isObsidian ? 'text-[10px] font-mono text-[#8E877A]' : 'text-[10px] text-zinc-500'}>
                     {intervals[boxNum]}
                   </span>
                 </div>
-                <div className={isBrutal ? 'text-xl font-black text-black tabular-nums mb-1' : isObsidian ? 'text-xl font-mono font-semibold text-[#F5F0E6] tabular-nums mb-1' : 'text-xl font-bold text-zinc-100 tabular-nums mb-1'}>
+                <div className={isNordic ? 'text-xl font-bold font-mono text-[#242E28] tabular-nums mb-1' : isGlass ? 'text-xl font-bold font-mono text-white tabular-nums mb-1' : isBrutal ? 'text-xl font-black text-black tabular-nums mb-1' : isObsidian ? 'text-xl font-mono font-semibold text-[#F5F0E6] tabular-nums mb-1' : 'text-xl font-bold text-zinc-100 tabular-nums mb-1'}>
                   {count}
                 </div>
-                <div className={isBrutal ? 'text-[10px] font-extrabold text-zinc-800 tracking-wider' : isObsidian ? 'text-[10px] uppercase tracking-[0.16em] text-[#A39E93]' : 'text-[10px] text-zinc-500 tracking-wider'}>
+                <div className={isNordic ? 'text-[10px] font-medium uppercase tracking-wider text-[#5C6962]' : isGlass ? 'text-[10px] font-medium uppercase tracking-wider text-slate-400' : isBrutal ? 'text-[10px] font-extrabold text-zinc-800 tracking-wider' : isObsidian ? 'text-[10px] uppercase tracking-[0.16em] text-[#A39E93]' : 'text-[10px] text-zinc-500 tracking-wider'}>
                   {labels[boxNum]}
                 </div>
               </button>
@@ -247,11 +279,11 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
         </div>
 
         {selectedBoxFilter !== 'all' && (
-          <div className={isBrutal ? 'flex items-center justify-between text-xs font-bold text-black pt-2 border-t-2 border-black' : isObsidian ? 'flex items-center justify-between text-[11px] uppercase tracking-[0.14em] text-[#A39E93] pt-2.5 border-t border-[#2A241A]' : 'flex items-center justify-between text-xs text-zinc-400 pt-2 border-t border-zinc-800'}>
+          <div className={isNordic ? 'flex items-center justify-between text-[11px] uppercase tracking-wider text-[#4E5A53] pt-2.5 border-t border-[#E4DFD4]' : isGlass ? 'flex items-center justify-between text-[11px] uppercase tracking-wider text-slate-300 pt-2.5 border-t border-white/15' : isBrutal ? 'flex items-center justify-between text-xs font-bold text-black pt-2 border-t-2 border-black' : isObsidian ? 'flex items-center justify-between text-[11px] uppercase tracking-[0.14em] text-[#A39E93] pt-2.5 border-t border-[#2A241A]' : 'flex items-center justify-between text-xs text-zinc-400 pt-2 border-t border-zinc-800'}>
             <span>FILTERING BY BOX {selectedBoxFilter}</span>
             <button
               onClick={() => setSelectedBoxFilter('all')}
-              className={isBrutal ? 'text-black underline font-black cursor-pointer' : isObsidian ? 'text-[#E5C77B] hover:underline cursor-pointer font-semibold' : 'text-zinc-200 hover:underline cursor-pointer'}
+              className={isNordic ? 'text-[#3B5948] hover:underline cursor-pointer font-semibold' : isGlass ? 'text-sky-300 hover:underline cursor-pointer font-semibold' : isBrutal ? 'text-black underline font-black cursor-pointer' : isObsidian ? 'text-[#E5C77B] hover:underline cursor-pointer font-semibold' : 'text-zinc-200 hover:underline cursor-pointer'}
             >
               SHOW ALL BOXES
             </button>
@@ -262,14 +294,18 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
       {/* Filter and Search Bar */}
       <div className="flex flex-col sm:flex-row items-center gap-3 mb-6">
         <div className="relative flex-1 w-full">
-          <Search className={isBrutal ? 'w-4 h-4 text-black absolute left-3 top-1/2 -translate-y-1/2' : isObsidian ? 'w-4 h-4 text-[#C5A059] absolute left-3 top-1/2 -translate-y-1/2' : 'w-4 h-4 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2'} />
+          <Search className={isNordic ? 'w-4 h-4 text-[#527360] absolute left-3 top-1/2 -translate-y-1/2' : isGlass ? 'w-4 h-4 text-sky-300 absolute left-3 top-1/2 -translate-y-1/2' : isBrutal ? 'w-4 h-4 text-black absolute left-3 top-1/2 -translate-y-1/2' : isObsidian ? 'w-4 h-4 text-[#C5A059] absolute left-3 top-1/2 -translate-y-1/2' : 'w-4 h-4 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2'} />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search phrases, scenarios, or keywords..."
             className={
-              isBrutal
+              isNordic
+                ? 'w-full nordic-card border border-[#DDD7C8] focus:border-[#527360] rounded-xl pl-9 pr-3 py-2 text-xs text-[#242E28] placeholder-[#7B867F] focus:outline-none'
+                : isGlass
+                ? 'w-full glass-panel border border-white/20 focus:border-sky-300/60 rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-slate-400 focus:outline-none'
+                : isBrutal
                 ? 'w-full bg-white border-2 border-black pl-9 pr-3 py-2 text-xs font-bold text-black placeholder-zinc-500 focus:outline-none brutal-shadow-sm'
                 : isObsidian
                 ? 'w-full bg-[#0B0B0E] border border-[#2A241A] focus:border-[#D4AF37]/60 pl-9 pr-3 py-2 text-xs text-[#F5F0E6] placeholder-[#736D63] focus:outline-none'
@@ -286,7 +322,19 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
               setSelectedCategory('all');
             }}
             className={
-              isBrutal
+              isNordic
+                ? `px-3 py-1.5 text-[11px] font-medium rounded-xl border transition-all cursor-pointer whitespace-nowrap ${
+                    selectedCategory === 'all'
+                      ? 'bg-[#527360] text-[#FDFBF7] border-[#425F4E] font-semibold shadow-sm'
+                      : 'nordic-card text-[#4E5A53] border-[#DDD7C8] hover:text-[#242E28] hover:border-[#B8CBBF]'
+                  }`
+                : isGlass
+                ? `px-3 py-1.5 text-[11px] font-medium rounded-xl border transition-all cursor-pointer whitespace-nowrap ${
+                    selectedCategory === 'all'
+                      ? 'bg-sky-400 text-slate-950 border-sky-300 font-semibold shadow-sm'
+                      : 'glass-panel text-slate-200 border-white/15 hover:text-white hover:border-white/35'
+                  }`
+                : isBrutal
                 ? `px-2.5 py-1.5 text-xs font-extrabold border-2 border-black cursor-pointer whitespace-nowrap brutal-btn ${
                     selectedCategory === 'all'
                       ? 'bg-[#FFE500] text-black'
@@ -318,7 +366,19 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                   setSelectedCategory(cat.id);
                 }}
                 className={
-                  isBrutal
+                  isNordic
+                    ? `px-3 py-1.5 text-[11px] font-medium rounded-xl border transition-all cursor-pointer whitespace-nowrap ${
+                        isSelected
+                          ? 'bg-[#527360] text-[#FDFBF7] border-[#425F4E] font-semibold shadow-sm'
+                          : 'nordic-card text-[#4E5A53] border-[#DDD7C8] hover:text-[#242E28] hover:border-[#B8CBBF]'
+                      }`
+                    : isGlass
+                    ? `px-3 py-1.5 text-[11px] font-medium rounded-xl border transition-all cursor-pointer whitespace-nowrap ${
+                        isSelected
+                          ? 'bg-sky-400 text-slate-950 border-sky-300 font-semibold shadow-sm'
+                          : 'glass-panel text-slate-200 border-white/15 hover:text-white hover:border-white/35'
+                      }`
+                    : isBrutal
                     ? `px-2.5 py-1.5 text-xs font-extrabold border-2 border-black cursor-pointer whitespace-nowrap brutal-btn ${
                         isSelected
                           ? 'bg-[#FFE500] text-black'
@@ -349,7 +409,11 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
         {filteredCards.length === 0 ? (
           <div
             className={
-              isBrutal
+              isNordic
+                ? 'border border-[#DDD7C8] nordic-card rounded-2xl p-8 text-center text-[#5C6962]'
+                : isGlass
+                ? 'border border-white/20 glass-panel rounded-2xl p-8 text-center text-slate-300'
+                : isBrutal
                 ? 'border-2 border-black bg-white p-8 text-center text-black brutal-shadow'
                 : isObsidian
                 ? 'border border-[#2A241A] bg-[#0B0B0E] p-8 text-center text-[#A39E93]'
@@ -367,7 +431,11 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
               <div
                 key={card.id}
                 className={
-                  isBrutal
+                  isNordic
+                    ? 'border border-[#DDD7C8] hover:border-[#B8CBBF] nordic-card rounded-2xl transition-all overflow-hidden'
+                    : isGlass
+                    ? 'border border-white/18 hover:border-sky-300/40 glass-panel rounded-2xl transition-all overflow-hidden'
+                    : isBrutal
                     ? 'border-2 border-black bg-white brutal-shadow-sm transition-all overflow-hidden'
                     : isObsidian
                     ? 'border border-[#2A241A] hover:border-[#D4AF37]/40 bg-[#0B0B0E] transition-all overflow-hidden'
@@ -385,14 +453,18 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                   <div className="flex-1 min-w-0">
                     <div
                       className={
-                        isBrutal
+                        isNordic
+                          ? 'flex items-center gap-2 text-[10px] uppercase tracking-[0.14em] text-[#5C6962] mb-1.5'
+                          : isGlass
+                          ? 'flex items-center gap-2 text-[10px] uppercase tracking-[0.14em] text-slate-400 mb-1.5'
+                          : isBrutal
                           ? 'flex items-center gap-2 text-[11px] font-bold text-zinc-700 mb-1'
                           : isObsidian
                           ? 'flex items-center gap-2 text-[10px] uppercase tracking-[0.14em] text-[#8E877A] mb-1.5'
                           : 'flex items-center gap-2 text-[11px] text-zinc-500 mb-1'
                       }
                     >
-                      <span className={isBrutal ? 'bg-[#FFE500] border border-black px-1 py-0.2 text-black font-black font-mono' : isObsidian ? 'text-[#D4AF37] font-mono font-semibold' : 'text-zinc-200 font-bold'}>
+                      <span className={isNordic ? 'text-[#3B5948] font-mono font-semibold' : isGlass ? 'text-sky-300 font-mono font-semibold' : isBrutal ? 'bg-[#FFE500] border border-black px-1 py-0.2 text-black font-black font-mono' : isObsidian ? 'text-[#D4AF37] font-mono font-semibold' : 'text-zinc-200 font-bold'}>
                         [BOX {card.box}]
                       </span>
                       <span>·</span>
@@ -400,7 +472,7 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                       <span>·</span>
                       <span className="hidden sm:inline font-mono">STREAK: {card.streak}</span>
                       {card.isCustom && (
-                        <span className={isBrutal ? 'bg-[#7DD3FC] border border-black px-1 text-black font-black' : isObsidian ? 'text-[#E5C77B] font-semibold' : 'text-amber-400 font-bold'}>
+                        <span className={isNordic ? 'text-[#3B5948] font-semibold' : isGlass ? 'text-sky-200 font-semibold' : isBrutal ? 'bg-[#7DD3FC] border border-black px-1 text-black font-black' : isObsidian ? 'text-[#E5C77B] font-semibold' : 'text-amber-400 font-bold'}>
                           [CUSTOM]
                         </span>
                       )}
@@ -408,11 +480,11 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
 
                     {/* Compact preview comparison */}
                     <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 text-sm">
-                      <div className={isBrutal ? 'text-zinc-600 line-through truncate font-medium' : isObsidian ? 'text-[#8E877A] line-through truncate' : 'text-zinc-400 line-through truncate'}>
+                      <div className={isNordic ? 'text-[#5C6962] line-through truncate' : isGlass ? 'text-slate-400 line-through truncate' : isBrutal ? 'text-zinc-600 line-through truncate font-medium' : isObsidian ? 'text-[#8E877A] line-through truncate' : 'text-zinc-400 line-through truncate'}>
                         "{card.dangerPhrase}"
                       </div>
-                      <span className={isBrutal ? 'hidden sm:inline text-black font-black' : isObsidian ? 'hidden sm:inline text-[#D4AF37]' : 'hidden sm:inline text-zinc-600'}>→</span>
-                      <div className={isBrutal ? 'text-black font-black truncate' : isObsidian ? 'text-[#F3E5AB] font-medium truncate' : 'text-zinc-100 font-bold truncate'}>
+                      <span className={isNordic ? 'hidden sm:inline text-[#527360]' : isGlass ? 'hidden sm:inline text-sky-300' : isBrutal ? 'hidden sm:inline text-black font-black' : isObsidian ? 'hidden sm:inline text-[#D4AF37]' : 'hidden sm:inline text-zinc-600'}>→</span>
+                      <div className={isNordic ? 'text-[#242E28] font-semibold truncate' : isGlass ? 'text-white font-semibold truncate' : isBrutal ? 'text-black font-black truncate' : isObsidian ? 'text-[#F3E5AB] font-medium truncate' : 'text-zinc-100 font-bold truncate'}>
                         "{card.powerPhrase}"
                       </div>
                     </div>
@@ -427,7 +499,11 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                         handleSpeak(card.powerPhrase);
                       }}
                       className={
-                        isBrutal
+                        isNordic
+                          ? 'p-1.5 rounded-xl nordic-well border border-[#DDD7C8] text-[#4E5A53] hover:text-[#2D4739] hover:border-[#B8CBBF] transition-all cursor-pointer'
+                          : isGlass
+                          ? 'p-1.5 rounded-xl glass-well border border-white/15 text-slate-300 hover:text-sky-300 hover:border-sky-300/45 transition-all cursor-pointer'
+                          : isBrutal
                           ? 'p-1.5 border-2 border-black bg-[#F4F1EA] hover:bg-[#7DD3FC] text-black transition-colors cursor-pointer'
                           : isObsidian
                           ? 'p-1.5 border border-[#2A241A] bg-[#070709] text-[#A39E93] hover:text-[#E5C77B] hover:border-[#D4AF37]/40 transition-colors cursor-pointer'
@@ -437,7 +513,7 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                     >
                       <Volume2 className="w-4 h-4" />
                     </button>
-                    <div className={isBrutal ? 'text-black' : isObsidian ? 'text-[#A39E93]' : 'text-zinc-500'}>
+                    <div className={isNordic ? 'text-[#5C6962]' : isGlass ? 'text-slate-300' : isBrutal ? 'text-black' : isObsidian ? 'text-[#A39E93]' : 'text-zinc-500'}>
                       {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                     </div>
                   </div>
@@ -447,7 +523,11 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                 {isExpanded && (
                   <div
                     className={
-                      isBrutal
+                      isNordic
+                        ? 'px-4 pb-4 pt-3 border-t border-[#E4DFD4] bg-[#F6F3EC]/75 text-xs space-y-3'
+                        : isGlass
+                        ? 'px-4 pb-4 pt-3 border-t border-white/15 bg-slate-950/35 text-xs space-y-3'
+                        : isBrutal
                         ? 'px-4 pb-4 pt-3 border-t-2 border-black bg-[#FFFDF5] text-xs space-y-3'
                         : isObsidian
                         ? 'px-4 pb-4 pt-3 border-t border-[#2A241A] bg-[#070709] text-xs space-y-3'
@@ -457,38 +537,38 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                     
                     {/* Scenario */}
                     <div>
-                      <div className={isBrutal ? 'text-[11px] uppercase tracking-wider text-zinc-700 mb-1 font-black' : isObsidian ? 'text-[10px] uppercase tracking-[0.16em] text-[#8E877A] mb-1 font-semibold' : 'text-[11px] uppercase tracking-wider text-zinc-500 mb-1 font-bold'}>
+                      <div className={isNordic ? 'text-[10px] uppercase tracking-[0.14em] text-[#5C6962] mb-1 font-semibold' : isGlass ? 'text-[10px] uppercase tracking-[0.14em] text-slate-400 mb-1 font-semibold' : isBrutal ? 'text-[11px] uppercase tracking-wider text-zinc-700 mb-1 font-black' : isObsidian ? 'text-[10px] uppercase tracking-[0.16em] text-[#8E877A] mb-1 font-semibold' : 'text-[11px] uppercase tracking-wider text-zinc-500 mb-1 font-bold'}>
                         SITUATION CONTEXT:
                       </div>
-                      <div className={isBrutal ? 'text-zinc-900 font-semibold italic' : isObsidian ? 'text-[#DDD6C8] italic' : 'text-zinc-300 italic'}>
+                      <div className={isNordic ? 'text-[#4E5A53] italic' : isGlass ? 'text-slate-200 italic' : isBrutal ? 'text-zinc-900 font-semibold italic' : isObsidian ? 'text-[#DDD6C8] italic' : 'text-zinc-300 italic'}>
                         "{card.context}"
                       </div>
                     </div>
 
                     {/* Psychological Shift & Rationale */}
-                    <div className={isBrutal ? 'bg-white border-2 border-black p-3' : isObsidian ? 'bg-[#0B0B0E] border border-[#2A241A] p-3.5' : 'bg-zinc-900/60 border border-zinc-800 p-3 rounded'}>
-                      <div className={isBrutal ? 'text-[11px] uppercase tracking-wider text-black mb-1 font-black flex items-center gap-1.5' : isObsidian ? 'text-[11px] uppercase tracking-[0.14em] text-[#E5C77B] mb-1.5 font-semibold flex items-center gap-1.5' : 'text-[11px] uppercase tracking-wider text-zinc-200 mb-1 font-bold flex items-center gap-1.5'}>
-                        <Sparkles className={isBrutal ? 'w-3.5 h-3.5 text-black' : isObsidian ? 'w-3.5 h-3.5 text-[#D4AF37]' : 'w-3.5 h-3.5 text-zinc-400'} />
+                    <div className={isNordic ? 'nordic-card border border-[#DDD7C8] rounded-xl p-3.5' : isGlass ? 'glass-well border border-white/12 rounded-xl p-3.5' : isBrutal ? 'bg-white border-2 border-black p-3' : isObsidian ? 'bg-[#0B0B0E] border border-[#2A241A] p-3.5' : 'bg-zinc-900/60 border border-zinc-800 p-3 rounded'}>
+                      <div className={isNordic ? 'text-[11px] uppercase tracking-wider text-[#3B5948] mb-1.5 font-semibold flex items-center gap-1.5' : isGlass ? 'text-[11px] uppercase tracking-wider text-sky-200 mb-1.5 font-semibold flex items-center gap-1.5' : isBrutal ? 'text-[11px] uppercase tracking-wider text-black mb-1 font-black flex items-center gap-1.5' : isObsidian ? 'text-[11px] uppercase tracking-[0.14em] text-[#E5C77B] mb-1.5 font-semibold flex items-center gap-1.5' : 'text-[11px] uppercase tracking-wider text-zinc-200 mb-1 font-bold flex items-center gap-1.5'}>
+                        <Sparkles className={isNordic ? 'w-3.5 h-3.5 text-[#527360]' : isGlass ? 'w-3.5 h-3.5 text-sky-300' : isBrutal ? 'w-3.5 h-3.5 text-black' : isObsidian ? 'w-3.5 h-3.5 text-[#D4AF37]' : 'w-3.5 h-3.5 text-zinc-400'} />
                         <span>THE PSYCHOLOGY: {card.psychologicalShift}</span>
                       </div>
-                      <p className={isBrutal ? 'text-zinc-900 font-medium leading-relaxed' : isObsidian ? 'text-[#DDD6C8] leading-relaxed' : 'text-zinc-300 leading-relaxed'}>
+                      <p className={isNordic ? 'text-[#4E5A53] leading-relaxed' : isGlass ? 'text-slate-200 leading-relaxed' : isBrutal ? 'text-zinc-900 font-medium leading-relaxed' : isObsidian ? 'text-[#DDD6C8] leading-relaxed' : 'text-zinc-300 leading-relaxed'}>
                         {card.rationale}
                       </p>
                     </div>
 
                     {/* Delivery Advice */}
-                    <div className={isBrutal ? 'bg-[#DCFCE7] border-2 border-black p-3' : isObsidian ? 'bg-[#0B0B0E] border border-[#2A241A] p-3.5' : 'bg-zinc-900/60 border border-zinc-800 p-3 rounded'}>
-                      <div className={isBrutal ? 'text-[11px] uppercase tracking-wider text-black mb-1 font-black flex items-center gap-1.5' : isObsidian ? 'text-[11px] uppercase tracking-[0.14em] text-[#E5C77B] mb-1.5 font-semibold flex items-center gap-1.5' : 'text-[11px] uppercase tracking-wider text-zinc-200 mb-1 font-bold flex items-center gap-1.5'}>
-                        <CheckCircle2 className={isBrutal ? 'w-3.5 h-3.5 text-black' : isObsidian ? 'w-3.5 h-3.5 text-[#D4AF37]' : 'w-3.5 h-3.5 text-zinc-400'} />
+                    <div className={isNordic ? 'nordic-card border border-[#B8CBBF] rounded-xl p-3.5' : isGlass ? 'glass-well border border-white/12 rounded-xl p-3.5' : isBrutal ? 'bg-[#DCFCE7] border-2 border-black p-3' : isObsidian ? 'bg-[#0B0B0E] border border-[#2A241A] p-3.5' : 'bg-zinc-900/60 border border-zinc-800 p-3 rounded'}>
+                      <div className={isNordic ? 'text-[11px] uppercase tracking-wider text-[#2D4739] mb-1.5 font-semibold flex items-center gap-1.5' : isGlass ? 'text-[11px] uppercase tracking-wider text-sky-200 mb-1.5 font-semibold flex items-center gap-1.5' : isBrutal ? 'text-[11px] uppercase tracking-wider text-black mb-1 font-black flex items-center gap-1.5' : isObsidian ? 'text-[11px] uppercase tracking-[0.14em] text-[#E5C77B] mb-1.5 font-semibold flex items-center gap-1.5' : 'text-[11px] uppercase tracking-wider text-zinc-200 mb-1 font-bold flex items-center gap-1.5'}>
+                        <CheckCircle2 className={isNordic ? 'w-3.5 h-3.5 text-[#527360]' : isGlass ? 'w-3.5 h-3.5 text-sky-300' : isBrutal ? 'w-3.5 h-3.5 text-black' : isObsidian ? 'w-3.5 h-3.5 text-[#D4AF37]' : 'w-3.5 h-3.5 text-zinc-400'} />
                         <span>VOCAL DELIVERY TIP:</span>
                       </div>
-                      <p className={isBrutal ? 'text-zinc-900 font-medium leading-relaxed' : isObsidian ? 'text-[#DDD6C8] leading-relaxed' : 'text-zinc-300 leading-relaxed'}>
+                      <p className={isNordic ? 'text-[#242E28] leading-relaxed' : isGlass ? 'text-slate-200 leading-relaxed' : isBrutal ? 'text-zinc-900 font-medium leading-relaxed' : isObsidian ? 'text-[#DDD6C8] leading-relaxed' : 'text-zinc-300 leading-relaxed'}>
                         {card.deliveryTip}
                       </p>
                     </div>
 
                     {/* Leitner metadata footer */}
-                    <div className={isBrutal ? 'flex items-center justify-between text-[11px] font-bold text-zinc-700 pt-2 border-t-2 border-black' : isObsidian ? 'flex items-center justify-between text-[10px] uppercase tracking-[0.14em] text-[#8E877A] pt-2.5 border-t border-[#2A241A]' : 'flex items-center justify-between text-[11px] text-zinc-500 pt-2 border-t border-zinc-800'}>
+                    <div className={isNordic ? 'flex items-center justify-between text-[10px] uppercase tracking-wider text-[#5C6962] pt-2.5 border-t border-[#E4DFD4]' : isGlass ? 'flex items-center justify-between text-[10px] uppercase tracking-wider text-slate-400 pt-2.5 border-t border-white/15' : isBrutal ? 'flex items-center justify-between text-[11px] font-bold text-zinc-700 pt-2 border-t-2 border-black' : isObsidian ? 'flex items-center justify-between text-[10px] uppercase tracking-[0.14em] text-[#8E877A] pt-2.5 border-t border-[#2A241A]' : 'flex items-center justify-between text-[11px] text-zinc-500 pt-2 border-t border-zinc-800'}>
                       <div>
                         NEXT DUE: {card.lastReviewedAt ? new Date(card.nextDueAt).toLocaleDateString() : 'IMMEDIATE'} · REVIEWS: {card.timesReviewed}
                       </div>
@@ -500,7 +580,11 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                             onDeleteCard(card.id);
                           }}
                           className={
-                            isBrutal
+                            isNordic
+                              ? 'text-[#7D3B29] hover:text-[#242E28] border border-[#E4C5B9] bg-[#FAF0EC] hover:bg-[#F3E1DA] rounded-lg px-2.5 py-0.5 flex items-center gap-1 cursor-pointer'
+                              : isGlass
+                              ? 'text-rose-200 hover:text-white border border-rose-300/30 bg-rose-950/35 rounded-lg px-2.5 py-0.5 flex items-center gap-1 cursor-pointer'
+                              : isBrutal
                               ? 'text-black bg-[#FDA4AF] border border-black px-2 py-0.5 font-black flex items-center gap-1 cursor-pointer'
                               : isObsidian
                               ? 'text-[#E8A5A5] hover:text-white border border-[#3D2225] bg-[#140D0E] px-2.5 py-0.5 flex items-center gap-1 cursor-pointer'
@@ -524,7 +608,11 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
       {/* Footer Utility Options */}
       <div
         className={
-          isBrutal
+          isNordic
+            ? 'mt-8 pt-4 border-t border-[#E4DFD4] flex flex-wrap items-center justify-between gap-3 text-[11px] uppercase tracking-wider text-[#5C6962]'
+            : isGlass
+            ? 'mt-8 pt-4 border-t border-white/15 flex flex-wrap items-center justify-between gap-3 text-[11px] uppercase tracking-wider text-slate-400'
+            : isBrutal
             ? 'mt-8 pt-4 border-t-2 border-black flex flex-wrap items-center justify-between gap-3 text-xs font-bold text-zinc-700'
             : isObsidian
             ? 'mt-8 pt-4 border-t border-[#2A241A] flex flex-wrap items-center justify-between gap-3 text-[11px] uppercase tracking-[0.14em] text-[#8E877A]'
@@ -542,7 +630,11 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
             }
           }}
           className={
-            isBrutal
+            isNordic
+              ? 'text-[#4E5A53] hover:text-[#2D4739] transition-colors flex items-center gap-1.5 cursor-pointer font-medium'
+              : isGlass
+              ? 'text-slate-300 hover:text-sky-300 transition-colors flex items-center gap-1.5 cursor-pointer'
+              : isBrutal
               ? 'text-black hover:underline font-black flex items-center gap-1 cursor-pointer'
               : isObsidian
               ? 'text-[#A39E93] hover:text-[#E5C77B] transition-colors flex items-center gap-1.5 cursor-pointer'
@@ -556,20 +648,28 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
 
       {/* Add Custom Reframe Modal */}
       {isAddModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className={`fixed inset-0 z-50 backdrop-blur-sm flex items-center justify-center p-4 ${isNordic ? 'bg-[#242E28]/35' : 'bg-black/75'}`}>
           <div
             className={
-              isBrutal
+              isNordic
+                ? 'nordic-card-elevated border border-[#DDD7C8] rounded-2xl max-w-lg w-full p-6'
+                : isGlass
+                ? 'glass-panel-elevated border border-white/25 rounded-2xl max-w-lg w-full p-6'
+                : isBrutal
                 ? 'bg-[#FFFDF5] border-2 border-black max-w-lg w-full p-6 brutal-shadow-lg'
                 : isObsidian
                 ? 'obsidian-surface border border-[#D4AF37]/35 max-w-lg w-full p-6'
                 : 'bg-zinc-950 border border-zinc-750 rounded-lg max-w-lg w-full p-6 shadow-2xl'
             }
           >
-            <div className={`flex items-center justify-between mb-4 pb-3 ${isBrutal ? 'border-b-2 border-black' : isObsidian ? 'border-b border-[#2A241A]' : 'border-b border-zinc-800'}`}>
+            <div className={`flex items-center justify-between mb-4 pb-3 ${isNordic ? 'border-b border-[#E4DFD4]' : isGlass ? 'border-b border-white/15' : isBrutal ? 'border-b-2 border-black' : isObsidian ? 'border-b border-[#2A241A]' : 'border-b border-zinc-800'}`}>
               <div
                 className={
-                  isBrutal
+                  isNordic
+                    ? 'text-base font-bold text-[#242E28] tracking-tight'
+                    : isGlass
+                    ? 'text-base font-bold text-white tracking-tight'
+                    : isBrutal
                     ? 'text-sm font-black text-black tracking-tight'
                     : isObsidian
                     ? 'font-luxury text-lg font-semibold text-[#F5F0E6] tracking-wide'
@@ -581,7 +681,11 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
               <button
                 onClick={() => setIsAddModalOpen(false)}
                 className={
-                  isBrutal
+                  isNordic
+                    ? 'text-[#5C6962] hover:text-[#242E28] font-mono text-xs cursor-pointer'
+                    : isGlass
+                    ? 'text-slate-300 hover:text-sky-300 font-mono text-xs cursor-pointer'
+                    : isBrutal
                     ? 'text-black font-black border-2 border-black bg-[#FFE500] px-2 py-0.5 text-xs cursor-pointer'
                     : isObsidian
                     ? 'text-[#A39E93] hover:text-[#E5C77B] font-mono text-xs cursor-pointer'
@@ -592,16 +696,20 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
               </button>
             </div>
 
-            <form onSubmit={handleCreateCard} className={`space-y-4 text-xs ${isBrutal || isObsidian ? 'font-sans' : 'font-mono'}`}>
+            <form onSubmit={handleCreateCard} className={`space-y-4 text-xs ${isBrutal || isObsidian || isGlass || isNordic ? 'font-sans' : 'font-mono'}`}>
               <div>
-                <label className={isBrutal ? 'block text-black mb-1 font-extrabold' : isObsidian ? 'block text-[10px] uppercase tracking-[0.14em] text-[#A39E93] mb-1.5 font-semibold' : 'block text-zinc-400 mb-1 font-bold'}>
+                <label className={isNordic ? 'block text-[10px] uppercase tracking-wider text-[#5C6962] mb-1.5 font-semibold' : isGlass ? 'block text-[10px] uppercase tracking-wider text-slate-300 mb-1.5 font-semibold' : isBrutal ? 'block text-black mb-1 font-extrabold' : isObsidian ? 'block text-[10px] uppercase tracking-[0.14em] text-[#A39E93] mb-1.5 font-semibold' : 'block text-zinc-400 mb-1 font-bold'}>
                   COMMUNICATION CATEGORY:
                 </label>
                 <select
                   value={newCategory}
                   onChange={(e) => setNewCategory(e.target.value as CategoryId)}
                   className={
-                    isBrutal
+                    isNordic
+                      ? 'w-full nordic-well border border-[#DDD7C8] rounded-xl px-3 py-2 text-[#242E28] focus:border-[#527360] focus:outline-none cursor-pointer'
+                      : isGlass
+                      ? 'w-full glass-well border border-white/15 rounded-xl px-3 py-2 text-white focus:border-sky-300/60 focus:outline-none cursor-pointer'
+                      : isBrutal
                       ? 'w-full bg-white border-2 border-black px-3 py-2 text-black font-bold focus:outline-none cursor-pointer'
                       : isObsidian
                       ? 'w-full bg-[#070709] border border-[#2A241A] px-3 py-2 text-[#F5F0E6] focus:border-[#D4AF37]/60 focus:outline-none cursor-pointer'
@@ -609,13 +717,13 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                   }
                 >
                   {CATEGORIES.map(c => (
-                    <option key={c.id} value={c.id}>{c.name}</option>
+                    <option key={c.id} value={c.id} className={isNordic ? 'bg-[#FDFBF7] text-[#242E28]' : isGlass ? 'bg-[#0B192C] text-slate-100' : ''}>{c.name}</option>
                   ))}
                 </select>
               </div>
 
               <div>
-                <label className={isBrutal ? 'block text-black mb-1 font-extrabold' : isObsidian ? 'block text-[10px] uppercase tracking-[0.14em] text-[#E8A5A5] mb-1.5 font-semibold' : 'block text-zinc-300 mb-1 font-bold'}>
+                <label className={isNordic ? 'block text-[10px] uppercase tracking-wider text-[#964B36] mb-1.5 font-semibold' : isGlass ? 'block text-[10px] uppercase tracking-wider text-rose-200 mb-1.5 font-semibold' : isBrutal ? 'block text-black mb-1 font-extrabold' : isObsidian ? 'block text-[10px] uppercase tracking-[0.14em] text-[#E8A5A5] mb-1.5 font-semibold' : 'block text-zinc-300 mb-1 font-bold'}>
                   DON'T SAY (THE DANGER PHRASE):
                 </label>
                 <input
@@ -625,7 +733,11 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                   value={newDangerPhrase}
                   onChange={(e) => setNewDangerPhrase(e.target.value)}
                   className={
-                    isBrutal
+                    isNordic
+                      ? 'w-full nordic-well border border-[#DDD7C8] rounded-xl px-3 py-2 text-[#242E28] placeholder-[#7B867F] focus:border-[#527360] focus:outline-none'
+                      : isGlass
+                      ? 'w-full glass-well border border-white/15 rounded-xl px-3 py-2 text-white placeholder-slate-400 focus:border-sky-300/60 focus:outline-none'
+                      : isBrutal
                       ? 'w-full bg-white border-2 border-black px-3 py-2 text-black font-medium focus:outline-none'
                       : isObsidian
                       ? 'w-full bg-[#070709] border border-[#2A241A] px-3 py-2 text-[#F5F0E6] placeholder-[#736D63] focus:border-[#D4AF37]/60 focus:outline-none'
@@ -635,7 +747,7 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
               </div>
 
               <div>
-                <label className={isBrutal ? 'block text-black mb-1 font-extrabold' : isObsidian ? 'block text-[10px] uppercase tracking-[0.14em] text-[#E5C77B] mb-1.5 font-semibold' : 'block text-zinc-300 mb-1 font-bold'}>
+                <label className={isNordic ? 'block text-[10px] uppercase tracking-wider text-[#3B5948] mb-1.5 font-semibold' : isGlass ? 'block text-[10px] uppercase tracking-wider text-sky-300 mb-1.5 font-semibold' : isBrutal ? 'block text-black mb-1 font-extrabold' : isObsidian ? 'block text-[10px] uppercase tracking-[0.14em] text-[#E5C77B] mb-1.5 font-semibold' : 'block text-zinc-300 mb-1 font-bold'}>
                   SAY INSTEAD (THE POWER REFRAME):
                 </label>
                 <input
@@ -645,7 +757,11 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                   value={newPowerPhrase}
                   onChange={(e) => setNewPowerPhrase(e.target.value)}
                   className={
-                    isBrutal
+                    isNordic
+                      ? 'w-full nordic-well border border-[#DDD7C8] rounded-xl px-3 py-2 text-[#242E28] placeholder-[#7B867F] focus:border-[#527360] focus:outline-none'
+                      : isGlass
+                      ? 'w-full glass-well border border-white/15 rounded-xl px-3 py-2 text-white placeholder-slate-400 focus:border-sky-300/60 focus:outline-none'
+                      : isBrutal
                       ? 'w-full bg-white border-2 border-black px-3 py-2 text-black font-bold focus:outline-none'
                       : isObsidian
                       ? 'w-full bg-[#070709] border border-[#2A241A] px-3 py-2 text-[#F3E5AB] placeholder-[#736D63] focus:border-[#D4AF37]/60 focus:outline-none'
@@ -655,7 +771,7 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
               </div>
 
               <div>
-                <label className={isBrutal ? 'block text-black mb-1 font-extrabold' : isObsidian ? 'block text-[10px] uppercase tracking-[0.14em] text-[#A39E93] mb-1.5 font-semibold' : 'block text-zinc-400 mb-1 font-bold'}>
+                <label className={isNordic ? 'block text-[10px] uppercase tracking-wider text-[#5C6962] mb-1.5 font-semibold' : isGlass ? 'block text-[10px] uppercase tracking-wider text-slate-300 mb-1.5 font-semibold' : isBrutal ? 'block text-black mb-1 font-extrabold' : isObsidian ? 'block text-[10px] uppercase tracking-[0.14em] text-[#A39E93] mb-1.5 font-semibold' : 'block text-zinc-400 mb-1 font-bold'}>
                   SITUATIONAL CONTEXT TRIGGER:
                 </label>
                 <input
@@ -664,7 +780,11 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                   value={newContext}
                   onChange={(e) => setNewContext(e.target.value)}
                   className={
-                    isBrutal
+                    isNordic
+                      ? 'w-full nordic-well border border-[#DDD7C8] rounded-xl px-3 py-2 text-[#242E28] placeholder-[#7B867F] focus:border-[#527360] focus:outline-none'
+                      : isGlass
+                      ? 'w-full glass-well border border-white/15 rounded-xl px-3 py-2 text-white placeholder-slate-400 focus:border-sky-300/60 focus:outline-none'
+                      : isBrutal
                       ? 'w-full bg-white border-2 border-black px-3 py-2 text-black font-medium focus:outline-none'
                       : isObsidian
                       ? 'w-full bg-[#070709] border border-[#2A241A] px-3 py-2 text-[#F5F0E6] placeholder-[#736D63] focus:border-[#D4AF37]/60 focus:outline-none'
@@ -674,7 +794,7 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
               </div>
 
               <div>
-                <label className={isBrutal ? 'block text-black mb-1 font-extrabold' : isObsidian ? 'block text-[10px] uppercase tracking-[0.14em] text-[#A39E93] mb-1.5 font-semibold' : 'block text-zinc-400 mb-1 font-bold'}>
+                <label className={isNordic ? 'block text-[10px] uppercase tracking-wider text-[#5C6962] mb-1.5 font-semibold' : isGlass ? 'block text-[10px] uppercase tracking-wider text-slate-300 mb-1.5 font-semibold' : isBrutal ? 'block text-black mb-1 font-extrabold' : isObsidian ? 'block text-[10px] uppercase tracking-[0.14em] text-[#A39E93] mb-1.5 font-semibold' : 'block text-zinc-400 mb-1 font-bold'}>
                   PSYCHOLOGICAL SHIFT:
                 </label>
                 <input
@@ -683,7 +803,11 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                   value={newPsychShift}
                   onChange={(e) => setNewPsychShift(e.target.value)}
                   className={
-                    isBrutal
+                    isNordic
+                      ? 'w-full nordic-well border border-[#DDD7C8] rounded-xl px-3 py-2 text-[#242E28] placeholder-[#7B867F] focus:border-[#527360] focus:outline-none'
+                      : isGlass
+                      ? 'w-full glass-well border border-white/15 rounded-xl px-3 py-2 text-white placeholder-slate-400 focus:border-sky-300/60 focus:outline-none'
+                      : isBrutal
                       ? 'w-full bg-white border-2 border-black px-3 py-2 text-black font-medium focus:outline-none'
                       : isObsidian
                       ? 'w-full bg-[#070709] border border-[#2A241A] px-3 py-2 text-[#F5F0E6] placeholder-[#736D63] focus:border-[#D4AF37]/60 focus:outline-none'
@@ -692,12 +816,16 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                 />
               </div>
 
-              <div className={`flex items-center justify-end gap-3 pt-3 ${isBrutal ? 'border-t-2 border-black' : isObsidian ? 'border-t border-[#2A241A]' : 'border-t border-zinc-800'}`}>
+              <div className={`flex items-center justify-end gap-3 pt-3 ${isNordic ? 'border-t border-[#E4DFD4]' : isGlass ? 'border-t border-white/15' : isBrutal ? 'border-t-2 border-black' : isObsidian ? 'border-t border-[#2A241A]' : 'border-t border-zinc-800'}`}>
                 <button
                   type="button"
                   onClick={() => setIsAddModalOpen(false)}
                   className={
-                    isBrutal
+                    isNordic
+                      ? 'px-4 py-2 rounded-xl nordic-well border border-[#DDD7C8] text-[#4E5A53] hover:text-[#242E28] hover:border-[#B8CBBF] text-xs font-medium cursor-pointer'
+                      : isGlass
+                      ? 'px-4 py-2 rounded-xl glass-well border border-white/15 text-slate-200 hover:text-white hover:border-white/35 text-xs font-medium cursor-pointer'
+                      : isBrutal
                       ? 'px-4 py-2 border-2 border-black bg-white text-black font-extrabold cursor-pointer brutal-btn'
                       : isObsidian
                       ? 'px-4 py-2 border border-[#2A241A] bg-[#070709] text-[#A39E93] hover:text-[#F5F0E6] uppercase tracking-[0.14em] text-[11px] cursor-pointer'
@@ -709,7 +837,11 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                 <button
                   type="submit"
                   className={
-                    isBrutal
+                    isNordic
+                      ? 'px-5 py-2 rounded-xl bg-[#527360] hover:bg-[#425F4E] text-[#FDFBF7] border border-[#425F4E] text-xs font-semibold cursor-pointer shadow-sm'
+                      : isGlass
+                      ? 'px-5 py-2 rounded-xl bg-sky-400 hover:bg-sky-300 text-slate-950 border border-sky-300 text-xs font-semibold cursor-pointer shadow-lg shadow-sky-500/20'
+                      : isBrutal
                       ? 'px-5 py-2 border-2 border-black bg-[#86EFAC] hover:bg-[#4ADE80] text-black font-black cursor-pointer brutal-btn'
                       : isObsidian
                       ? 'px-5 py-2 bg-[#D4AF37] hover:bg-[#E5C77B] text-[#070709] border border-[#E5C77B] uppercase tracking-[0.16em] text-[11px] font-semibold cursor-pointer'

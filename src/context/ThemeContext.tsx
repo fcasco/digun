@@ -1,30 +1,38 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
-export type AppTheme = 'obsidian' | 'neobrutalism' | 'terminal';
+export type AppTheme = 'nordic' | 'glassmorphism' | 'obsidian' | 'neobrutalism' | 'terminal';
 
 interface ThemeContextValue {
   theme: AppTheme;
   setTheme: (theme: AppTheme) => void;
   toggleTheme: () => void;
+  isNordic: boolean;
+  isGlass: boolean;
   isBrutal: boolean;
   isObsidian: boolean;
 }
 
-const THEME_STORAGE_KEY = 'articulation_ui_theme_v2';
+const THEME_STORAGE_KEY = 'articulation_ui_theme_v4';
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [theme, setThemeState] = useState<AppTheme>(() => {
-    if (typeof window === 'undefined') return 'obsidian';
+    if (typeof window === 'undefined') return 'nordic';
     try {
       const saved = localStorage.getItem(THEME_STORAGE_KEY);
-      if (saved === 'neobrutalism' || saved === 'terminal' || saved === 'obsidian') {
+      if (
+        saved === 'nordic' ||
+        saved === 'glassmorphism' ||
+        saved === 'neobrutalism' ||
+        saved === 'terminal' ||
+        saved === 'obsidian'
+      ) {
         return saved;
       }
-      return 'obsidian';
+      return 'nordic';
     } catch {
-      return 'obsidian';
+      return 'nordic';
     }
   });
 
@@ -40,7 +48,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, []);
 
   const toggleTheme = useCallback(() => {
-    const order: AppTheme[] = ['obsidian', 'neobrutalism', 'terminal'];
+    const order: AppTheme[] = ['nordic', 'glassmorphism', 'obsidian', 'neobrutalism', 'terminal'];
     const idx = order.indexOf(theme);
     setTheme(order[(idx + 1) % order.length]);
   }, [theme, setTheme]);
@@ -48,7 +56,11 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   // Sync root <html> & <body> attributes/classes for seamless background & scrollbar styling
   useEffect(() => {
     const root = document.documentElement;
-    if (theme === 'neobrutalism') {
+    if (theme === 'nordic') {
+      root.classList.remove('dark');
+      root.setAttribute('data-theme', 'nordic');
+      document.body.className = 'bg-[#F6F3EC] text-[#242E28] antialiased selection:bg-[#527360]/20 selection:text-[#242E28]';
+    } else if (theme === 'neobrutalism') {
       root.classList.remove('dark');
       root.setAttribute('data-theme', 'neobrutalism');
       document.body.className = 'bg-[#FFFDF5] text-zinc-950 antialiased selection:bg-[#FFE500] selection:text-black';
@@ -56,6 +68,10 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       root.classList.add('dark');
       root.setAttribute('data-theme', 'obsidian');
       document.body.className = 'bg-[#070709] text-[#F5F0E6] antialiased selection:bg-[#D4AF37]/30 selection:text-[#F3E5AB]';
+    } else if (theme === 'glassmorphism') {
+      root.classList.add('dark');
+      root.setAttribute('data-theme', 'glassmorphism');
+      document.body.className = 'bg-[#07111F] text-slate-100 antialiased selection:bg-sky-400/30 selection:text-sky-100';
     } else {
       root.classList.add('dark');
       root.setAttribute('data-theme', 'terminal');
@@ -69,6 +85,8 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         theme,
         setTheme,
         toggleTheme,
+        isNordic: theme === 'nordic',
+        isGlass: theme === 'glassmorphism',
         isBrutal: theme === 'neobrutalism',
         isObsidian: theme === 'obsidian',
       }}

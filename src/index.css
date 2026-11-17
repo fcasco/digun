@@ -10,8 +10,14 @@
 
   body {
     font-family: var(--font-sans);
-    background-color: #070709;
-    color: #F5F0E6;
+    background-color: #F6F3EC;
+    color: #242E28;
+  }
+
+  html[data-theme="nordic"] body {
+    font-family: var(--font-sans);
+    background-color: #F6F3EC;
+    color: #242E28;
   }
 
   html[data-theme="terminal"] body {
@@ -31,10 +37,72 @@
     background-color: #070709;
     color: #F5F0E6;
   }
+
+  html[data-theme="glassmorphism"] body {
+    font-family: var(--font-sans);
+    background-color: #07111F;
+    color: #F1F5F9;
+  }
 }
 
 .font-luxury {
   font-family: var(--font-serif);
+}
+
+/* Theme #11: Nordic Organic Pastel surfaces & calm botanical canvas */
+.nordic-canvas {
+  background-color: #F6F3EC;
+  background-image:
+    radial-gradient(ellipse 65% 50% at 10% 8%, rgba(82, 115, 96, 0.07), transparent 65%),
+    radial-gradient(ellipse 55% 45% at 90% 15%, rgba(198, 178, 152, 0.14), transparent 65%),
+    radial-gradient(ellipse 70% 50% at 50% 95%, rgba(145, 168, 153, 0.08), transparent 70%);
+  background-attachment: fixed;
+}
+
+.nordic-card {
+  background-color: #FDFBF7;
+  box-shadow: 0 10px 30px -12px rgba(45, 58, 50, 0.08);
+}
+
+.nordic-card-elevated {
+  background-color: #FFFFFF;
+  box-shadow: 0 16px 38px -14px rgba(45, 58, 50, 0.12);
+}
+
+.nordic-well {
+  background-color: #EFECE3;
+}
+
+/* Theme #03: Glassmorphism / Frosted Glass surfaces & atmospheric canvas */
+.glass-canvas {
+  background-color: #07111F;
+  background-image:
+    radial-gradient(ellipse 68% 52% at 12% 10%, rgba(56, 189, 248, 0.22), transparent 65%),
+    radial-gradient(ellipse 58% 48% at 88% 18%, rgba(45, 212, 191, 0.16), transparent 65%),
+    radial-gradient(ellipse 75% 55% at 50% 92%, rgba(59, 130, 246, 0.18), transparent 70%),
+    linear-gradient(160deg, #06101E 0%, #0B1D33 50%, #071424 100%);
+  background-attachment: fixed;
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.065);
+  backdrop-filter: blur(22px) saturate(155%);
+  -webkit-backdrop-filter: blur(22px) saturate(155%);
+  box-shadow: 0 20px 48px -18px rgba(2, 8, 22, 0.68), inset 0 1px 0 0 rgba(255, 255, 255, 0.22);
+}
+
+.glass-panel-elevated {
+  background: rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(26px) saturate(165%);
+  -webkit-backdrop-filter: blur(26px) saturate(165%);
+  box-shadow: 0 24px 56px -18px rgba(2, 8, 22, 0.74), inset 0 1px 0 0 rgba(255, 255, 255, 0.30);
+}
+
+.glass-well {
+  background: rgba(6, 15, 29, 0.44);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
 }
 
 /* Luxury Obsidian & Warm Brass surfaces */
@@ -133,6 +201,20 @@
   background: #3f3f46;
 }
 
+/* Glassmorphism scrollbars */
+html[data-theme="glassmorphism"] ::-webkit-scrollbar-track {
+  background: #07111F;
+}
+
+html[data-theme="glassmorphism"] ::-webkit-scrollbar-thumb {
+  background: rgba(186, 230, 253, 0.25);
+  border-radius: 9999px;
+}
+
+html[data-theme="glassmorphism"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(56, 189, 248, 0.5);
+}
+
 /* Luxury Obsidian & Warm Brass scrollbars */
 html[data-theme="obsidian"] ::-webkit-scrollbar-track {
   background: #070709;
@@ -165,4 +247,18 @@ html[data-theme="neobrutalism"] ::-webkit-scrollbar-thumb {
 
 html[data-theme="neobrutalism"] ::-webkit-scrollbar-thumb:hover {
   background: #27272a;
+}
+
+/* Nordic Organic Pastel scrollbars */
+html[data-theme="nordic"] ::-webkit-scrollbar-track {
+  background: #F6F3EC;
+}
+
+html[data-theme="nordic"] ::-webkit-scrollbar-thumb {
+  background: #D4CEC0;
+  border-radius: 9999px;
+}
+
+html[data-theme="nordic"] ::-webkit-scrollbar-thumb:hover {
+  background: #527360;
 }
