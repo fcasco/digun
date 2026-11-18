@@ -1,27 +1,33 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
-export type AppTheme = 'nordic' | 'glassmorphism' | 'obsidian' | 'neobrutalism' | 'terminal';
+export type AppTheme = 'slate' | 'clay' | 'saas' | 'nordic' | 'glassmorphism' | 'obsidian' | 'neobrutalism' | 'terminal';
 
 interface ThemeContextValue {
   theme: AppTheme;
   setTheme: (theme: AppTheme) => void;
   toggleTheme: () => void;
+  isSlate: boolean;
+  isClay: boolean;
+  isSaas: boolean;
   isNordic: boolean;
   isGlass: boolean;
   isBrutal: boolean;
   isObsidian: boolean;
 }
 
-const THEME_STORAGE_KEY = 'articulation_ui_theme_v4';
+const THEME_STORAGE_KEY = 'articulation_ui_theme_v7';
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [theme, setThemeState] = useState<AppTheme>(() => {
-    if (typeof window === 'undefined') return 'nordic';
+    if (typeof window === 'undefined') return 'slate';
     try {
       const saved = localStorage.getItem(THEME_STORAGE_KEY);
       if (
+        saved === 'slate' ||
+        saved === 'clay' ||
+        saved === 'saas' ||
         saved === 'nordic' ||
         saved === 'glassmorphism' ||
         saved === 'neobrutalism' ||
@@ -30,9 +36,9 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       ) {
         return saved;
       }
-      return 'nordic';
+      return 'slate';
     } catch {
-      return 'nordic';
+      return 'slate';
     }
   });
 
@@ -48,7 +54,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, []);
 
   const toggleTheme = useCallback(() => {
-    const order: AppTheme[] = ['nordic', 'glassmorphism', 'obsidian', 'neobrutalism', 'terminal'];
+    const order: AppTheme[] = ['slate', 'clay', 'saas', 'nordic', 'glassmorphism', 'obsidian', 'neobrutalism', 'terminal'];
     const idx = order.indexOf(theme);
     setTheme(order[(idx + 1) % order.length]);
   }, [theme, setTheme]);
@@ -56,7 +62,19 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   // Sync root <html> & <body> attributes/classes for seamless background & scrollbar styling
   useEffect(() => {
     const root = document.documentElement;
-    if (theme === 'nordic') {
+    if (theme === 'slate') {
+      root.classList.add('dark');
+      root.setAttribute('data-theme', 'slate');
+      document.body.className = 'bg-[#0F172A] text-slate-100 antialiased selection:bg-teal-400/25 selection:text-teal-100';
+    } else if (theme === 'clay') {
+      root.classList.remove('dark');
+      root.setAttribute('data-theme', 'clay');
+      document.body.className = 'bg-[#EEF2FA] text-[#1E2547] antialiased selection:bg-indigo-500/20 selection:text-indigo-950';
+    } else if (theme === 'saas') {
+      root.classList.remove('dark');
+      root.setAttribute('data-theme', 'saas');
+      document.body.className = 'bg-[#F8FAFC] text-[#0F172A] antialiased selection:bg-indigo-600/15 selection:text-indigo-950';
+    } else if (theme === 'nordic') {
       root.classList.remove('dark');
       root.setAttribute('data-theme', 'nordic');
       document.body.className = 'bg-[#F6F3EC] text-[#242E28] antialiased selection:bg-[#527360]/20 selection:text-[#242E28]';
@@ -85,6 +103,9 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         theme,
         setTheme,
         toggleTheme,
+        isSlate: theme === 'slate',
+        isClay: theme === 'clay',
+        isSaas: theme === 'saas',
         isNordic: theme === 'nordic',
         isGlass: theme === 'glassmorphism',
         isBrutal: theme === 'neobrutalism',

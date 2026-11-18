@@ -16,7 +16,7 @@ import { speechEngine } from '../utils/speechSynthesis';
 import { useTheme } from '../context/ThemeContext';
 
 export const ScenarioQuiz: React.FC = () => {
-  const { isGlass, isBrutal, isObsidian, isNordic } = useTheme();
+  const { isSlate, isClay, isSaas, isGlass, isBrutal, isObsidian, isNordic } = useTheme();
   const [filterCategory, setFilterCategory] = useState<string>('all');
   const [shuffleSeed, setShuffleSeed] = useState<number>(0);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
@@ -161,10 +161,16 @@ export const ScenarioQuiz: React.FC = () => {
     const percentage = Math.round((score / total) * 100);
 
     return (
-      <div className={`max-w-3xl mx-auto px-4 py-8 ${isBrutal || isObsidian || isGlass || isNordic ? 'font-sans' : 'font-mono'}`}>
+      <div className={`max-w-3xl mx-auto px-4 py-8 ${isSlate || isBrutal || isObsidian || isGlass || isNordic || isSaas || isClay ? 'font-sans' : 'font-mono'}`}>
         <div
           className={
-            isNordic
+            isSlate
+              ? 'slate-card-elevated border border-teal-400/35 rounded-lg p-6 sm:p-8 relative overflow-hidden'
+              : isClay
+              ? 'clay-card-elevated border border-white/95 rounded-3xl p-6 sm:p-8 relative overflow-hidden'
+              : isSaas
+              ? 'saas-card-elevated border border-slate-200 rounded-xl p-6 sm:p-8 relative overflow-hidden'
+              : isNordic
               ? 'nordic-card-elevated border border-[#DDD7C8] rounded-2xl p-6 sm:p-8 relative overflow-hidden'
               : isGlass
               ? 'glass-panel-elevated border border-white/25 rounded-2xl p-6 sm:p-8 relative overflow-hidden'
@@ -176,12 +182,18 @@ export const ScenarioQuiz: React.FC = () => {
           }
         >
           <div className="flex items-center gap-3 mb-4">
-            <div className={isNordic ? 'p-2 rounded-xl bg-[#E7EFEA] border border-[#B8CBBF] text-[#3B5948]' : isGlass ? 'p-2 rounded-xl bg-sky-400/15 border border-sky-300/35 text-sky-300' : isBrutal ? 'p-2 bg-[#86EFAC] border-2 border-black text-black' : ''}>
-              <CheckCircle2 className={isNordic ? 'w-5 h-5 text-[#3B5948]' : isGlass ? 'w-5 h-5 text-sky-300' : isBrutal ? 'w-5 h-5 text-black' : isObsidian ? 'w-5 h-5 text-[#D4AF37]' : 'w-5 h-5 text-amber-400'} />
+            <div className={isSlate ? 'p-2 rounded-md bg-teal-400/15 border border-teal-400/35 text-teal-300' : isClay ? 'p-2.5 rounded-2xl bg-[#E3FCEC] border border-white/80 text-[#065F46] shadow-sm' : isSaas ? 'p-2 rounded-lg bg-indigo-50 border border-indigo-200 text-indigo-600' : isNordic ? 'p-2 rounded-xl bg-[#E7EFEA] border border-[#B8CBBF] text-[#3B5948]' : isGlass ? 'p-2 rounded-xl bg-sky-400/15 border border-sky-300/35 text-sky-300' : isBrutal ? 'p-2 bg-[#86EFAC] border-2 border-black text-black' : ''}>
+              <CheckCircle2 className={isSlate ? 'w-5 h-5 text-teal-300' : isClay ? 'w-5 h-5 text-[#065F46]' : isSaas ? 'w-5 h-5 text-indigo-600' : isNordic ? 'w-5 h-5 text-[#3B5948]' : isGlass ? 'w-5 h-5 text-sky-300' : isBrutal ? 'w-5 h-5 text-black' : isObsidian ? 'w-5 h-5 text-[#D4AF37]' : 'w-5 h-5 text-amber-400'} />
             </div>
             <h2
               className={
-                isNordic
+                isSlate
+                  ? 'text-xl sm:text-2xl font-bold tracking-tight text-slate-100'
+                  : isClay
+                  ? 'text-xl sm:text-2xl font-bold tracking-tight text-[#1E2547]'
+                  : isSaas
+                  ? 'text-xl sm:text-2xl font-bold tracking-tight text-slate-900'
+                  : isNordic
                   ? 'text-xl sm:text-2xl font-bold tracking-tight text-[#242E28]'
                   : isGlass
                   ? 'text-xl sm:text-2xl font-bold tracking-tight text-white'
@@ -196,14 +208,20 @@ export const ScenarioQuiz: React.FC = () => {
             </h2>
           </div>
 
-          <p className={isNordic ? 'text-sm text-[#4E5A53] mb-6 leading-relaxed' : isGlass ? 'text-sm text-slate-300 mb-6 leading-relaxed' : isBrutal ? 'text-sm text-zinc-700 font-medium mb-6 leading-relaxed' : isObsidian ? 'text-sm text-[#A39E93] mb-6 leading-relaxed' : 'text-sm text-zinc-400 mb-6 leading-relaxed'}>
+          <p className={isSlate ? 'text-sm text-slate-300 mb-6 leading-relaxed' : isClay ? 'text-sm text-[#4B5478] mb-6 leading-relaxed' : isSaas ? 'text-sm text-slate-600 mb-6 leading-relaxed' : isNordic ? 'text-sm text-[#4E5A53] mb-6 leading-relaxed' : isGlass ? 'text-sm text-slate-300 mb-6 leading-relaxed' : isBrutal ? 'text-sm text-zinc-700 font-medium mb-6 leading-relaxed' : isObsidian ? 'text-sm text-[#A39E93] mb-6 leading-relaxed' : 'text-sm text-zinc-400 mb-6 leading-relaxed'}>
             Situational simulation complete. You evaluated strategic verbal options across complex interpersonal workplace dynamics.
           </p>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-8">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3.5 mb-8">
             <div
               className={
-                isNordic
+                isSlate
+                  ? 'slate-well border border-slate-800 rounded-md p-4 text-center'
+                  : isClay
+                  ? 'clay-well border border-white/70 rounded-2xl p-4 text-center'
+                  : isSaas
+                  ? 'saas-well border border-slate-200 rounded-lg p-4 text-center'
+                  : isNordic
                   ? 'nordic-well border border-[#E2DDD0] rounded-xl p-4 text-center'
                   : isGlass
                   ? 'glass-well border border-white/15 rounded-xl p-4 text-center'
@@ -214,16 +232,22 @@ export const ScenarioQuiz: React.FC = () => {
                   : 'border border-zinc-800 bg-zinc-900/50 p-4 rounded text-center'
               }
             >
-              <div className={isNordic ? 'text-[10px] font-semibold uppercase tracking-wider text-[#5C6962] mb-1' : isGlass ? 'text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1' : isBrutal ? 'text-xs font-extrabold text-zinc-700 mb-1' : isObsidian ? 'text-[10px] uppercase tracking-[0.16em] text-[#8E877A] mb-1' : 'text-xs text-zinc-500 mb-1'}>
+              <div className={isSlate ? 'text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1' : isClay ? 'text-[10px] font-semibold uppercase tracking-wider text-[#647094] mb-1' : isSaas ? 'text-[10px] font-semibold uppercase tracking-wider text-slate-500 mb-1' : isNordic ? 'text-[10px] font-semibold uppercase tracking-wider text-[#5C6962] mb-1' : isGlass ? 'text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1' : isBrutal ? 'text-xs font-extrabold text-zinc-700 mb-1' : isObsidian ? 'text-[10px] uppercase tracking-[0.16em] text-[#8E877A] mb-1' : 'text-xs text-zinc-500 mb-1'}>
                 SCORE
               </div>
-              <div className={isNordic ? 'text-3xl font-bold font-mono text-[#242E28] tabular-nums' : isGlass ? 'text-3xl font-bold font-mono text-white tabular-nums' : isBrutal ? 'text-3xl font-black text-black tabular-nums' : isObsidian ? 'text-3xl font-mono font-semibold text-[#F5F0E6] tabular-nums' : 'text-3xl font-bold text-zinc-100 tabular-nums'}>
+              <div className={isSlate ? 'text-3xl font-bold font-mono text-slate-100 tabular-nums' : isClay ? 'text-3xl font-bold font-mono text-[#1E2547] tabular-nums' : isSaas ? 'text-3xl font-bold font-mono text-slate-900 tabular-nums' : isNordic ? 'text-3xl font-bold font-mono text-[#242E28] tabular-nums' : isGlass ? 'text-3xl font-bold font-mono text-white tabular-nums' : isBrutal ? 'text-3xl font-black text-black tabular-nums' : isObsidian ? 'text-3xl font-mono font-semibold text-[#F5F0E6] tabular-nums' : 'text-3xl font-bold text-zinc-100 tabular-nums'}>
                 {score} / {total}
               </div>
             </div>
             <div
               className={
-                isNordic
+                isSlate
+                  ? 'border border-teal-400/35 bg-teal-950/35 rounded-md p-4 text-center'
+                  : isClay
+                  ? 'border border-white/80 bg-[#E5E9FF] rounded-2xl p-4 text-center shadow-sm'
+                  : isSaas
+                  ? 'border border-indigo-200 bg-indigo-50/75 rounded-lg p-4 text-center'
+                  : isNordic
                   ? 'border border-[#B8CBBF] bg-[#E7EFEA] rounded-xl p-4 text-center'
                   : isGlass
                   ? 'border border-sky-300/40 bg-sky-950/35 rounded-xl p-4 text-center'
@@ -234,16 +258,22 @@ export const ScenarioQuiz: React.FC = () => {
                   : 'border border-zinc-800 bg-zinc-900/50 p-4 rounded text-center'
               }
             >
-              <div className={isNordic ? 'text-[10px] font-semibold uppercase tracking-wider text-[#3B5948] mb-1' : isGlass ? 'text-[10px] font-semibold uppercase tracking-wider text-sky-200 mb-1' : isBrutal ? 'text-xs font-extrabold text-black mb-1' : isObsidian ? 'text-[10px] uppercase tracking-[0.16em] text-[#C5A059] mb-1' : 'text-xs text-zinc-500 mb-1'}>
+              <div className={isSlate ? 'text-[10px] font-semibold uppercase tracking-wider text-teal-300 mb-1' : isClay ? 'text-[10px] font-semibold uppercase tracking-wider text-indigo-700 mb-1' : isSaas ? 'text-[10px] font-semibold uppercase tracking-wider text-indigo-700 mb-1' : isNordic ? 'text-[10px] font-semibold uppercase tracking-wider text-[#3B5948] mb-1' : isGlass ? 'text-[10px] font-semibold uppercase tracking-wider text-sky-200 mb-1' : isBrutal ? 'text-xs font-extrabold text-black mb-1' : isObsidian ? 'text-[10px] uppercase tracking-[0.16em] text-[#C5A059] mb-1' : 'text-xs text-zinc-500 mb-1'}>
                 ACCURACY
               </div>
-              <div className={isNordic ? 'text-3xl font-bold font-mono text-[#2D4739] tabular-nums' : isGlass ? 'text-3xl font-bold font-mono text-sky-300 tabular-nums' : isBrutal ? 'text-3xl font-black text-black tabular-nums' : isObsidian ? 'text-3xl font-mono font-semibold text-[#E5C77B] tabular-nums' : 'text-3xl font-bold text-amber-400 tabular-nums'}>
+              <div className={isSlate ? 'text-3xl font-bold font-mono text-teal-300 tabular-nums' : isClay ? 'text-3xl font-bold font-mono text-indigo-600 tabular-nums' : isSaas ? 'text-3xl font-bold font-mono text-indigo-700 tabular-nums' : isNordic ? 'text-3xl font-bold font-mono text-[#2D4739] tabular-nums' : isGlass ? 'text-3xl font-bold font-mono text-sky-300 tabular-nums' : isBrutal ? 'text-3xl font-black text-black tabular-nums' : isObsidian ? 'text-3xl font-mono font-semibold text-[#E5C77B] tabular-nums' : 'text-3xl font-bold text-amber-400 tabular-nums'}>
                 {percentage}%
               </div>
             </div>
             <div
               className={
-                isNordic
+                isSlate
+                  ? 'slate-well border border-slate-800 rounded-md p-4 text-center col-span-2 sm:col-span-1'
+                  : isClay
+                  ? 'border border-white/80 bg-[#E3FCEC] rounded-2xl p-4 text-center col-span-2 sm:col-span-1 shadow-sm'
+                  : isSaas
+                  ? 'saas-well border border-slate-200 rounded-lg p-4 text-center col-span-2 sm:col-span-1'
+                  : isNordic
                   ? 'nordic-well border border-[#E2DDD0] rounded-xl p-4 text-center col-span-2 sm:col-span-1'
                   : isGlass
                   ? 'glass-well border border-white/15 rounded-xl p-4 text-center col-span-2 sm:col-span-1'
@@ -254,10 +284,10 @@ export const ScenarioQuiz: React.FC = () => {
                   : 'border border-zinc-800 bg-zinc-900/50 p-4 rounded text-center col-span-2 sm:col-span-1'
               }
             >
-              <div className={isNordic ? 'text-[10px] font-semibold uppercase tracking-wider text-[#5C6962] mb-1' : isGlass ? 'text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1' : isBrutal ? 'text-xs font-extrabold text-black mb-1' : isObsidian ? 'text-[10px] uppercase tracking-[0.16em] text-[#8E877A] mb-1' : 'text-xs text-zinc-500 mb-1'}>
+              <div className={isSlate ? 'text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1' : isClay ? 'text-[10px] font-semibold uppercase tracking-wider text-[#065F46] mb-1' : isSaas ? 'text-[10px] font-semibold uppercase tracking-wider text-slate-500 mb-1' : isNordic ? 'text-[10px] font-semibold uppercase tracking-wider text-[#5C6962] mb-1' : isGlass ? 'text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1' : isBrutal ? 'text-xs font-extrabold text-black mb-1' : isObsidian ? 'text-[10px] uppercase tracking-[0.16em] text-[#8E877A] mb-1' : 'text-xs text-zinc-500 mb-1'}>
                 STRATEGIC RATING
               </div>
-              <div className={isNordic ? 'text-lg font-bold tracking-wide text-[#242E28]' : isGlass ? 'text-lg font-bold tracking-wide text-white' : isBrutal ? 'text-lg font-black text-black' : isObsidian ? 'font-luxury text-xl font-semibold tracking-wider text-[#F3E5AB]' : 'text-lg font-bold text-zinc-200'}>
+              <div className={isSlate ? 'text-lg font-bold tracking-wide text-slate-100' : isClay ? 'text-lg font-bold tracking-wide text-[#065F46]' : isSaas ? 'text-lg font-bold tracking-wide text-slate-900' : isNordic ? 'text-lg font-bold tracking-wide text-[#242E28]' : isGlass ? 'text-lg font-bold tracking-wide text-white' : isBrutal ? 'text-lg font-black text-black' : isObsidian ? 'font-luxury text-xl font-semibold tracking-wider text-[#F3E5AB]' : 'text-lg font-bold text-zinc-200'}>
                 {percentage >= 80 ? 'EXECUTIVE' : percentage >= 50 ? 'PRACTITIONER' : 'REFINING'}
               </div>
             </div>
@@ -267,7 +297,13 @@ export const ScenarioQuiz: React.FC = () => {
             <button
               onClick={() => handleRestart(false)}
               className={
-                isNordic
+                isSlate
+                  ? 'px-5 py-2.5 rounded-md bg-teal-400 hover:bg-teal-300 text-slate-950 border border-teal-300 font-semibold text-xs tracking-wide transition-colors cursor-pointer flex items-center justify-center gap-2 shadow-xs'
+                  : isClay
+                  ? 'px-5 py-2.5 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white border border-indigo-400/60 font-semibold text-xs tracking-wide transition-all cursor-pointer flex items-center justify-center gap-2 clay-btn whitespace-nowrap shrink-0'
+                  : isSaas
+                  ? 'px-5 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white border border-indigo-600 font-semibold text-xs tracking-wide transition-colors cursor-pointer flex items-center justify-center gap-2 shadow-xs'
+                  : isNordic
                   ? 'px-5 py-2.5 rounded-xl bg-[#527360] hover:bg-[#425F4E] text-[#FDFBF7] border border-[#425F4E] font-semibold text-xs tracking-wide transition-all cursor-pointer flex items-center justify-center gap-2 shadow-sm'
                   : isGlass
                   ? 'px-5 py-2.5 rounded-xl bg-sky-400 hover:bg-sky-300 text-slate-950 border border-sky-300 font-semibold text-xs tracking-wide transition-all cursor-pointer flex items-center justify-center gap-2 shadow-lg shadow-sky-500/20'
@@ -278,13 +314,19 @@ export const ScenarioQuiz: React.FC = () => {
                   : 'px-5 py-2.5 rounded bg-zinc-100 hover:bg-white text-zinc-950 font-bold text-xs tracking-wider transition-colors cursor-pointer flex items-center justify-center gap-2'
               }
             >
-              <RotateCcw className={isNordic ? 'w-4 h-4 text-[#FDFBF7]' : isGlass ? 'w-4 h-4 text-slate-950' : isBrutal ? 'w-4 h-4 text-black' : isObsidian ? 'w-4 h-4 text-[#070709]' : 'w-4 h-4 text-amber-600'} />
+              <RotateCcw className={isSlate ? 'w-4 h-4 text-slate-950' : isClay || isSaas ? 'w-4 h-4 text-white' : isNordic ? 'w-4 h-4 text-[#FDFBF7]' : isGlass ? 'w-4 h-4 text-slate-950' : isBrutal ? 'w-4 h-4 text-black' : isObsidian ? 'w-4 h-4 text-[#070709]' : 'w-4 h-4 text-amber-600'} />
               <span>RESTART DRILL</span>
             </button>
             <button
               onClick={() => handleRestart(true)}
               className={
-                isNordic
+                isSlate
+                  ? 'px-5 py-2.5 rounded-md bg-[#0B1220] border border-slate-700 hover:border-teal-400/50 text-slate-200 hover:text-white font-medium text-xs tracking-wide transition-colors cursor-pointer flex items-center justify-center gap-2'
+                  : isClay
+                  ? 'px-5 py-2.5 rounded-2xl bg-white border border-white/90 text-[#1E2547] hover:text-indigo-600 font-semibold text-xs tracking-wide transition-all cursor-pointer flex items-center justify-center gap-2 clay-btn-soft whitespace-nowrap shrink-0'
+                  : isSaas
+                  ? 'px-5 py-2.5 rounded-lg bg-white border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700 font-medium text-xs tracking-wide transition-colors cursor-pointer flex items-center justify-center gap-2'
+                  : isNordic
                   ? 'px-5 py-2.5 rounded-xl nordic-well border border-[#DDD7C8] hover:border-[#B8CBBF] text-[#242E28] font-medium text-xs tracking-wide transition-all cursor-pointer flex items-center justify-center gap-2'
                   : isGlass
                   ? 'px-5 py-2.5 rounded-xl glass-well border border-white/20 hover:border-white/35 text-white font-medium text-xs tracking-wide transition-all cursor-pointer flex items-center justify-center gap-2'
@@ -307,11 +349,17 @@ export const ScenarioQuiz: React.FC = () => {
   const progressPercent = Math.round(((currentQuestionIndex + 1) / filteredQuestions.length) * 100);
 
   return (
-    <div className={`max-w-3xl mx-auto px-4 py-6 ${isBrutal || isObsidian || isGlass || isNordic ? 'font-sans' : 'font-mono'}`}>
+    <div className={`max-w-3xl mx-auto px-4 py-6 ${isSlate || isBrutal || isObsidian || isGlass || isNordic || isSaas || isClay ? 'font-sans' : 'font-mono'}`}>
       {/* Toolbar: Category filter, Shuffle & Progress */}
       <div
         className={
-          isNordic
+          isSlate
+            ? 'flex flex-wrap items-center justify-between gap-3 mb-4 border border-slate-700/80 slate-card rounded-lg p-3'
+            : isClay
+            ? 'flex flex-wrap items-center justify-between gap-3 mb-4 border border-white/90 clay-card rounded-3xl p-3.5'
+            : isSaas
+            ? 'flex flex-wrap items-center justify-between gap-3 mb-4 border border-slate-200 saas-card rounded-xl p-3'
+            : isNordic
             ? 'flex flex-wrap items-center justify-between gap-3 mb-4 border border-[#DDD7C8] nordic-card rounded-2xl p-3'
             : isGlass
             ? 'flex flex-wrap items-center justify-between gap-3 mb-4 border border-white/20 glass-panel rounded-2xl p-3'
@@ -324,7 +372,13 @@ export const ScenarioQuiz: React.FC = () => {
       >
         <div
           className={
-            isNordic
+            isSlate
+              ? 'flex items-center gap-2 text-xs text-slate-400'
+              : isClay
+              ? 'flex items-center gap-2 text-xs text-[#647094]'
+              : isSaas
+              ? 'flex items-center gap-2 text-xs text-slate-500'
+              : isNordic
               ? 'flex items-center gap-2 text-xs text-[#5C6962]'
               : isGlass
               ? 'flex items-center gap-2 text-xs text-slate-300'
@@ -335,13 +389,19 @@ export const ScenarioQuiz: React.FC = () => {
               : 'flex items-center gap-2 text-xs text-zinc-400'
           }
         >
-          <span className={isNordic ? 'text-[#242E28] font-mono font-semibold tabular-nums' : isGlass ? 'text-white font-mono font-semibold tabular-nums' : isBrutal ? 'font-black tabular-nums' : isObsidian ? 'text-[#F5F0E6] font-mono tabular-nums' : 'text-zinc-100 font-bold tabular-nums'}>
+          <span className={isSlate ? 'text-slate-100 font-mono font-semibold tabular-nums' : isClay ? 'text-[#1E2547] font-mono font-semibold tabular-nums' : isSaas ? 'text-slate-900 font-mono font-semibold tabular-nums' : isNordic ? 'text-[#242E28] font-mono font-semibold tabular-nums' : isGlass ? 'text-white font-mono font-semibold tabular-nums' : isBrutal ? 'font-black tabular-nums' : isObsidian ? 'text-[#F5F0E6] font-mono tabular-nums' : 'text-zinc-100 font-bold tabular-nums'}>
             SCENARIO {currentQuestionIndex + 1} / {filteredQuestions.length}
           </span>
           <span>·</span>
           <span
             className={
-              isNordic
+              isSlate
+                ? 'text-teal-300 font-mono font-semibold tabular-nums'
+                : isClay
+                ? 'text-indigo-600 font-mono font-semibold tabular-nums'
+                : isSaas
+                ? 'text-indigo-600 font-mono font-semibold tabular-nums'
+                : isNordic
                 ? 'text-[#3B5948] font-mono font-semibold tabular-nums'
                 : isGlass
                 ? 'text-sky-300 font-mono font-semibold tabular-nums'
@@ -357,8 +417,8 @@ export const ScenarioQuiz: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <div className={isNordic ? 'flex items-center gap-1.5 text-xs text-[#4E5A53]' : isGlass ? 'flex items-center gap-1.5 text-xs text-slate-300' : isBrutal ? 'flex items-center gap-1.5 text-xs text-black' : isObsidian ? 'flex items-center gap-1.5 text-xs text-[#A39E93]' : 'flex items-center gap-1.5 text-xs text-zinc-400'}>
-            <SlidersHorizontal className={isNordic ? 'w-3.5 h-3.5 text-[#527360]' : isGlass ? 'w-3.5 h-3.5 text-sky-300' : isBrutal ? 'w-3.5 h-3.5 text-black' : isObsidian ? 'w-3.5 h-3.5 text-[#C5A059]' : 'w-3.5 h-3.5 text-zinc-500'} />
+          <div className={isSlate ? 'flex items-center gap-1.5 text-xs text-slate-300' : isClay ? 'flex items-center gap-1.5 text-xs text-[#4B5478]' : isSaas ? 'flex items-center gap-1.5 text-xs text-slate-500' : isNordic ? 'flex items-center gap-1.5 text-xs text-[#4E5A53]' : isGlass ? 'flex items-center gap-1.5 text-xs text-slate-300' : isBrutal ? 'flex items-center gap-1.5 text-xs text-black' : isObsidian ? 'flex items-center gap-1.5 text-xs text-[#A39E93]' : 'flex items-center gap-1.5 text-xs text-zinc-400'}>
+            <SlidersHorizontal className={isSlate ? 'w-3.5 h-3.5 text-teal-400' : isClay ? 'w-3.5 h-3.5 text-indigo-500' : isSaas ? 'w-3.5 h-3.5 text-indigo-600' : isNordic ? 'w-3.5 h-3.5 text-[#527360]' : isGlass ? 'w-3.5 h-3.5 text-sky-300' : isBrutal ? 'w-3.5 h-3.5 text-black' : isObsidian ? 'w-3.5 h-3.5 text-[#C5A059]' : 'w-3.5 h-3.5 text-zinc-500'} />
             <select
               value={filterCategory}
               onChange={(e) => {
@@ -372,7 +432,13 @@ export const ScenarioQuiz: React.FC = () => {
                 e.currentTarget.blur();
               }}
               className={
-                isNordic
+                isSlate
+                  ? 'slate-well border border-slate-700/80 focus:border-teal-400 text-xs font-medium text-slate-100 rounded-md px-2.5 py-1.5 focus:outline-none cursor-pointer'
+                  : isClay
+                  ? 'clay-well border border-white/70 focus:border-indigo-300 text-xs font-semibold text-[#1E2547] rounded-2xl px-3 py-1.5 focus:outline-none cursor-pointer'
+                  : isSaas
+                  ? 'saas-well border border-slate-200 focus:border-indigo-500 text-xs font-medium text-slate-900 rounded-lg px-2.5 py-1.5 focus:outline-none cursor-pointer'
+                  : isNordic
                   ? 'nordic-well border border-[#DDD7C8] focus:border-[#527360] text-xs font-medium text-[#242E28] rounded-xl px-2.5 py-1.5 focus:outline-none cursor-pointer'
                   : isGlass
                   ? 'glass-well border border-white/15 focus:border-sky-300/60 text-xs font-medium text-slate-100 rounded-xl px-2.5 py-1.5 focus:outline-none cursor-pointer'
@@ -383,11 +449,11 @@ export const ScenarioQuiz: React.FC = () => {
                   : 'bg-zinc-900 border border-zinc-800 text-xs text-zinc-300 rounded px-2 py-1 focus:outline-none focus:border-zinc-600 cursor-pointer'
               }
             >
-              <option value="all" className={isNordic ? 'bg-[#FDFBF7] text-[#242E28]' : isGlass ? 'bg-[#0B192C] text-slate-100' : ''}>ALL SCENARIOS ({SCENARIO_QUIZZES.length})</option>
+              <option value="all" className={isSlate ? 'bg-[#0B1220] text-slate-100' : isClay ? 'bg-white text-[#1E2547]' : isSaas ? 'bg-white text-slate-900' : isNordic ? 'bg-[#FDFBF7] text-[#242E28]' : isGlass ? 'bg-[#0B192C] text-slate-100' : ''}>ALL SCENARIOS ({SCENARIO_QUIZZES.length})</option>
               {CATEGORIES.map(cat => {
                 const count = SCENARIO_QUIZZES.filter(q => q.category === cat.id).length;
                 return (
-                  <option key={cat.id} value={cat.id} className={isNordic ? 'bg-[#FDFBF7] text-[#242E28]' : isGlass ? 'bg-[#0B192C] text-slate-100' : ''}>
+                  <option key={cat.id} value={cat.id} className={isSlate ? 'bg-[#0B1220] text-slate-100' : isClay ? 'bg-white text-[#1E2547]' : isSaas ? 'bg-white text-slate-900' : isNordic ? 'bg-[#FDFBF7] text-[#242E28]' : isGlass ? 'bg-[#0B192C] text-slate-100' : ''}>
                     {cat.name.toUpperCase()} ({count})
                   </option>
                 );
@@ -400,7 +466,13 @@ export const ScenarioQuiz: React.FC = () => {
             onClick={() => handleRestart(true)}
             title="Shuffle scenarios"
             className={
-              isNordic
+              isSlate
+                ? 'text-[11px] px-2.5 py-1.5 rounded-md bg-[#0B1220] border border-slate-700 text-slate-200 hover:text-white hover:border-teal-400/50 transition-colors cursor-pointer flex items-center gap-1.5 whitespace-nowrap'
+                : isClay
+                ? 'text-[11px] px-3 py-1.5 rounded-2xl bg-white border border-white/90 text-[#4B5478] hover:text-[#1E2547] font-semibold transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0 clay-btn-soft'
+                : isSaas
+                ? 'text-[11px] px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:border-slate-300 transition-colors cursor-pointer flex items-center gap-1.5 whitespace-nowrap'
+                : isNordic
                 ? 'text-[11px] px-2.5 py-1.5 rounded-xl nordic-well border border-[#DDD7C8] text-[#4E5A53] hover:text-[#242E28] hover:border-[#B8CBBF] transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap'
                 : isGlass
                 ? 'text-[11px] px-2.5 py-1.5 rounded-xl glass-well border border-white/15 text-slate-200 hover:text-white hover:border-sky-300/40 transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap'
@@ -420,7 +492,13 @@ export const ScenarioQuiz: React.FC = () => {
       {/* Progress Track */}
       <div
         className={
-          isNordic
+          isSlate
+            ? 'w-full slate-well h-1.5 rounded-full overflow-hidden mb-5 border border-slate-800'
+            : isClay
+            ? 'w-full clay-well h-2 rounded-full overflow-hidden mb-5 border border-white/70'
+            : isSaas
+            ? 'w-full bg-slate-200/80 h-1.5 rounded-full overflow-hidden mb-5'
+            : isNordic
             ? 'w-full nordic-well h-1.5 rounded-full overflow-hidden mb-5 border border-[#E2DDD0]'
             : isGlass
             ? 'w-full glass-well h-1.5 rounded-full overflow-hidden mb-5 border border-white/15'
@@ -433,7 +511,13 @@ export const ScenarioQuiz: React.FC = () => {
       >
         <div
           className={
-            isNordic
+            isSlate
+              ? 'bg-teal-400 h-full transition-all duration-300'
+              : isClay
+              ? 'bg-indigo-500 h-full rounded-full transition-all duration-300'
+              : isSaas
+              ? 'bg-indigo-600 h-full transition-all duration-300'
+              : isNordic
               ? 'bg-[#527360] h-full transition-all duration-300'
               : isGlass
               ? 'bg-sky-400 h-full transition-all duration-300'
@@ -450,7 +534,13 @@ export const ScenarioQuiz: React.FC = () => {
       {speechNotice && (
         <div
           className={
-            isNordic
+            isSlate
+              ? 'mb-4 px-3.5 py-2.5 rounded-md border border-amber-400/40 bg-amber-950/35 text-xs text-amber-200 flex items-center justify-between gap-3'
+              : isClay
+              ? 'mb-4 px-4 py-2.5 rounded-2xl border border-white/80 bg-[#FEF3C7] text-xs text-[#92400E] flex items-center justify-between gap-3 shadow-sm'
+              : isSaas
+              ? 'mb-4 px-3.5 py-2.5 rounded-lg border border-amber-200 bg-amber-50 text-xs text-amber-800 flex items-center justify-between gap-3'
+              : isNordic
               ? 'mb-4 px-3.5 py-2.5 rounded-xl border border-[#DFD3BE] bg-[#F5EFE4] text-xs text-[#614F35] flex items-center justify-between gap-3'
               : isGlass
               ? 'mb-4 px-3.5 py-2.5 rounded-xl border border-sky-300/40 glass-panel text-xs text-sky-200 flex items-center justify-between gap-3'
@@ -465,7 +555,7 @@ export const ScenarioQuiz: React.FC = () => {
           <button
             type="button"
             onClick={() => setSpeechNotice(null)}
-            className={isNordic ? 'text-[#3B5948] hover:text-[#242E28] font-semibold cursor-pointer shrink-0' : isGlass ? 'text-sky-300 hover:text-white font-semibold cursor-pointer shrink-0' : isBrutal ? 'text-black underline font-black cursor-pointer shrink-0' : isObsidian ? 'text-[#A39E93] hover:text-[#F5F0E6] uppercase tracking-[0.12em] cursor-pointer shrink-0' : 'text-zinc-400 hover:text-zinc-200 cursor-pointer shrink-0'}
+            className={isSlate ? 'text-amber-300 hover:text-white font-semibold cursor-pointer shrink-0' : isClay ? 'text-[#78350F] hover:underline font-semibold cursor-pointer shrink-0' : isSaas ? 'text-amber-900 hover:underline font-semibold cursor-pointer shrink-0' : isNordic ? 'text-[#3B5948] hover:text-[#242E28] font-semibold cursor-pointer shrink-0' : isGlass ? 'text-sky-300 hover:text-white font-semibold cursor-pointer shrink-0' : isBrutal ? 'text-black underline font-black cursor-pointer shrink-0' : isObsidian ? 'text-[#A39E93] hover:text-[#F5F0E6] uppercase tracking-[0.12em] cursor-pointer shrink-0' : 'text-zinc-400 hover:text-zinc-200 cursor-pointer shrink-0'}
           >
             DISMISS
           </button>
@@ -475,7 +565,13 @@ export const ScenarioQuiz: React.FC = () => {
       {/* Question Card */}
       <div
         className={
-          isNordic
+          isSlate
+            ? 'border border-slate-700/80 slate-card rounded-lg p-6 sm:p-8 mb-6'
+            : isClay
+            ? 'border border-white/90 clay-card rounded-3xl p-6 sm:p-8 mb-6'
+            : isSaas
+            ? 'border border-slate-200 saas-card rounded-xl p-6 sm:p-8 mb-6'
+            : isNordic
             ? 'border border-[#DDD7C8] nordic-card rounded-2xl p-6 sm:p-8 mb-6'
             : isGlass
             ? 'border border-white/25 glass-panel rounded-2xl p-6 sm:p-8 mb-6'
@@ -490,7 +586,13 @@ export const ScenarioQuiz: React.FC = () => {
         {/* Context badge */}
         <div
           className={
-            isNordic
+            isSlate
+              ? 'text-[11px] uppercase tracking-[0.14em] text-teal-300 mb-2.5 font-semibold'
+              : isClay
+              ? 'text-[11px] uppercase tracking-[0.14em] text-indigo-600 mb-2.5 font-semibold'
+              : isSaas
+              ? 'text-[11px] uppercase tracking-[0.12em] text-indigo-600 mb-2.5 font-semibold'
+              : isNordic
               ? 'text-[11px] uppercase tracking-[0.16em] text-[#3B5948] mb-2.5 font-semibold'
               : isGlass
               ? 'text-[11px] uppercase tracking-[0.16em] text-sky-300 mb-2.5 font-semibold'
@@ -507,7 +609,13 @@ export const ScenarioQuiz: React.FC = () => {
         {/* Real-world Scenario */}
         <div
           className={
-            isNordic
+            isSlate
+              ? 'text-xl sm:text-2xl font-semibold text-slate-100 mb-5 leading-snug'
+              : isClay
+              ? 'text-xl sm:text-2xl font-semibold text-[#1E2547] mb-5 leading-snug'
+              : isSaas
+              ? 'text-xl sm:text-2xl font-semibold text-slate-900 mb-5 leading-snug'
+              : isNordic
               ? 'text-xl sm:text-2xl font-semibold text-[#242E28] mb-5 leading-snug'
               : isGlass
               ? 'text-xl sm:text-2xl font-semibold text-white mb-5 leading-snug'
@@ -524,7 +632,13 @@ export const ScenarioQuiz: React.FC = () => {
         {/* The Danger Phrase Trigger */}
         <div
           className={
-            isNordic
+            isSlate
+              ? 'border border-rose-500/35 bg-rose-950/35 rounded-md p-4 mb-6 flex items-start justify-between gap-3'
+              : isClay
+              ? 'border border-white/80 bg-[#FFE8EC] rounded-2xl p-4 mb-6 flex items-start justify-between gap-3 shadow-sm'
+              : isSaas
+              ? 'border border-rose-200 bg-rose-50/70 rounded-lg p-4 mb-6 flex items-start justify-between gap-3'
+              : isNordic
               ? 'border border-[#E4C5B9] bg-[#FAF0EC] rounded-xl p-4 mb-6 flex items-start justify-between gap-3'
               : isGlass
               ? 'border border-rose-300/25 bg-rose-950/30 rounded-xl p-4 mb-6 flex items-start justify-between gap-3'
@@ -538,7 +652,13 @@ export const ScenarioQuiz: React.FC = () => {
           <div>
             <div
               className={
-                isNordic
+                isSlate
+                  ? 'text-[10px] text-rose-300 font-semibold uppercase tracking-[0.14em] mb-1.5'
+                  : isClay
+                  ? 'text-[10px] text-[#9F1239] font-semibold uppercase tracking-[0.14em] mb-1.5'
+                  : isSaas
+                  ? 'text-[10px] text-rose-700 font-semibold uppercase tracking-[0.14em] mb-1.5'
+                  : isNordic
                   ? 'text-[10px] text-[#964B36] font-semibold uppercase tracking-[0.16em] mb-1.5'
                   : isGlass
                   ? 'text-[10px] text-rose-200 font-semibold uppercase tracking-[0.16em] mb-1.5'
@@ -551,7 +671,7 @@ export const ScenarioQuiz: React.FC = () => {
             >
               THE INTUITIVE (DANGER) PHRASE TO AVOID:
             </div>
-            <div className={isNordic ? 'text-sm text-[#242E28] italic' : isGlass ? 'text-sm text-white italic' : isBrutal ? 'text-sm text-zinc-900 font-semibold italic' : isObsidian ? 'text-sm text-[#F5F0E6] italic' : 'text-sm text-zinc-300 italic font-mono'}>
+            <div className={isSlate ? 'text-sm text-rose-50 italic' : isClay ? 'text-sm text-[#4B2D38] italic font-medium' : isSaas ? 'text-sm text-slate-800 italic' : isNordic ? 'text-sm text-[#242E28] italic' : isGlass ? 'text-sm text-white italic' : isBrutal ? 'text-sm text-zinc-900 font-semibold italic' : isObsidian ? 'text-sm text-[#F5F0E6] italic' : 'text-sm text-zinc-300 italic font-mono'}>
               "{question.dangerPhrase}"
             </div>
           </div>
@@ -559,7 +679,25 @@ export const ScenarioQuiz: React.FC = () => {
             type="button"
             onClick={() => handleSpeak(question.dangerPhrase)}
             className={
-              isNordic
+              isSlate
+                ? `p-2 rounded-md border transition-colors cursor-pointer shrink-0 ${
+                    isSpeaking
+                      ? 'bg-teal-400 text-slate-950 border-teal-300'
+                      : 'bg-[#0B1220] text-rose-300 border-rose-500/35 hover:border-teal-400/60 hover:text-teal-300'
+                  }`
+                : isClay
+                ? `p-2 rounded-2xl border transition-all cursor-pointer shrink-0 ${
+                    isSpeaking
+                      ? 'bg-indigo-500 text-white border-indigo-400/60 clay-btn'
+                      : 'bg-white text-[#9F1239] border-white/90 hover:bg-rose-50 clay-btn-soft'
+                  }`
+                : isSaas
+                ? `p-2 rounded-lg border transition-colors cursor-pointer shrink-0 ${
+                    isSpeaking
+                      ? 'bg-indigo-600 text-white border-indigo-600'
+                      : 'bg-white text-rose-700 border-rose-200 hover:bg-rose-50'
+                  }`
+                : isNordic
                 ? `p-2 rounded-xl border transition-all cursor-pointer shrink-0 ${
                     isSpeaking
                       ? 'bg-[#527360] text-[#FDFBF7] border-[#425F4E]'
@@ -599,7 +737,13 @@ export const ScenarioQuiz: React.FC = () => {
         <div className="space-y-3 mb-6">
           <div
             className={
-              isNordic
+              isSlate
+                ? 'text-[11px] text-slate-400 uppercase tracking-wider flex items-center justify-between font-medium'
+                : isClay
+                ? 'text-[11px] text-[#647094] uppercase tracking-wider flex items-center justify-between font-medium'
+                : isSaas
+                ? 'text-[11px] text-slate-500 uppercase tracking-wider flex items-center justify-between font-medium'
+                : isNordic
                 ? 'text-[11px] text-[#5C6962] uppercase tracking-wider flex items-center justify-between font-medium'
                 : isGlass
                 ? 'text-[11px] text-slate-300 uppercase tracking-wider flex items-center justify-between font-medium'
@@ -611,14 +755,20 @@ export const ScenarioQuiz: React.FC = () => {
             }
           >
             <span>SELECT THE OPTIMAL STRATEGIC REFRAME:</span>
-            <span className={isNordic ? 'text-[10px] font-mono text-[#5C6962] hidden sm:inline' : isGlass ? 'text-[10px] font-mono text-slate-400 hidden sm:inline' : isBrutal ? 'text-[10px] font-mono text-zinc-700 hidden sm:inline' : isObsidian ? 'text-[10px] font-mono text-[#8E877A] hidden sm:inline' : 'text-[10px] text-zinc-500 hidden sm:inline'}>
+            <span className={isSlate ? 'text-[10px] font-mono text-slate-500 hidden sm:inline' : isClay ? 'text-[10px] font-mono text-[#647094] hidden sm:inline' : isSaas ? 'text-[10px] font-mono text-slate-400 hidden sm:inline' : isNordic ? 'text-[10px] font-mono text-[#5C6962] hidden sm:inline' : isGlass ? 'text-[10px] font-mono text-slate-400 hidden sm:inline' : isBrutal ? 'text-[10px] font-mono text-zinc-700 hidden sm:inline' : isObsidian ? 'text-[10px] font-mono text-[#8E877A] hidden sm:inline' : 'text-[10px] text-zinc-500 hidden sm:inline'}>
               [KEYS 1–3 · ENTER]
             </span>
           </div>
 
           {question.options.map((option, idx) => {
             const isSelected = selectedOptionIndex === idx;
-            let containerStyle = isNordic
+            let containerStyle = isSlate
+              ? 'rounded-md slate-well border border-slate-800 hover:border-teal-400/50 text-slate-200'
+              : isClay
+              ? 'rounded-2xl clay-well border border-white/75 hover:border-indigo-300 text-[#1E2547]'
+              : isSaas
+              ? 'rounded-lg bg-slate-50/70 border border-slate-200 hover:border-indigo-300 hover:bg-white text-slate-800'
+              : isNordic
               ? 'rounded-xl nordic-well border border-[#E2DDD0] hover:border-[#8EAE9B] text-[#242E28]'
               : isGlass
               ? 'rounded-xl glass-well border border-white/15 hover:border-sky-300/45 text-slate-100'
@@ -630,7 +780,13 @@ export const ScenarioQuiz: React.FC = () => {
             
             if (hasSubmitted) {
               if (option.isOptimal) {
-                containerStyle = isNordic
+                containerStyle = isSlate
+                  ? 'rounded-md border border-teal-400/70 bg-teal-950/35 text-teal-50'
+                  : isClay
+                  ? 'rounded-2xl border border-white/90 bg-[#E3FCEC] text-[#065F46] shadow-sm'
+                  : isSaas
+                  ? 'rounded-lg border border-emerald-500 bg-emerald-50/80 text-emerald-950'
+                  : isNordic
                   ? 'rounded-xl border border-[#527360] bg-[#E7EFEA] text-[#2D4739]'
                   : isGlass
                   ? 'rounded-xl border border-emerald-300/60 bg-emerald-950/35 text-emerald-100'
@@ -640,7 +796,13 @@ export const ScenarioQuiz: React.FC = () => {
                   ? 'border border-[#D4AF37]/80 bg-[#14110C] text-[#F3E5AB] brass-hairline-glow'
                   : 'border border-amber-400/80 bg-zinc-900 text-white shadow-sm rounded';
               } else if (isSelected && !option.isOptimal) {
-                containerStyle = isNordic
+                containerStyle = isSlate
+                  ? 'rounded-md border border-rose-500/45 bg-rose-950/35 text-rose-200 line-through'
+                  : isClay
+                  ? 'rounded-2xl border border-white/80 bg-[#FFE8EC] text-[#9F1239] line-through'
+                  : isSaas
+                  ? 'rounded-lg border border-rose-200 bg-rose-50/80 text-rose-700 line-through'
+                  : isNordic
                   ? 'rounded-xl border border-[#E4C5B9] bg-[#FAF0EC] text-[#8F4A37] line-through'
                   : isGlass
                   ? 'rounded-xl border border-rose-300/35 bg-rose-950/30 text-rose-200 line-through'
@@ -650,7 +812,13 @@ export const ScenarioQuiz: React.FC = () => {
                   ? 'border border-[#3D2225] bg-[#140D0E] text-[#A39E93] line-through'
                   : 'border border-zinc-700 bg-zinc-900 text-zinc-400 line-through rounded';
               } else {
-                containerStyle = isNordic
+                containerStyle = isSlate
+                  ? 'rounded-md slate-well border border-slate-800/70 text-slate-500 opacity-60'
+                  : isClay
+                  ? 'rounded-2xl clay-well border border-white/60 text-[#647094] opacity-70'
+                  : isSaas
+                  ? 'rounded-lg bg-slate-50 border border-slate-200 text-slate-400 opacity-70'
+                  : isNordic
                   ? 'rounded-xl nordic-well border border-[#E2DDD0] text-[#5C6962] opacity-65'
                   : isGlass
                   ? 'rounded-xl glass-well border border-white/10 text-slate-400 opacity-60'
@@ -661,7 +829,13 @@ export const ScenarioQuiz: React.FC = () => {
                   : 'border border-zinc-800 bg-zinc-950 text-zinc-600 opacity-60 rounded';
               }
             } else if (isSelected) {
-              containerStyle = isNordic
+              containerStyle = isSlate
+                ? 'rounded-md border border-teal-400 bg-teal-950/35 text-white'
+                : isClay
+                ? 'rounded-2xl border border-indigo-300 bg-[#E5E9FF] text-[#1E2547] shadow-sm'
+                : isSaas
+                ? 'rounded-lg border border-indigo-600 bg-indigo-50/75 text-slate-900'
+                : isNordic
                 ? 'rounded-xl border border-[#527360] bg-[#E7EFEA] text-[#242E28]'
                 : isGlass
                 ? 'rounded-xl border border-sky-300 bg-sky-950/40 text-white'
@@ -681,17 +855,23 @@ export const ScenarioQuiz: React.FC = () => {
                 <div className="mt-0.5 shrink-0">
                   {hasSubmitted ? (
                     option.isOptimal ? (
-                      <CheckCircle2 className={isNordic ? 'w-4 h-4 text-[#3B5948]' : isGlass ? 'w-4 h-4 text-emerald-300' : isBrutal ? 'w-4 h-4 text-black' : isObsidian ? 'w-4 h-4 text-[#D4AF37]' : 'w-4 h-4 text-amber-400'} />
+                      <CheckCircle2 className={isSlate ? 'w-4 h-4 text-teal-300' : isClay ? 'w-4 h-4 text-[#065F46]' : isSaas ? 'w-4 h-4 text-emerald-600' : isNordic ? 'w-4 h-4 text-[#3B5948]' : isGlass ? 'w-4 h-4 text-emerald-300' : isBrutal ? 'w-4 h-4 text-black' : isObsidian ? 'w-4 h-4 text-[#D4AF37]' : 'w-4 h-4 text-amber-400'} />
                     ) : isSelected ? (
-                      <XCircle className={isNordic ? 'w-4 h-4 text-[#964B36]' : isGlass ? 'w-4 h-4 text-rose-300' : isBrutal ? 'w-4 h-4 text-black' : isObsidian ? 'w-4 h-4 text-[#E8A5A5]' : 'w-4 h-4 text-zinc-500'} />
+                      <XCircle className={isSlate ? 'w-4 h-4 text-rose-300' : isClay ? 'w-4 h-4 text-[#9F1239]' : isSaas ? 'w-4 h-4 text-rose-600' : isNordic ? 'w-4 h-4 text-[#964B36]' : isGlass ? 'w-4 h-4 text-rose-300' : isBrutal ? 'w-4 h-4 text-black' : isObsidian ? 'w-4 h-4 text-[#E8A5A5]' : 'w-4 h-4 text-zinc-500'} />
                     ) : (
-                      <span className={isNordic ? 'text-xs font-mono text-[#5C6962]' : isGlass ? 'text-xs font-mono text-slate-500' : isBrutal ? 'text-xs font-mono font-bold text-zinc-600' : isObsidian ? 'text-xs font-mono text-[#736D63]' : 'text-xs font-mono text-zinc-600'}>[0{idx + 1}]</span>
+                      <span className={isSlate ? 'text-xs font-mono text-slate-500' : isClay ? 'text-xs font-mono text-[#647094]' : isSaas ? 'text-xs font-mono text-slate-400' : isNordic ? 'text-xs font-mono text-[#5C6962]' : isGlass ? 'text-xs font-mono text-slate-500' : isBrutal ? 'text-xs font-mono font-bold text-zinc-600' : isObsidian ? 'text-xs font-mono text-[#736D63]' : 'text-xs font-mono text-zinc-600'}>[0{idx + 1}]</span>
                     )
                   ) : (
                     <span
                       className={`text-xs font-mono ${
                         isSelected
-                          ? isNordic
+                          ? isSlate
+                            ? 'text-teal-300 font-semibold'
+                            : isClay
+                            ? 'text-indigo-600 font-semibold'
+                            : isSaas
+                            ? 'text-indigo-600 font-semibold'
+                            : isNordic
                             ? 'text-[#3B5948] font-semibold'
                             : isGlass
                             ? 'text-sky-300 font-semibold'
@@ -700,6 +880,12 @@ export const ScenarioQuiz: React.FC = () => {
                             : isObsidian
                             ? 'text-[#E5C77B] font-semibold'
                             : 'text-zinc-100 font-bold'
+                          : isSlate
+                          ? 'text-slate-400'
+                          : isClay
+                          ? 'text-[#647094]'
+                          : isSaas
+                          ? 'text-slate-400'
                           : isNordic
                           ? 'text-[#5C6962]'
                           : isGlass
@@ -727,7 +913,13 @@ export const ScenarioQuiz: React.FC = () => {
                     handleSpeak(option.text);
                   }}
                   className={
-                    isNordic
+                    isSlate
+                      ? 'p-1 rounded-md text-slate-400 hover:text-teal-300 transition-colors cursor-pointer shrink-0'
+                      : isClay
+                      ? 'p-1.5 rounded-xl bg-white/80 text-[#647094] hover:text-indigo-600 transition-colors cursor-pointer shrink-0 shadow-xs'
+                      : isSaas
+                      ? 'p-1 rounded-lg text-slate-400 hover:text-indigo-600 transition-colors cursor-pointer shrink-0'
+                      : isNordic
                       ? 'p-1 rounded-lg text-[#5C6962] hover:text-[#3B5948] transition-colors cursor-pointer shrink-0'
                       : isGlass
                       ? 'p-1 rounded-lg text-slate-400 hover:text-sky-300 transition-colors cursor-pointer shrink-0'
@@ -750,7 +942,13 @@ export const ScenarioQuiz: React.FC = () => {
         {hasSubmitted && (
           <div
             className={
-              isNordic
+              isSlate
+                ? 'p-4 rounded-md slate-well border border-teal-400/35 mb-6'
+                : isClay
+                ? 'p-4 rounded-2xl bg-[#E5E9FF]/80 border border-white/80 mb-6 shadow-sm'
+                : isSaas
+                ? 'p-4 rounded-lg bg-indigo-50/55 border border-indigo-200 mb-6'
+                : isNordic
                 ? 'p-4 rounded-xl bg-[#E7EFEA]/65 border border-[#B8CBBF] mb-6'
                 : isGlass
                 ? 'p-4 rounded-xl glass-well border border-sky-300/30 mb-6'
@@ -763,7 +961,13 @@ export const ScenarioQuiz: React.FC = () => {
           >
             <div
               className={
-                isNordic
+                isSlate
+                  ? 'text-[11px] text-teal-300 font-semibold uppercase tracking-wider mb-1.5 flex items-center gap-1.5'
+                  : isClay
+                  ? 'text-[11px] text-indigo-700 font-semibold uppercase tracking-wider mb-1.5 flex items-center gap-1.5'
+                  : isSaas
+                  ? 'text-[11px] text-indigo-700 font-semibold uppercase tracking-wider mb-1.5 flex items-center gap-1.5'
+                  : isNordic
                   ? 'text-[11px] text-[#2D4739] font-semibold uppercase tracking-wider mb-1.5 flex items-center gap-1.5'
                   : isGlass
                   ? 'text-[11px] text-sky-300 font-semibold uppercase tracking-wider mb-1.5 flex items-center gap-1.5'
@@ -774,14 +978,14 @@ export const ScenarioQuiz: React.FC = () => {
                   : 'text-xs text-zinc-200 font-bold uppercase tracking-wider mb-1.5 flex items-center gap-1.5'
               }
             >
-              <HelpCircle className={isNordic ? 'w-4 h-4 text-[#527360]' : isGlass ? 'w-4 h-4 text-sky-300' : isBrutal ? 'w-4 h-4 text-black' : isObsidian ? 'w-4 h-4 text-[#D4AF37]' : 'w-4 h-4 text-amber-400'} />
+              <HelpCircle className={isSlate ? 'w-4 h-4 text-teal-400' : isClay ? 'w-4 h-4 text-indigo-600' : isSaas ? 'w-4 h-4 text-indigo-600' : isNordic ? 'w-4 h-4 text-[#527360]' : isGlass ? 'w-4 h-4 text-sky-300' : isBrutal ? 'w-4 h-4 text-black' : isObsidian ? 'w-4 h-4 text-[#D4AF37]' : 'w-4 h-4 text-amber-400'} />
               <span>COMMUNICATION PSYCHOLOGY DEBRIEF:</span>
             </div>
-            <p className={isNordic ? 'text-xs text-[#242E28] leading-relaxed mb-3' : isGlass ? 'text-xs text-slate-200 leading-relaxed mb-3' : isBrutal ? 'text-xs text-zinc-900 font-medium leading-relaxed mb-3' : isObsidian ? 'text-xs text-[#DDD6C8] leading-relaxed mb-3' : 'text-xs text-zinc-300 leading-relaxed mb-3'}>
+            <p className={isSlate ? 'text-xs text-slate-200 leading-relaxed mb-3' : isClay ? 'text-xs text-[#1E2547] leading-relaxed mb-3' : isSaas ? 'text-xs text-slate-700 leading-relaxed mb-3' : isNordic ? 'text-xs text-[#242E28] leading-relaxed mb-3' : isGlass ? 'text-xs text-slate-200 leading-relaxed mb-3' : isBrutal ? 'text-xs text-zinc-900 font-medium leading-relaxed mb-3' : isObsidian ? 'text-xs text-[#DDD6C8] leading-relaxed mb-3' : 'text-xs text-zinc-300 leading-relaxed mb-3'}>
               {question.psychologicalPrinciple}
             </p>
             {selectedOptionIndex !== null && (
-              <div className={isNordic ? 'text-xs text-[#4E5A53] border-t border-[#B8CBBF] pt-2.5 italic' : isGlass ? 'text-xs text-slate-300 border-t border-white/15 pt-2.5 italic' : isBrutal ? 'text-xs text-black font-bold border-t-2 border-black pt-2 italic' : isObsidian ? 'text-xs text-[#A39E93] border-t border-[#2A241A] pt-2.5 italic' : 'text-xs text-zinc-400 border-t border-zinc-800 pt-2 italic'}>
+              <div className={isSlate ? 'text-xs text-slate-400 border-t border-slate-800 pt-2.5 italic' : isClay ? 'text-xs text-[#4B5478] border-t border-indigo-900/10 pt-2.5 italic' : isSaas ? 'text-xs text-slate-600 border-t border-indigo-200/80 pt-2.5 italic' : isNordic ? 'text-xs text-[#4E5A53] border-t border-[#B8CBBF] pt-2.5 italic' : isGlass ? 'text-xs text-slate-300 border-t border-white/15 pt-2.5 italic' : isBrutal ? 'text-xs text-black font-bold border-t-2 border-black pt-2 italic' : isObsidian ? 'text-xs text-[#A39E93] border-t border-[#2A241A] pt-2.5 italic' : 'text-xs text-zinc-400 border-t border-zinc-800 pt-2 italic'}>
                 Feedback on your choice: {question.options[selectedOptionIndex].feedback}
               </div>
             )}
@@ -795,7 +999,25 @@ export const ScenarioQuiz: React.FC = () => {
               onClick={handleSubmit}
               disabled={selectedOptionIndex === null}
               className={
-                isNordic
+                isSlate
+                  ? `px-5 py-2.5 rounded-md text-xs font-semibold tracking-wide border transition-colors ${
+                      selectedOptionIndex !== null
+                        ? 'bg-teal-400 hover:bg-teal-300 text-slate-950 border-teal-300 cursor-pointer shadow-xs'
+                        : 'bg-[#0B1220] text-slate-500 border-slate-800 cursor-not-allowed'
+                    }`
+                  : isClay
+                  ? `px-5 py-2.5 rounded-2xl text-xs font-semibold tracking-wide border transition-all whitespace-nowrap shrink-0 ${
+                      selectedOptionIndex !== null
+                        ? 'bg-indigo-500 hover:bg-indigo-600 text-white border-indigo-400/60 cursor-pointer clay-btn'
+                        : 'clay-well text-[#647094] border-white/70 cursor-not-allowed'
+                    }`
+                  : isSaas
+                  ? `px-5 py-2.5 rounded-lg text-xs font-semibold tracking-wide border transition-colors ${
+                      selectedOptionIndex !== null
+                        ? 'bg-indigo-600 hover:bg-indigo-700 text-white border-indigo-600 cursor-pointer shadow-xs'
+                        : 'bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed'
+                    }`
+                  : isNordic
                   ? `px-5 py-2.5 rounded-xl text-xs font-semibold tracking-wide border transition-all ${
                       selectedOptionIndex !== null
                         ? 'bg-[#527360] hover:bg-[#425F4E] text-[#FDFBF7] border-[#425F4E] cursor-pointer shadow-sm'
@@ -832,7 +1054,13 @@ export const ScenarioQuiz: React.FC = () => {
             <button
               onClick={handleNext}
               className={
-                isNordic
+                isSlate
+                  ? 'px-5 py-2.5 rounded-md bg-teal-400 hover:bg-teal-300 text-slate-950 border border-teal-300 text-xs font-semibold tracking-wide transition-colors cursor-pointer flex items-center gap-2 shadow-xs'
+                  : isClay
+                  ? 'px-5 py-2.5 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white border border-indigo-400/60 text-xs font-semibold tracking-wide transition-all cursor-pointer flex items-center gap-2 clay-btn whitespace-nowrap shrink-0'
+                  : isSaas
+                  ? 'px-5 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white border border-indigo-600 text-xs font-semibold tracking-wide transition-colors cursor-pointer flex items-center gap-2 shadow-xs'
+                  : isNordic
                   ? 'px-5 py-2.5 rounded-xl bg-[#527360] hover:bg-[#425F4E] text-[#FDFBF7] border border-[#425F4E] text-xs font-semibold tracking-wide transition-all cursor-pointer flex items-center gap-2 shadow-sm'
                   : isGlass
                   ? 'px-5 py-2.5 rounded-xl bg-sky-400 hover:bg-sky-300 text-slate-950 border border-sky-300 text-xs font-semibold tracking-wide transition-all cursor-pointer flex items-center gap-2 shadow-lg shadow-sky-500/20'
@@ -844,7 +1072,7 @@ export const ScenarioQuiz: React.FC = () => {
               }
             >
               <span>{currentQuestionIndex + 1 < filteredQuestions.length ? 'NEXT SCENARIO' : 'FINISH DRILL'}</span>
-              <ArrowRight className={isNordic ? 'w-4 h-4 text-[#FDFBF7]' : isGlass ? 'w-4 h-4 text-slate-950' : isBrutal ? 'w-4 h-4 text-black' : isObsidian ? 'w-4 h-4 text-[#070709]' : 'w-4 h-4 text-amber-600'} />
+              <ArrowRight className={isSlate ? 'w-4 h-4 text-slate-950' : isClay || isSaas ? 'w-4 h-4 text-white' : isNordic ? 'w-4 h-4 text-[#FDFBF7]' : isGlass ? 'w-4 h-4 text-slate-950' : isBrutal ? 'w-4 h-4 text-black' : isObsidian ? 'w-4 h-4 text-[#070709]' : 'w-4 h-4 text-amber-600'} />
             </button>
           )}
         </div>

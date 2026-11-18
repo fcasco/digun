@@ -10,8 +10,26 @@
 
   body {
     font-family: var(--font-sans);
-    background-color: #F6F3EC;
-    color: #242E28;
+    background-color: #0F172A;
+    color: #F1F5F9;
+  }
+
+  html[data-theme="slate"] body {
+    font-family: var(--font-sans);
+    background-color: #0F172A;
+    color: #F1F5F9;
+  }
+
+  html[data-theme="clay"] body {
+    font-family: var(--font-sans);
+    background-color: #EEF2FA;
+    color: #1E2547;
+  }
+
+  html[data-theme="saas"] body {
+    font-family: var(--font-sans);
+    background-color: #F8FAFC;
+    color: #0F172A;
   }
 
   html[data-theme="nordic"] body {
@@ -47,6 +65,126 @@
 
 .font-luxury {
   font-family: var(--font-serif);
+}
+
+/* Theme #02: Modern Slate Dark Mode — Deep #0F172A engineering micro-dot canvas & specular matte rims */
+.slate-canvas {
+  background-color: #0F172A;
+  background-image:
+    radial-gradient(rgba(148, 163, 184, 0.085) 1px, transparent 1px),
+    radial-gradient(ellipse 80% 42% at 50% 0%, rgba(20, 184, 166, 0.075), transparent 70%);
+  background-size: 24px 24px, 100% 100%;
+  background-attachment: fixed;
+}
+
+.slate-card {
+  background: linear-gradient(180deg, #1E293B 0%, #172033 100%);
+  box-shadow:
+    0 12px 28px -12px rgba(2, 6, 23, 0.65),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.075);
+}
+
+.slate-card-elevated {
+  background: linear-gradient(180deg, #233046 0%, #192438 100%);
+  box-shadow:
+    0 18px 40px -14px rgba(2, 6, 23, 0.78),
+    inset 0 1px 0 0 rgba(45, 212, 191, 0.22);
+}
+
+.slate-well {
+  background-color: #0B1220;
+  box-shadow: inset 0 1px 2px rgba(2, 6, 23, 0.55);
+}
+
+/* Theme #06: Claymorphism / Soft 3D puffy inflated surfaces & pastel clouds */
+.clay-canvas {
+  background-color: #EEF2FA;
+  background-image:
+    radial-gradient(ellipse 65% 50% at 12% 10%, rgba(129, 140, 248, 0.16), transparent 65%),
+    radial-gradient(ellipse 55% 48% at 88% 16%, rgba(244, 114, 182, 0.12), transparent 65%),
+    radial-gradient(ellipse 70% 55% at 50% 92%, rgba(110, 231, 183, 0.14), transparent 70%);
+  background-attachment: fixed;
+}
+
+.clay-card {
+  background: linear-gradient(155deg, #FFFFFF 0%, #F7F9FF 100%);
+  box-shadow:
+    0 18px 34px -12px rgba(79, 92, 165, 0.2),
+    inset 0 -6px 12px rgba(155, 168, 224, 0.22),
+    inset 0 6px 12px rgba(255, 255, 255, 0.96);
+}
+
+.clay-card-elevated {
+  background: linear-gradient(155deg, #FFFFFF 0%, #F4F6FF 100%);
+  box-shadow:
+    0 24px 48px -14px rgba(79, 92, 165, 0.28),
+    inset 0 -8px 16px rgba(145, 158, 220, 0.26),
+    inset 0 7px 14px rgba(255, 255, 255, 1);
+}
+
+.clay-well {
+  background: #E8EEFC;
+  box-shadow:
+    inset 0 4px 10px rgba(96, 110, 180, 0.16),
+    inset 0 -3px 6px rgba(255, 255, 255, 0.88);
+}
+
+.clay-btn {
+  box-shadow:
+    0 10px 20px -6px rgba(79, 70, 229, 0.36),
+    inset 0 -4px 8px rgba(49, 46, 129, 0.24),
+    inset 0 4px 8px rgba(255, 255, 255, 0.42);
+  transition: transform 150ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 150ms cubic-bezier(0.16, 1, 0.3, 1), background-color 150ms ease;
+}
+
+.clay-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow:
+    0 14px 24px -6px rgba(79, 70, 229, 0.42),
+    inset 0 -4px 8px rgba(49, 46, 129, 0.24),
+    inset 0 4px 8px rgba(255, 255, 255, 0.48);
+}
+
+.clay-btn:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow:
+    0 5px 12px -4px rgba(79, 70, 229, 0.3),
+    inset 0 3px 6px rgba(49, 46, 129, 0.22);
+}
+
+.clay-btn-soft {
+  box-shadow:
+    0 8px 16px -6px rgba(79, 92, 165, 0.18),
+    inset 0 -3px 6px rgba(155, 168, 224, 0.22),
+    inset 0 3px 6px rgba(255, 255, 255, 0.95);
+  transition: transform 150ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.clay-btn-soft:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.clay-btn-soft:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+/* Theme #01: Clean SaaS Minimalist surfaces & crisp single-elevation hairline depth */
+.saas-canvas {
+  background-color: #F8FAFC;
+}
+
+.saas-card {
+  background-color: #FFFFFF;
+  box-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
+}
+
+.saas-card-elevated {
+  background-color: #FFFFFF;
+  box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.06), 0 1px 3px 0 rgba(15, 23, 42, 0.04);
+}
+
+.saas-well {
+  background-color: #F1F5F9;
 }
 
 /* Theme #11: Nordic Organic Pastel surfaces & calm botanical canvas */
@@ -261,4 +399,46 @@ html[data-theme="nordic"] ::-webkit-scrollbar-thumb {
 
 html[data-theme="nordic"] ::-webkit-scrollbar-thumb:hover {
   background: #527360;
+}
+
+/* Clean SaaS Minimalist scrollbars */
+html[data-theme="saas"] ::-webkit-scrollbar-track {
+  background: #F8FAFC;
+}
+
+html[data-theme="saas"] ::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 9999px;
+}
+
+html[data-theme="saas"] ::-webkit-scrollbar-thumb:hover {
+  background: #64748B;
+}
+
+/* Claymorphism / Soft 3D scrollbars */
+html[data-theme="clay"] ::-webkit-scrollbar-track {
+  background: #EEF2FA;
+}
+
+html[data-theme="clay"] ::-webkit-scrollbar-thumb {
+  background: #B8C2E6;
+  border-radius: 9999px;
+}
+
+html[data-theme="clay"] ::-webkit-scrollbar-thumb:hover {
+  background: #6366F1;
+}
+
+/* Modern Slate Dark Mode scrollbars */
+html[data-theme="slate"] ::-webkit-scrollbar-track {
+  background: #0F172A;
+}
+
+html[data-theme="slate"] ::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 6px;
+}
+
+html[data-theme="slate"] ::-webkit-scrollbar-thumb:hover {
+  background: #2DD4BF;
 }

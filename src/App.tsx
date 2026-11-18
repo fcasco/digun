@@ -12,7 +12,7 @@ import { soundEffects } from './utils/soundEffects';
 import { useTheme } from './context/ThemeContext';
 
 export default function App() {
-  const { theme, setTheme, isNordic, isGlass, isBrutal, isObsidian } = useTheme();
+  const { theme, setTheme, isSlate, isClay, isSaas, isNordic, isGlass, isBrutal, isObsidian } = useTheme();
   const [cards, setCards] = useState<ReframeCard[]>(() => {
     try {
       return leitnerStorage.loadCards();
@@ -91,7 +91,13 @@ export default function App() {
     return success;
   }, []);
 
-  const rootClass = isNordic
+  const rootClass = isSlate
+    ? 'min-h-screen slate-canvas text-slate-100 flex flex-col relative font-sans selection:bg-teal-400/25 selection:text-teal-100'
+    : isClay
+    ? 'min-h-screen clay-canvas text-[#1E2547] flex flex-col relative font-sans selection:bg-indigo-500/20 selection:text-indigo-950'
+    : isSaas
+    ? 'min-h-screen saas-canvas text-[#0F172A] flex flex-col relative font-sans selection:bg-indigo-600/15 selection:text-indigo-950'
+    : isNordic
     ? 'min-h-screen nordic-canvas text-[#242E28] flex flex-col relative font-sans selection:bg-[#527360]/20 selection:text-[#242E28]'
     : isBrutal
     ? 'min-h-screen bg-[#FFFDF5] text-zinc-950 flex flex-col relative font-sans selection:bg-[#FFE500] selection:text-black'
@@ -103,7 +109,13 @@ export default function App() {
         isCrtScanlinesEnabled ? 'crt-scanlines' : ''
       }`;
 
-  const switcherInactiveClass = isNordic
+  const switcherInactiveClass = isSlate
+    ? 'px-2.5 py-1 text-[11px] font-medium rounded-md bg-[#1E293B] text-slate-300 border border-slate-700/80 hover:border-teal-400/50 hover:text-white cursor-pointer whitespace-nowrap transition-colors'
+    : isClay
+    ? 'px-2.5 py-1 text-[11px] font-semibold rounded-xl clay-card clay-btn-soft text-[#4B5478] border border-white/80 hover:text-[#1E2547] cursor-pointer whitespace-nowrap transition-all'
+    : isSaas
+    ? 'px-2.5 py-1 text-[11px] font-medium rounded-lg bg-white text-slate-600 border border-slate-200 hover:border-slate-300 hover:text-slate-900 cursor-pointer whitespace-nowrap transition-colors'
+    : isNordic
     ? 'px-2.5 py-1 text-[11px] font-medium rounded-lg bg-[#FDFBF7] text-[#4E5A53] border border-[#DDD7C8] hover:border-[#527360]/50 hover:text-[#242E28] cursor-pointer whitespace-nowrap transition-colors'
     : isBrutal
     ? 'px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-wide bg-white text-zinc-950 border-2 border-black hover:bg-zinc-100 cursor-pointer whitespace-nowrap brutal-btn'
@@ -127,7 +139,13 @@ export default function App() {
       {/* Workspace Theme Strip (outside top header to preserve 3-zone contract) */}
       <div
         className={
-          isNordic
+          isSlate
+            ? 'border-b border-slate-800 bg-[#0B1220]/90'
+            : isClay
+            ? 'border-b border-white/70 bg-[#E6ECFA]/80 backdrop-blur-md'
+            : isSaas
+            ? 'border-b border-slate-200 bg-white/80 backdrop-blur-sm'
+            : isNordic
             ? 'border-b border-[#E4DFD4] bg-[#EFECE3]/75 backdrop-blur-sm'
             : isBrutal
             ? 'border-b-2 border-black bg-[#F4F1EA]'
@@ -138,10 +156,16 @@ export default function App() {
             : 'border-b border-zinc-800/70 bg-zinc-950/60'
         }
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex flex-wrap items-center justify-between gap-2 text-xs">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs">
           <div
             className={
-              isNordic
+              isSlate
+                ? 'flex items-center gap-2 text-[11px] uppercase tracking-[0.08em] text-slate-400 font-semibold'
+                : isClay
+                ? 'flex items-center gap-2 text-[11px] uppercase tracking-[0.08em] text-[#4B5478] font-bold'
+                : isSaas
+                ? 'flex items-center gap-2 text-[11px] uppercase tracking-[0.08em] text-slate-500 font-semibold'
+                : isNordic
                 ? 'flex items-center gap-2 text-[11px] uppercase tracking-[0.12em] text-[#4E5A53] font-semibold'
                 : isBrutal
                 ? 'flex items-center gap-2 font-bold text-zinc-900'
@@ -152,9 +176,15 @@ export default function App() {
                 : 'flex items-center gap-2 font-mono text-zinc-400'
             }
           >
-            <Palette className={isNordic ? 'w-3.5 h-3.5 text-[#527360]' : isBrutal ? 'w-3.5 h-3.5 text-black' : isObsidian ? 'w-3.5 h-3.5 text-[#D4AF37]' : isGlass ? 'w-3.5 h-3.5 text-sky-300' : 'w-3.5 h-3.5 text-amber-400'} />
+            <Palette className={isSlate ? 'w-3.5 h-3.5 text-teal-400' : isClay ? 'w-3.5 h-3.5 text-indigo-600' : isSaas ? 'w-3.5 h-3.5 text-indigo-600' : isNordic ? 'w-3.5 h-3.5 text-[#527360]' : isBrutal ? 'w-3.5 h-3.5 text-black' : isObsidian ? 'w-3.5 h-3.5 text-[#D4AF37]' : isGlass ? 'w-3.5 h-3.5 text-sky-300' : 'w-3.5 h-3.5 text-amber-400'} />
             <span className="uppercase">
-              {isNordic
+              {isSlate
+                ? 'THEME #02 · MODERN SLATE DARK MODE'
+                : isClay
+                ? 'THEME #06 · CLAYMORPHISM / SOFT 3D'
+                : isSaas
+                ? 'THEME #01 · CLEAN SAAS MINIMALIST'
+                : isNordic
                 ? 'THEME #11 · NORDIC ORGANIC PASTEL'
                 : isBrutal
                 ? 'THEME #04 · NEO-BRUTALISM'
@@ -167,6 +197,48 @@ export default function App() {
           </div>
 
           <div className="flex flex-wrap items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => {
+                soundEffects.playKeyClick();
+                setTheme('slate');
+              }}
+              className={
+                isSlate
+                  ? 'px-2.5 py-1 text-[11px] font-semibold tracking-wide uppercase rounded-md bg-teal-400 text-slate-950 border border-teal-300 cursor-pointer whitespace-nowrap shadow-xs'
+                  : switcherInactiveClass
+              }
+            >
+              #02 SLATE DARK
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                soundEffects.playKeyClick();
+                setTheme('clay');
+              }}
+              className={
+                isClay
+                  ? 'px-2.5 py-1 text-[11px] font-bold tracking-wide uppercase rounded-xl bg-indigo-500 text-white border border-indigo-400 cursor-pointer whitespace-nowrap clay-btn'
+                  : switcherInactiveClass
+              }
+            >
+              #06 CLAYMORPHISM
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                soundEffects.playKeyClick();
+                setTheme('saas');
+              }}
+              className={
+                isSaas
+                  ? 'px-2.5 py-1 text-[11px] font-semibold tracking-wide uppercase rounded-lg bg-indigo-600 text-white border border-indigo-600 cursor-pointer whitespace-nowrap shadow-xs'
+                  : switcherInactiveClass
+              }
+            >
+              #01 SAAS MINIMALIST
+            </button>
             <button
               type="button"
               onClick={() => {
@@ -275,7 +347,13 @@ export default function App() {
       {/* Bottom Status & Theme Information Footer */}
       <footer
         className={
-          isNordic
+          isSlate
+            ? 'border-t border-slate-800 bg-[#0B1220] py-4 px-4 text-xs text-slate-400'
+            : isClay
+            ? 'border-t border-white/75 bg-[#F4F7FF]/90 py-4 px-4 text-xs text-[#4B5478]'
+            : isSaas
+            ? 'border-t border-slate-200 bg-white py-4 px-4 text-xs text-slate-500'
+            : isNordic
             ? 'border-t border-[#E4DFD4] bg-[#FDFBF7]/90 py-4 px-4 text-xs text-[#5C6962]'
             : isBrutal
             ? 'border-t-2 border-black bg-white py-4 px-4 text-xs text-zinc-900'
@@ -289,7 +367,13 @@ export default function App() {
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
           <div
             className={
-              isNordic
+              isSlate
+                ? 'flex items-center gap-2 text-[11px] uppercase tracking-[0.08em] text-slate-400'
+                : isClay
+                ? 'flex items-center gap-2 text-[11px] uppercase tracking-[0.08em] text-[#4B5478] font-medium'
+                : isSaas
+                ? 'flex items-center gap-2 text-[11px] uppercase tracking-[0.08em] text-slate-500'
+                : isNordic
                 ? 'flex items-center gap-2 text-[11px] uppercase tracking-[0.1em] text-[#4E5A53]'
                 : isBrutal
                 ? 'flex items-center gap-2 font-bold text-zinc-900'
@@ -302,7 +386,13 @@ export default function App() {
           >
             <span
               className={
-                isNordic
+                isSlate
+                  ? 'text-teal-400 font-semibold'
+                  : isClay
+                  ? 'text-indigo-600 font-bold'
+                  : isSaas
+                  ? 'text-indigo-600 font-semibold'
+                  : isNordic
                   ? 'text-[#3D5B4A] font-semibold'
                   : isBrutal
                   ? 'bg-[#FFE500] border-2 border-black px-1.5 py-0.5 text-black font-black'
@@ -313,7 +403,13 @@ export default function App() {
                   : 'text-zinc-200 font-bold'
               }
             >
-              {theme === 'nordic'
+              {theme === 'slate'
+                ? 'THEME #02'
+                : theme === 'clay'
+                ? 'THEME #06'
+                : theme === 'saas'
+                ? 'THEME #01'
+                : theme === 'nordic'
                 ? 'THEME #11'
                 : theme === 'neobrutalism'
                 ? 'THEME #04'
@@ -324,7 +420,13 @@ export default function App() {
                 : 'THEME #12'}
             </span>
             <span>
-              {theme === 'nordic'
+              {theme === 'slate'
+                ? 'MODERN SLATE DARK MODE'
+                : theme === 'clay'
+                ? 'CLAYMORPHISM / SOFT 3D'
+                : theme === 'saas'
+                ? 'CLEAN SAAS MINIMALIST'
+                : theme === 'nordic'
                 ? 'NORDIC ORGANIC PASTEL'
                 : theme === 'neobrutalism'
                 ? 'NEO-BRUTALISM'
@@ -340,7 +442,13 @@ export default function App() {
 
           <div
             className={
-              isNordic
+              isSlate
+                ? 'flex flex-wrap items-center justify-center gap-3 text-[11px] tracking-[0.08em] uppercase text-slate-400'
+                : isClay
+                ? 'flex flex-wrap items-center justify-center gap-3 text-[11px] tracking-[0.08em] uppercase text-[#4B5478] font-medium'
+                : isSaas
+                ? 'flex flex-wrap items-center justify-center gap-3 text-[11px] tracking-[0.08em] uppercase text-slate-500'
+                : isNordic
                 ? 'flex flex-wrap items-center justify-center gap-3 text-[11px] tracking-[0.1em] uppercase text-[#5C6962]'
                 : isBrutal
                 ? 'flex flex-wrap items-center justify-center gap-3 text-[11px] font-bold text-zinc-900'
@@ -366,7 +474,13 @@ export default function App() {
             <span className="hidden sm:inline">·</span>
             <span
               className={
-                isNordic
+                isSlate
+                  ? 'text-teal-400 font-semibold font-mono tabular-nums'
+                  : isClay
+                  ? 'text-indigo-600 font-bold font-mono tabular-nums'
+                  : isSaas
+                  ? 'text-indigo-600 font-semibold font-mono tabular-nums'
+                  : isNordic
                   ? 'text-[#3D5B4A] font-semibold font-mono tabular-nums'
                   : isBrutal
                   ? 'bg-[#86EFAC] border-2 border-black px-1.5 py-0.5 text-black font-black'

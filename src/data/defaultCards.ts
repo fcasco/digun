@@ -1327,15 +1327,15 @@ export const UI_THEMES_LIST: UIThemeInfo[] = [
     rank: 1,
     name: "Clean SaaS Minimalist",
     description: "Crisp white workspaces, subtle hairline borders, muted slate text, and restrained interactive accents.",
-    keyCharacteristics: ["White neutral canvas", "Tailwind slate palette", "Generous whitespace", "Subtle drop shadows"],
-    isChosen: false,
+    keyCharacteristics: ["White neutral canvas", "Tailwind slate palette", "Generous whitespace", "Single-elevation depth"],
+    isChosen: true,
   },
   {
     rank: 2,
     name: "Modern Slate Dark Mode",
-    description: "Deep neutral slate (#0F172A), low surface contrast delta (<12%), and soft specular edge dividers.",
-    keyCharacteristics: ["Dark slate base", "High contrast legibility", "Eye comfort", "Subtle neon indicators"],
-    isChosen: false,
+    description: "Deep cool slate (#0F172A), low surface contrast delta (<12%), specular top-edge rims, 24px engineering dot-grid, and crisp teal focal accents.",
+    keyCharacteristics: ["Deep #0F172A slate", "Specular top rims", "24px micro-dot grid", "Teal focal accents"],
+    isChosen: true,
   },
   {
     rank: 3,
@@ -1361,9 +1361,9 @@ export const UI_THEMES_LIST: UIThemeInfo[] = [
   {
     rank: 6,
     name: "Claymorphism / Soft 3D",
-    description: "Puffy inflated cards, double inner/drop shadows, pastel candies, and tactile pill containers.",
-    keyCharacteristics: ["Inner & outer soft shadows", "Rounded-3xl geometry", "Pastel candy tones", "Playful depth"],
-    isChosen: false,
+    description: "Puffy inflated cards, double inner/outer soft shadows, pastel candy accents, and tactile sculpted containers.",
+    keyCharacteristics: ["Inner & outer soft shadows", "Rounded-3xl geometry", "Pastel candy tones", "Tactile 3D depth"],
+    isChosen: true,
   },
   {
     rank: 7,
