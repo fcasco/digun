@@ -14,6 +14,7 @@ import { ReframeCard, LeitnerRating, ReviewSessionStats } from '../types/reframe
 import { CATEGORIES } from '../data/defaultCards';
 import { soundEffects } from '../utils/soundEffects';
 import { speechEngine } from '../utils/speechSynthesis';
+import { leitnerStorage } from '../utils/leitnerStorage';
 import { useTheme } from '../context/ThemeContext';
 
 interface FlashcardDeckProps {
@@ -21,28 +22,30 @@ interface FlashcardDeckProps {
   onRateCard: (cardId: string, rating: LeitnerRating) => { updatedCard: ReframeCard; promotedToBox5: boolean };
   onSessionComplete: (stats: ReviewSessionStats) => void;
   onOpenVault: () => void;
+  resetSignal?: number;
 }
 
-export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
-  cards,
-  onRateCard,
-  onSessionComplete,
-  onOpenVault,
-}) => {
-  const { isCyberpunk, isMaterial, isEditorial, isSlate, isClay, isSaas, isNordic, isGlass, isBrutal, isObsidian, isSkeuomorphic } = useTheme();
+function computeQueueFor(allCards: ReframeCard[], category: string, mode: 'due' | 'all'): ReframeCard[] {
+  let pool = [...allCards];
+  if (category !== 'all') {
+    pool = pool.filter(c => c.category === category);
+  }
 
-  // Session queue state
-  const [filterCategory, setFilterCategory] = useState<string>('all');
-  const [studyMode, setStudyMode] = useState<'due' | 'all'>('due');
-  const [activeQueue, setActiveQueue] = useState<ReframeCard[]>([]);
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const [isFlipped, setIsFlipped] = useState<boolean>(false);
-  const [speechRate, setSpeechRate] = useState<number>(1.0);
-  const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
-  const [speechNotice, setSpeechNotice] = useState<string | null>(null);
+  if (mode === 'due') {
+    const now = Date.now();
+    const dueCards = pool.filter(c => !c.lastReviewedAt || c.timesReviewed === 0 || new Date(c.nextDueAt).getTime() <= now);
+    if (dueCards.length > 0) {
+      pool = dueCards;
+    } else {
+      pool = pool.sort((a, b) => a.box - b.box).slice(0, 10);
+    }
+  }
 
-  // Session analytics
-  const [sessionStats, setSessionStats] = useState<ReviewSessionStats>({
+  return pool;
+}
+
+function createEmptySessionStats(): ReviewSessionStats {
+  return {
     cardsReviewed: 0,
     againCount: 0,
     hardCount: 0,
@@ -50,49 +53,120 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
     easyCount: 0,
     promotedToBox5: 0,
     startTime: Date.now(),
-  });
-  const [isSessionFinished, setIsSessionFinished] = useState<boolean>(false);
+  };
+}
 
-  // Initialize or re-filter queue
-  const buildQueue = useCallback(() => {
+export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
+  cards,
+  onRateCard,
+  onSessionComplete,
+  onOpenVault,
+  resetSignal = 0,
+}) => {
+  const { isCyberpunk, isMaterial, isEditorial, isSlate, isClay, isSaas, isNordic, isGlass, isBrutal, isObsidian, isSkeuomorphic } = useTheme();
+
+  const initialProgress = React.useMemo(() => {
+    const saved = leitnerStorage.loadFlashcardProgress();
+    if (!saved) return null;
+    const cardById = new Map(cards.map(c => [c.id, c]));
+    const hydratedQueue = saved.queueIds
+      .map(id => cardById.get(id))
+      .filter((c): c is ReframeCard => Boolean(c));
+    if (hydratedQueue.length === 0 && !saved.isSessionFinished) return null;
+    const safeIndex = hydratedQueue.length > 0
+      ? Math.min(Math.max(0, saved.currentIndex), hydratedQueue.length - 1)
+      : 0;
+    return {
+      filterCategory: saved.filterCategory || 'all',
+      studyMode: saved.studyMode === 'all' ? ('all' as const) : ('due' as const),
+      speechRate: typeof saved.speechRate === 'number' ? saved.speechRate : 1.0,
+      queue: hydratedQueue,
+      currentIndex: safeIndex,
+      sessionStats: saved.sessionStats || createEmptySessionStats(),
+      isSessionFinished: Boolean(saved.isSessionFinished),
+    };
+    // Intentionally evaluated once on mount to hydrate saved progress
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Session queue state
+  const [filterCategory, setFilterCategory] = useState<string>(initialProgress?.filterCategory ?? 'all');
+  const [studyMode, setStudyMode] = useState<'due' | 'all'>(initialProgress?.studyMode ?? 'due');
+  const [activeQueue, setActiveQueue] = useState<ReframeCard[]>(() =>
+    initialProgress ? initialProgress.queue : computeQueueFor(cards, 'all', 'due')
+  );
+  const [currentIndex, setCurrentIndex] = useState<number>(initialProgress?.currentIndex ?? 0);
+  const [isFlipped, setIsFlipped] = useState<boolean>(false);
+  const [speechRate, setSpeechRate] = useState<number>(initialProgress?.speechRate ?? 1.0);
+  const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
+  const [speechNotice, setSpeechNotice] = useState<string | null>(null);
+
+  // Session analytics
+  const [sessionStats, setSessionStats] = useState<ReviewSessionStats>(
+    () => initialProgress?.sessionStats ?? createEmptySessionStats()
+  );
+  const [isSessionFinished, setIsSessionFinished] = useState<boolean>(
+    initialProgress?.isSessionFinished ?? false
+  );
+
+  // Build fresh queue for specified (or current) category & study mode
+  const buildQueue = useCallback((nextCategory = filterCategory, nextMode = studyMode) => {
     speechEngine.stop();
     setIsSpeaking(false);
     setSpeechNotice(null);
 
-    let pool = [...cards];
-    if (filterCategory !== 'all') {
-      pool = pool.filter(c => c.category === filterCategory);
-    }
-
-    if (studyMode === 'due') {
-      const now = Date.now();
-      const dueCards = pool.filter(c => !c.lastReviewedAt || c.timesReviewed === 0 || new Date(c.nextDueAt).getTime() <= now);
-      if (dueCards.length > 0) {
-        pool = dueCards;
-      } else {
-        // Fallback to lowest boxes first so user is never stranded
-        pool = pool.sort((a, b) => a.box - b.box).slice(0, 10);
-      }
-    }
-
+    const pool = computeQueueFor(cards, nextCategory, nextMode);
     setActiveQueue(pool);
     setCurrentIndex(0);
     setIsFlipped(false);
     setIsSessionFinished(false);
-    setSessionStats({
-      cardsReviewed: 0,
-      againCount: 0,
-      hardCount: 0,
-      goodCount: 0,
-      easyCount: 0,
-      promotedToBox5: 0,
-      startTime: Date.now(),
-    });
+    setSessionStats(createEmptySessionStats());
   }, [cards, filterCategory, studyMode]);
 
+  // Keep queued cards synced with latest Leitner card metadata (without wiping progress)
   useEffect(() => {
-    buildQueue();
-  }, [buildQueue]);
+    const cardById = new Map(cards.map(c => [c.id, c]));
+    setActiveQueue(prevQueue => {
+      if (prevQueue.length === 0) return prevQueue;
+      const synced = prevQueue
+        .map(c => cardById.get(c.id))
+        .filter((c): c is ReframeCard => Boolean(c));
+      return synced;
+    });
+  }, [cards]);
+
+  // Reset queue cleanly when user triggers "Clear Saved Progress"
+  const lastResetSignalRef = React.useRef(resetSignal);
+  useEffect(() => {
+    if (resetSignal !== lastResetSignalRef.current) {
+      lastResetSignalRef.current = resetSignal;
+      speechEngine.stop();
+      setIsSpeaking(false);
+      setSpeechNotice(null);
+      setFilterCategory('all');
+      setStudyMode('due');
+      setSpeechRate(1.0);
+      setActiveQueue(computeQueueFor(cards, 'all', 'due'));
+      setCurrentIndex(0);
+      setIsFlipped(false);
+      setIsSessionFinished(false);
+      setSessionStats(createEmptySessionStats());
+    }
+  }, [resetSignal, cards]);
+
+  // Persist active flashcard progress & preferences to browser localStorage
+  useEffect(() => {
+    leitnerStorage.saveFlashcardProgress({
+      filterCategory,
+      studyMode,
+      speechRate,
+      queueIds: activeQueue.map(c => c.id),
+      currentIndex,
+      sessionStats,
+      isSessionFinished,
+      updatedAt: new Date().toISOString(),
+    });
+  }, [filterCategory, studyMode, speechRate, activeQueue, currentIndex, sessionStats, isSessionFinished]);
 
   // Stop speech when unmounting
   useEffect(() => {
@@ -438,7 +512,7 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
               onClick={() => {
                 soundEffects.playKeyClick();
                 setStudyMode('all');
-                buildQueue();
+                buildQueue(filterCategory, 'all');
               }}
               className={
                 isSkeuomorphic
@@ -575,6 +649,7 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
               onClick={() => {
                 soundEffects.playKeyClick();
                 setStudyMode('due');
+                buildQueue(filterCategory, 'due');
               }}
               className={
                 isSkeuomorphic
@@ -656,6 +731,7 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
               onClick={() => {
                 soundEffects.playKeyClick();
                 setStudyMode('all');
+                buildQueue(filterCategory, 'all');
               }}
               className={
                 isSkeuomorphic
@@ -779,7 +855,9 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
               value={filterCategory}
               onChange={(e) => {
                 soundEffects.playKeyClick();
-                setFilterCategory(e.target.value);
+                const nextCategory = e.target.value;
+                setFilterCategory(nextCategory);
+                buildQueue(nextCategory, studyMode);
                 e.currentTarget.blur();
               }}
               className={

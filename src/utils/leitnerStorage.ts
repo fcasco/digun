@@ -3,12 +3,41 @@ import { DEFAULT_CARDS } from '../data/defaultCards';
 
 const STORAGE_KEY = 'articulation_leitner_cards_v1';
 const STATS_KEY = 'articulation_global_stats_v1';
+const FLASHCARD_PROGRESS_KEY = 'articulation_flashcard_progress_v1';
+const QUIZ_PROGRESS_KEY = 'articulation_quiz_progress_v1';
+const ACTIVE_TAB_KEY = 'articulation_active_tab_v1';
+
+export type AppTab = 'flashcards' | 'quiz' | 'vault' | 'psychology';
 
 export interface GlobalStats {
   totalReviews: number;
   completedSessions: number;
   currentStreakDays: number;
   lastActiveDate: string;
+}
+
+export interface FlashcardProgressState {
+  filterCategory: string;
+  studyMode: 'due' | 'all';
+  speechRate: number;
+  queueIds: string[];
+  currentIndex: number;
+  sessionStats: ReviewSessionStats;
+  isSessionFinished: boolean;
+  updatedAt: string;
+}
+
+export interface QuizProgressState {
+  filterCategory: string;
+  questionOrderIds: string[];
+  currentQuestionIndex: number;
+  selectedOptionIndex: number | null;
+  hasSubmitted: boolean;
+  score: number;
+  isQuizCompleted: boolean;
+  quizzesCompleted: number;
+  bestScorePercentage: number;
+  updatedAt: string;
 }
 
 // Leitner intervals in days per box
@@ -20,23 +49,38 @@ export const LEITNER_INTERVALS: Record<number, number> = {
   5: 14,
 };
 
+function cloneDefaultCards(): ReframeCard[] {
+  return DEFAULT_CARDS.map(card => ({ ...card }));
+}
+
+function createInitialStats(): GlobalStats {
+  return {
+    totalReviews: 0,
+    completedSessions: 0,
+    currentStreakDays: 1,
+    lastActiveDate: new Date().toISOString(),
+  };
+}
+
 export const leitnerStorage = {
   loadCards(): ReframeCard[] {
-    if (typeof window === 'undefined') return DEFAULT_CARDS;
+    if (typeof window === 'undefined') return cloneDefaultCards();
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) {
-        this.saveCards(DEFAULT_CARDS);
-        return DEFAULT_CARDS;
+        const defaults = cloneDefaultCards();
+        this.saveCards(defaults);
+        return defaults;
       }
       const parsed = JSON.parse(raw) as ReframeCard[];
       if (!Array.isArray(parsed) || parsed.length === 0) {
-        this.saveCards(DEFAULT_CARDS);
-        return DEFAULT_CARDS;
+        const defaults = cloneDefaultCards();
+        this.saveCards(defaults);
+        return defaults;
       }
       // Auto-merge any newly added default cards into the user's stored deck
       const existingIds = new Set(parsed.map(c => c.id));
-      const missingDefaults = DEFAULT_CARDS.filter(c => !existingIds.has(c.id));
+      const missingDefaults = DEFAULT_CARDS.filter(c => !existingIds.has(c.id)).map(c => ({ ...c }));
       if (missingDefaults.length > 0) {
         const merged = [...parsed, ...missingDefaults];
         this.saveCards(merged);
@@ -44,7 +88,7 @@ export const leitnerStorage = {
       }
       return parsed;
     } catch {
-      return DEFAULT_CARDS;
+      return cloneDefaultCards();
     }
   },
 
@@ -59,23 +103,18 @@ export const leitnerStorage = {
 
   loadStats(): GlobalStats {
     if (typeof window === 'undefined') {
-      return { totalReviews: 0, completedSessions: 0, currentStreakDays: 1, lastActiveDate: new Date().toISOString() };
+      return createInitialStats();
     }
     try {
       const raw = localStorage.getItem(STATS_KEY);
       if (!raw) {
-        const initial: GlobalStats = {
-          totalReviews: 0,
-          completedSessions: 0,
-          currentStreakDays: 1,
-          lastActiveDate: new Date().toISOString(),
-        };
+        const initial = createInitialStats();
         this.saveStats(initial);
         return initial;
       }
       return JSON.parse(raw);
     } catch {
-      return { totalReviews: 0, completedSessions: 0, currentStreakDays: 1, lastActiveDate: new Date().toISOString() };
+      return createInitialStats();
     }
   },
 
@@ -83,6 +122,90 @@ export const leitnerStorage = {
     if (typeof window === 'undefined') return;
     try {
       localStorage.setItem(STATS_KEY, JSON.stringify(stats));
+    } catch {
+      // Ignored
+    }
+  },
+
+  loadFlashcardProgress(): FlashcardProgressState | null {
+    if (typeof window === 'undefined') return null;
+    try {
+      const raw = localStorage.getItem(FLASHCARD_PROGRESS_KEY);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw) as FlashcardProgressState;
+      if (!parsed || !Array.isArray(parsed.queueIds)) return null;
+      return parsed;
+    } catch {
+      return null;
+    }
+  },
+
+  saveFlashcardProgress(state: FlashcardProgressState): void {
+    if (typeof window === 'undefined') return;
+    try {
+      localStorage.setItem(FLASHCARD_PROGRESS_KEY, JSON.stringify(state));
+    } catch {
+      // Ignored
+    }
+  },
+
+  clearFlashcardProgress(): void {
+    if (typeof window === 'undefined') return;
+    try {
+      localStorage.removeItem(FLASHCARD_PROGRESS_KEY);
+    } catch {
+      // Ignored
+    }
+  },
+
+  loadQuizProgress(): QuizProgressState | null {
+    if (typeof window === 'undefined') return null;
+    try {
+      const raw = localStorage.getItem(QUIZ_PROGRESS_KEY);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw) as QuizProgressState;
+      if (!parsed || !Array.isArray(parsed.questionOrderIds)) return null;
+      return parsed;
+    } catch {
+      return null;
+    }
+  },
+
+  saveQuizProgress(state: QuizProgressState): void {
+    if (typeof window === 'undefined') return;
+    try {
+      localStorage.setItem(QUIZ_PROGRESS_KEY, JSON.stringify(state));
+    } catch {
+      // Ignored
+    }
+  },
+
+  clearQuizProgress(): void {
+    if (typeof window === 'undefined') return;
+    try {
+      localStorage.removeItem(QUIZ_PROGRESS_KEY);
+    } catch {
+      // Ignored
+    }
+  },
+
+  loadActiveTab(): AppTab | null {
+    if (typeof window === 'undefined') return null;
+    try {
+      const raw = localStorage.getItem(ACTIVE_TAB_KEY);
+      if (raw === 'flashcards' || raw === 'quiz' || raw === 'vault' || raw === 'psychology') {
+        return raw;
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  },
+
+  saveActiveTab(tab: AppTab): void {
+    if (typeof window === 'undefined') return;
+    try {
+      localStorage.setItem(ACTIVE_TAB_KEY, tab);
     } catch {
       // Ignored
     }
@@ -224,13 +347,44 @@ export const leitnerStorage = {
   },
 
   resetToDefault(): void {
-    this.saveCards(DEFAULT_CARDS);
+    this.saveCards(cloneDefaultCards());
+  },
+
+  clearAllProgress(): { cards: ReframeCard[]; stats: GlobalStats } {
+    const freshCards = cloneDefaultCards();
+    const freshStats = createInitialStats();
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(STATS_KEY);
+        localStorage.removeItem(FLASHCARD_PROGRESS_KEY);
+        localStorage.removeItem(QUIZ_PROGRESS_KEY);
+      } catch {
+        // Ignored
+      }
+    }
+    this.saveCards(freshCards);
+    this.saveStats(freshStats);
+    return { cards: freshCards, stats: freshStats };
   },
 
   exportBackupJson(): string {
     const cards = this.loadCards();
     const stats = this.loadStats();
-    return JSON.stringify({ version: 1, exportedAt: new Date().toISOString(), cards, stats }, null, 2);
+    const flashcardProgress = this.loadFlashcardProgress();
+    const quizProgress = this.loadQuizProgress();
+    return JSON.stringify(
+      {
+        version: 2,
+        exportedAt: new Date().toISOString(),
+        cards,
+        stats,
+        flashcardProgress,
+        quizProgress,
+      },
+      null,
+      2
+    );
   },
 
   importBackupJson(jsonString: string): boolean {
@@ -239,6 +393,8 @@ export const leitnerStorage = {
       if (parsed && Array.isArray(parsed.cards)) {
         this.saveCards(parsed.cards);
         if (parsed.stats) this.saveStats(parsed.stats);
+        if (parsed.flashcardProgress) this.saveFlashcardProgress(parsed.flashcardProgress);
+        if (parsed.quizProgress) this.saveQuizProgress(parsed.quizProgress);
         return true;
       }
       return false;

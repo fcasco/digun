@@ -1,13 +1,14 @@
-import React, { useState, useCallback } from 'react';
-import { Palette } from 'lucide-react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import { Palette, RotateCcw } from 'lucide-react';
 import { Header } from './components/Header';
 import { FlashcardDeck } from './components/FlashcardDeck';
 import { ScenarioQuiz } from './components/ScenarioQuiz';
 import { LeitnerVault } from './components/LeitnerVault';
 import { ThemesAndPsychology } from './components/ThemesAndPsychology';
 import { KeyboardShortcutsModal } from './components/KeyboardShortcutsModal';
+import { ClearProgressModal } from './components/ClearProgressModal';
 import { ReframeCard, LeitnerRating, ReviewSessionStats } from './types/reframe';
-import { leitnerStorage, GlobalStats } from './utils/leitnerStorage';
+import { leitnerStorage, GlobalStats, AppTab } from './utils/leitnerStorage';
 import { soundEffects } from './utils/soundEffects';
 import { useTheme } from './context/ThemeContext';
 
@@ -27,9 +28,29 @@ export default function App() {
       return { totalReviews: 0, completedSessions: 0, currentStreakDays: 1, lastActiveDate: new Date().toISOString() };
     }
   });
-  const [currentTab, setCurrentTab] = useState<'flashcards' | 'quiz' | 'vault' | 'psychology'>('flashcards');
+  const [currentTab, setCurrentTab] = useState<AppTab>(() => leitnerStorage.loadActiveTab() ?? 'flashcards');
   const [isShortcutsOpen, setIsShortcutsOpen] = useState<boolean>(false);
+  const [isClearProgressOpen, setIsClearProgressOpen] = useState<boolean>(false);
+  const [progressVersion, setProgressVersion] = useState<number>(0);
+  const [progressClearedNotice, setProgressClearedNotice] = useState<boolean>(false);
   const [isCrtScanlinesEnabled, setIsCrtScanlinesEnabled] = useState<boolean>(true);
+
+  useEffect(() => {
+    leitnerStorage.saveActiveTab(currentTab);
+  }, [currentTab]);
+
+  useEffect(() => {
+    if (!progressClearedNotice) return;
+    const timer = window.setTimeout(() => setProgressClearedNotice(false), 4000);
+    return () => window.clearTimeout(timer);
+  }, [progressClearedNotice]);
+
+  const progressSummary = useMemo(() => ({
+    reviewedCardsCount: cards.filter(c => c.timesReviewed > 0 || c.box > 1).length,
+    customCardsCount: cards.filter(c => c.isCustom).length,
+    totalReviews: globalStats?.totalReviews ?? 0,
+    streakDays: globalStats?.currentStreakDays ?? 1,
+  }), [cards, globalStats]);
 
   // Calculate due count
   const dueCount = React.useMemo(() => {
@@ -62,11 +83,14 @@ export default function App() {
     setCards(prev => prev.filter(c => c.id !== cardId));
   }, []);
 
-  // Reset to defaults
+  // Reset to defaults / Clear all browser storage progress
   const handleResetDeck = useCallback(() => {
-    leitnerStorage.resetToDefault();
-    const defaults = leitnerStorage.loadCards();
-    setCards(defaults);
+    const { cards: freshCards, stats: freshStats } = leitnerStorage.clearAllProgress();
+    setCards(freshCards);
+    setGlobalStats(freshStats);
+    setProgressVersion(prev => prev + 1);
+    setIsClearProgressOpen(false);
+    setProgressClearedNotice(true);
   }, []);
 
   // Export JSON backup
@@ -417,11 +441,12 @@ export default function App() {
             onRateCard={handleRateCard}
             onSessionComplete={handleSessionComplete}
             onOpenVault={() => setCurrentTab('vault')}
+            resetSignal={progressVersion}
           />
         )}
 
         {currentTab === 'quiz' && (
-          <ScenarioQuiz />
+          <ScenarioQuiz resetSignal={progressVersion} />
         )}
 
         {currentTab === 'vault' && (
@@ -430,13 +455,14 @@ export default function App() {
             onAddCard={handleAddCard}
             onDeleteCard={handleDeleteCard}
             onResetDeck={handleResetDeck}
+            onClearProgress={() => setIsClearProgressOpen(true)}
             onExportJson={handleExportJson}
             onImportJson={handleImportJson}
           />
         )}
 
         {currentTab === 'psychology' && (
-          <ThemesAndPsychology />
+          <ThemesAndPsychology cards={cards} />
         )}
       </main>
 
@@ -645,6 +671,61 @@ export default function App() {
             >
               STREAK: {globalStats?.currentStreakDays ?? 1}D
             </span>
+            <span className="hidden sm:inline">·</span>
+            {progressClearedNotice ? (
+              <span
+                className={
+                  isSkeuomorphic
+                    ? 'text-[#E8C978] font-mono font-bold'
+                    : isMaterial
+                    ? 'text-[#00695C] font-mono font-bold'
+                    : isEditorial
+                    ? 'text-[#1E4D40] font-mono font-semibold'
+                    : isBrutal
+                    ? 'bg-[#86EFAC] border-2 border-black px-1.5 py-0.5 text-black font-black'
+                    : 'text-emerald-400 font-mono font-semibold'
+                }
+              >
+                PROGRESS CLEARED
+              </span>
+            ) : (
+              <button
+                type="button"
+                onClick={() => {
+                  soundEffects.playKeyClick();
+                  setIsClearProgressOpen(true);
+                }}
+                className={
+                  isSkeuomorphic
+                    ? 'text-[#E6D6B8] hover:text-[#FFE39A] transition-colors flex items-center gap-1 cursor-pointer underline decoration-dotted underline-offset-4'
+                    : isCyberpunk
+                    ? 'text-cyan-200/80 hover:text-[#FF4DA6] transition-colors flex items-center gap-1 cursor-pointer underline decoration-dotted underline-offset-4'
+                    : isMaterial
+                    ? 'text-[#475569] hover:text-[#C62828] transition-colors flex items-center gap-1 cursor-pointer underline decoration-dotted underline-offset-4'
+                    : isEditorial
+                    ? 'text-[#574D42] hover:text-[#9B2226] transition-colors flex items-center gap-1 cursor-pointer underline decoration-dotted underline-offset-4'
+                    : isSlate
+                    ? 'text-slate-400 hover:text-rose-300 transition-colors flex items-center gap-1 cursor-pointer underline decoration-dotted underline-offset-4'
+                    : isClay
+                    ? 'text-[#4B5478] hover:text-[#9F1239] transition-colors flex items-center gap-1 cursor-pointer underline decoration-dotted underline-offset-4'
+                    : isSaas
+                    ? 'text-slate-500 hover:text-rose-600 transition-colors flex items-center gap-1 cursor-pointer underline decoration-dotted underline-offset-4'
+                    : isNordic
+                    ? 'text-[#5C6962] hover:text-[#964B36] transition-colors flex items-center gap-1 cursor-pointer underline decoration-dotted underline-offset-4'
+                    : isBrutal
+                    ? 'bg-[#FFE4E6] hover:bg-[#FDA4AF] border-2 border-black px-1.5 py-0.5 text-black font-black flex items-center gap-1 cursor-pointer'
+                    : isObsidian
+                    ? 'text-[#A39E93] hover:text-[#E5C77B] transition-colors flex items-center gap-1 cursor-pointer underline decoration-dotted underline-offset-4'
+                    : isGlass
+                    ? 'text-slate-300 hover:text-rose-200 transition-colors flex items-center gap-1 cursor-pointer underline decoration-dotted underline-offset-4'
+                    : 'text-zinc-400 hover:text-rose-400 transition-colors flex items-center gap-1 cursor-pointer underline decoration-dotted underline-offset-4'
+                }
+                title="Clear all saved progress from browser local storage"
+              >
+                <RotateCcw className="w-3 h-3" />
+                <span>CLEAR PROGRESS</span>
+              </button>
+            )}
           </div>
         </div>
       </footer>
@@ -653,6 +734,14 @@ export default function App() {
       <KeyboardShortcutsModal
         isOpen={isShortcutsOpen}
         onClose={() => setIsShortcutsOpen(false)}
+      />
+
+      {/* Clear browser progress confirmation modal */}
+      <ClearProgressModal
+        isOpen={isClearProgressOpen}
+        onClose={() => setIsClearProgressOpen(false)}
+        onConfirmClear={handleResetDeck}
+        summary={progressSummary}
       />
     </div>
   );

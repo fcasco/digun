@@ -13,36 +13,139 @@ import {
 import { SCENARIO_QUIZZES, CATEGORIES } from '../data/defaultCards';
 import { soundEffects } from '../utils/soundEffects';
 import { speechEngine } from '../utils/speechSynthesis';
+import { leitnerStorage } from '../utils/leitnerStorage';
 import { useTheme } from '../context/ThemeContext';
 
-export const ScenarioQuiz: React.FC = () => {
+interface ScenarioQuizProps {
+  resetSignal?: number;
+}
+
+function getCategoryQuestionIds(category: string): string[] {
+  const pool =
+    category === 'all'
+      ? SCENARIO_QUIZZES
+      : SCENARIO_QUIZZES.filter(q => q.category === category);
+  return pool.map(q => q.id);
+}
+
+function shuffleIds(ids: string[]): string[] {
+  const copy = [...ids];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+export const ScenarioQuiz: React.FC<ScenarioQuizProps> = ({ resetSignal = 0 }) => {
   const { isSkeuomorphic, isMaterial, isEditorial, isSlate, isClay, isSaas, isGlass, isBrutal, isObsidian, isNordic, isCyberpunk } = useTheme();
-  const [filterCategory, setFilterCategory] = useState<string>('all');
-  const [shuffleSeed, setShuffleSeed] = useState<number>(0);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
-  const [selectedOptionIndex, setSelectedOptionIndex] = useState<number | null>(null);
-  const [hasSubmitted, setHasSubmitted] = useState<boolean>(false);
-  const [score, setScore] = useState<number>(0);
-  const [isQuizCompleted, setIsQuizCompleted] = useState<boolean>(false);
+
+  const initialQuizProgress = useMemo(() => {
+    const saved = leitnerStorage.loadQuizProgress();
+    if (!saved) return null;
+    const validIds = new Set(getCategoryQuestionIds(saved.filterCategory || 'all'));
+    const filteredOrder = saved.questionOrderIds.filter(id => validIds.has(id));
+    const orderIds = filteredOrder.length > 0 ? filteredOrder : getCategoryQuestionIds(saved.filterCategory || 'all');
+    const safeIdx = orderIds.length > 0
+      ? Math.min(Math.max(0, saved.currentQuestionIndex), orderIds.length - 1)
+      : 0;
+    return {
+      filterCategory: saved.filterCategory || 'all',
+      questionOrderIds: orderIds,
+      currentQuestionIndex: safeIdx,
+      selectedOptionIndex: saved.selectedOptionIndex,
+      hasSubmitted: Boolean(saved.hasSubmitted),
+      score: typeof saved.score === 'number' ? saved.score : 0,
+      isQuizCompleted: Boolean(saved.isQuizCompleted),
+      quizzesCompleted: typeof saved.quizzesCompleted === 'number' ? saved.quizzesCompleted : 0,
+      bestScorePercentage: typeof saved.bestScorePercentage === 'number' ? saved.bestScorePercentage : 0,
+    };
+  }, []);
+
+  const [filterCategory, setFilterCategory] = useState<string>(initialQuizProgress?.filterCategory ?? 'all');
+  const [questionOrderIds, setQuestionOrderIds] = useState<string[]>(
+    () => initialQuizProgress?.questionOrderIds ?? getCategoryQuestionIds('all')
+  );
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(
+    initialQuizProgress?.currentQuestionIndex ?? 0
+  );
+  const [selectedOptionIndex, setSelectedOptionIndex] = useState<number | null>(
+    initialQuizProgress?.selectedOptionIndex ?? null
+  );
+  const [hasSubmitted, setHasSubmitted] = useState<boolean>(
+    initialQuizProgress?.hasSubmitted ?? false
+  );
+  const [score, setScore] = useState<number>(initialQuizProgress?.score ?? 0);
+  const [isQuizCompleted, setIsQuizCompleted] = useState<boolean>(
+    initialQuizProgress?.isQuizCompleted ?? false
+  );
+  const [quizzesCompleted, setQuizzesCompleted] = useState<number>(
+    initialQuizProgress?.quizzesCompleted ?? 0
+  );
+  const [bestScorePercentage, setBestScorePercentage] = useState<number>(
+    initialQuizProgress?.bestScorePercentage ?? 0
+  );
   const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
   const [speechNotice, setSpeechNotice] = useState<string | null>(null);
 
   const filteredQuestions = useMemo(() => {
-    const pool =
-      filterCategory === 'all'
-        ? [...SCENARIO_QUIZZES]
-        : SCENARIO_QUIZZES.filter(q => q.category === filterCategory);
-
-    if (shuffleSeed > 0) {
-      for (let i = pool.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [pool[i], pool[j]] = [pool[j], pool[i]];
-      }
-    }
-    return pool;
-  }, [filterCategory, shuffleSeed]);
+    const byId = new Map(SCENARIO_QUIZZES.map(q => [q.id, q]));
+    const resolved = questionOrderIds
+      .map(id => byId.get(id))
+      .filter((q): q is (typeof SCENARIO_QUIZZES)[number] => Boolean(q));
+    if (resolved.length > 0) return resolved;
+    return filterCategory === 'all'
+      ? SCENARIO_QUIZZES
+      : SCENARIO_QUIZZES.filter(q => q.category === filterCategory);
+  }, [questionOrderIds, filterCategory]);
 
   const question = filteredQuestions[currentQuestionIndex];
+
+  // Reset quiz progress when global clear is triggered
+  const lastResetSignalRef = React.useRef(resetSignal);
+  useEffect(() => {
+    if (resetSignal !== lastResetSignalRef.current) {
+      lastResetSignalRef.current = resetSignal;
+      speechEngine.stop();
+      setIsSpeaking(false);
+      setSpeechNotice(null);
+      setFilterCategory('all');
+      setQuestionOrderIds(getCategoryQuestionIds('all'));
+      setCurrentQuestionIndex(0);
+      setSelectedOptionIndex(null);
+      setHasSubmitted(false);
+      setScore(0);
+      setIsQuizCompleted(false);
+      setQuizzesCompleted(0);
+      setBestScorePercentage(0);
+    }
+  }, [resetSignal]);
+
+  // Persist scenario quiz progress to browser localStorage
+  useEffect(() => {
+    leitnerStorage.saveQuizProgress({
+      filterCategory,
+      questionOrderIds,
+      currentQuestionIndex,
+      selectedOptionIndex,
+      hasSubmitted,
+      score,
+      isQuizCompleted,
+      quizzesCompleted,
+      bestScorePercentage,
+      updatedAt: new Date().toISOString(),
+    });
+  }, [
+    filterCategory,
+    questionOrderIds,
+    currentQuestionIndex,
+    selectedOptionIndex,
+    hasSubmitted,
+    score,
+    isQuizCompleted,
+    quizzesCompleted,
+    bestScorePercentage,
+  ]);
 
   useEffect(() => {
     return () => {
@@ -103,25 +206,28 @@ export const ScenarioQuiz: React.FC = () => {
       setSelectedOptionIndex(null);
       setHasSubmitted(false);
     } else {
+      const total = filteredQuestions.length || 1;
+      const pct = Math.round((score / total) * 100);
+      setQuizzesCompleted(prev => prev + 1);
+      setBestScorePercentage(prev => Math.max(prev, pct));
       setIsQuizCompleted(true);
       soundEffects.playGraduationChime();
     }
-  }, [currentQuestionIndex, filteredQuestions.length]);
+  }, [currentQuestionIndex, filteredQuestions.length, score]);
 
   const handleRestart = useCallback((shouldShuffle = false) => {
     speechEngine.stop();
     setIsSpeaking(false);
     setSpeechNotice(null);
     soundEffects.playKeyClick();
-    if (shouldShuffle) {
-      setShuffleSeed(prev => prev + 1);
-    }
+    const baseIds = getCategoryQuestionIds(filterCategory);
+    setQuestionOrderIds(shouldShuffle ? shuffleIds(baseIds) : baseIds);
     setCurrentQuestionIndex(0);
     setSelectedOptionIndex(null);
     setHasSubmitted(false);
     setScore(0);
     setIsQuizCompleted(false);
-  }, []);
+  }, [filterCategory]);
 
   // Keyboard shortcuts for Scenario Drill
   useEffect(() => {
@@ -330,6 +436,11 @@ export const ScenarioQuiz: React.FC = () => {
               <div className={isSkeuomorphic ? 'font-editorial-display text-xl font-bold tracking-wide text-[#164A37]' : isMaterial ? 'text-lg font-bold tracking-wide text-[#004D40]' : isCyberpunk ? 'font-cyber text-lg font-bold tracking-wider text-[#E6FFFA]' : isEditorial ? 'font-editorial-display text-xl font-bold tracking-wide text-[#1D1814]' : isSlate ? 'text-lg font-bold tracking-wide text-slate-100' : isClay ? 'text-lg font-bold tracking-wide text-[#065F46]' : isSaas ? 'text-lg font-bold tracking-wide text-slate-900' : isNordic ? 'text-lg font-bold tracking-wide text-[#242E28]' : isGlass ? 'text-lg font-bold tracking-wide text-white' : isBrutal ? 'text-lg font-black text-black' : isObsidian ? 'font-luxury text-xl font-semibold tracking-wider text-[#F3E5AB]' : 'text-lg font-bold text-zinc-200'}>
                 {percentage >= 80 ? 'EXECUTIVE' : percentage >= 50 ? 'PRACTITIONER' : 'REFINING'}
               </div>
+              {quizzesCompleted > 0 && (
+                <div className="text-[10px] font-mono opacity-75 mt-1 tabular-nums">
+                  RUNS: {quizzesCompleted} · BEST: {bestScorePercentage}%
+                </div>
+              )}
             </div>
           </div>
 
@@ -503,7 +614,9 @@ export const ScenarioQuiz: React.FC = () => {
               value={filterCategory}
               onChange={(e) => {
                 soundEffects.playKeyClick();
-                setFilterCategory(e.target.value);
+                const nextCategory = e.target.value;
+                setFilterCategory(nextCategory);
+                setQuestionOrderIds(getCategoryQuestionIds(nextCategory));
                 setCurrentQuestionIndex(0);
                 setSelectedOptionIndex(null);
                 setHasSubmitted(false);

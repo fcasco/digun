@@ -23,6 +23,7 @@ interface LeitnerVaultProps {
   onAddCard: (card: Omit<ReframeCard, 'id' | 'box' | 'intervalDays' | 'lastReviewedAt' | 'nextDueAt' | 'timesReviewed' | 'timesCorrect' | 'streak' | 'isCustom'>) => void;
   onDeleteCard: (cardId: string) => void;
   onResetDeck: () => void;
+  onClearProgress?: () => void;
   onExportJson: () => void;
   onImportJson: (json: string) => boolean;
 }
@@ -32,6 +33,7 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
   onAddCard,
   onDeleteCard,
   onResetDeck,
+  onClearProgress,
   onExportJson,
 }) => {
   const { isSkeuomorphic, isMaterial, isEditorial, isSlate, isClay, isSaas, isGlass, isBrutal, isObsidian, isNordic, isCyberpunk } = useTheme();
@@ -40,6 +42,7 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
   const [selectedBoxFilter, setSelectedBoxFilter] = useState<number | 'all'>('all');
   const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
+  const [isConfirmingReset, setIsConfirmingReset] = useState<boolean>(false);
 
   // New card form state
   const [newDangerPhrase, setNewDangerPhrase] = useState('');
@@ -931,44 +934,102 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
         }
       >
         <div>
-          STORAGE: LOCAL STORAGE PERSISTENCE · {cards.length} TOTAL CARDS
+          STORAGE: BROWSER LOCAL STORAGE PERSISTENCE · {cards.length} TOTAL CARDS
         </div>
-        <button
-          onClick={() => {
-            if (window.confirm('Reset all cards to initial defaults? Custom reframes will be cleared.')) {
+        {onClearProgress ? (
+          <button
+            type="button"
+            onClick={() => {
               soundEffects.playKeyClick();
-              onResetDeck();
+              onClearProgress();
+            }}
+            className={
+              isSkeuomorphic
+                ? 'text-[#E8C978] hover:text-[#FFF8EA] transition-colors flex items-center gap-1.5 cursor-pointer font-semibold whitespace-nowrap shrink-0'
+                : isMaterial
+                ? 'text-[#475569] hover:text-[#C62828] transition-colors flex items-center gap-1.5 cursor-pointer font-semibold whitespace-nowrap shrink-0'
+                : isCyberpunk
+                ? 'text-[#9BB8D3] hover:text-[#FF66B3] transition-colors flex items-center gap-1.5 cursor-pointer font-cyber font-semibold whitespace-nowrap shrink-0'
+                : isEditorial
+                ? 'text-[#574D42] hover:text-[#9B2226] transition-colors flex items-center gap-1.5 cursor-pointer font-semibold whitespace-nowrap shrink-0'
+                : isClay
+                ? 'text-[#4B5478] hover:text-[#9F1239] transition-colors flex items-center gap-1.5 cursor-pointer font-medium whitespace-nowrap shrink-0'
+                : isSaas
+                ? 'text-slate-600 hover:text-rose-600 transition-colors flex items-center gap-1.5 cursor-pointer font-medium whitespace-nowrap shrink-0'
+                : isNordic
+                ? 'text-[#4E5A53] hover:text-[#2D4739] transition-colors flex items-center gap-1.5 cursor-pointer font-medium'
+                : isGlass
+                ? 'text-slate-300 hover:text-sky-300 transition-colors flex items-center gap-1.5 cursor-pointer'
+                : isBrutal
+                ? 'text-black hover:underline font-black flex items-center gap-1 cursor-pointer'
+                : isObsidian
+                ? 'text-[#A39E93] hover:text-[#E5C77B] transition-colors flex items-center gap-1.5 cursor-pointer'
+                : isSlate
+                ? 'text-slate-400 hover:text-teal-300 transition-colors flex items-center gap-1.5 cursor-pointer font-medium whitespace-nowrap shrink-0'
+                : 'text-zinc-500 hover:text-zinc-300 transition-colors flex items-center gap-1 cursor-pointer'
             }
-          }}
-          className={
-            isSkeuomorphic
-              ? 'text-[#E8C978] hover:text-[#FFF8EA] transition-colors flex items-center gap-1.5 cursor-pointer font-semibold whitespace-nowrap shrink-0'
-              : isMaterial
-              ? 'text-[#475569] hover:text-[#C62828] transition-colors flex items-center gap-1.5 cursor-pointer font-semibold whitespace-nowrap shrink-0'
-              : isCyberpunk
-              ? 'text-[#9BB8D3] hover:text-[#FF66B3] transition-colors flex items-center gap-1.5 cursor-pointer font-cyber font-semibold whitespace-nowrap shrink-0'
-              : isEditorial
-              ? 'text-[#574D42] hover:text-[#9B2226] transition-colors flex items-center gap-1.5 cursor-pointer font-semibold whitespace-nowrap shrink-0'
-              : isClay
-              ? 'text-[#4B5478] hover:text-[#9F1239] transition-colors flex items-center gap-1.5 cursor-pointer font-medium whitespace-nowrap shrink-0'
-              : isSaas
-              ? 'text-slate-600 hover:text-rose-600 transition-colors flex items-center gap-1.5 cursor-pointer font-medium whitespace-nowrap shrink-0'
-              : isNordic
-              ? 'text-[#4E5A53] hover:text-[#2D4739] transition-colors flex items-center gap-1.5 cursor-pointer font-medium'
-              : isGlass
-              ? 'text-slate-300 hover:text-sky-300 transition-colors flex items-center gap-1.5 cursor-pointer'
-              : isBrutal
-              ? 'text-black hover:underline font-black flex items-center gap-1 cursor-pointer'
-              : isObsidian
-              ? 'text-[#A39E93] hover:text-[#E5C77B] transition-colors flex items-center gap-1.5 cursor-pointer'
-              : isSlate
-              ? 'text-slate-400 hover:text-teal-300 transition-colors flex items-center gap-1.5 cursor-pointer font-medium whitespace-nowrap shrink-0'
-              : 'text-zinc-500 hover:text-zinc-300 transition-colors flex items-center gap-1 cursor-pointer'
-          }
-        >
-          <RotateCcw className="w-3.5 h-3.5" />
-          <span>RESET DECK TO DEFAULTS</span>
-        </button>
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            <span>CLEAR SAVED PROGRESS</span>
+          </button>
+        ) : isConfirmingReset ? (
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                soundEffects.playAgainTone();
+                setIsConfirmingReset(false);
+                onResetDeck();
+              }}
+              className="text-rose-500 hover:underline font-bold cursor-pointer"
+            >
+              CONFIRM RESET
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsConfirmingReset(false)}
+              className="opacity-75 hover:opacity-100 cursor-pointer"
+            >
+              CANCEL
+            </button>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={() => {
+              soundEffects.playKeyClick();
+              setIsConfirmingReset(true);
+            }}
+            className={
+              isSkeuomorphic
+                ? 'text-[#E8C978] hover:text-[#FFF8EA] transition-colors flex items-center gap-1.5 cursor-pointer font-semibold whitespace-nowrap shrink-0'
+                : isMaterial
+                ? 'text-[#475569] hover:text-[#C62828] transition-colors flex items-center gap-1.5 cursor-pointer font-semibold whitespace-nowrap shrink-0'
+                : isCyberpunk
+                ? 'text-[#9BB8D3] hover:text-[#FF66B3] transition-colors flex items-center gap-1.5 cursor-pointer font-cyber font-semibold whitespace-nowrap shrink-0'
+                : isEditorial
+                ? 'text-[#574D42] hover:text-[#9B2226] transition-colors flex items-center gap-1.5 cursor-pointer font-semibold whitespace-nowrap shrink-0'
+                : isClay
+                ? 'text-[#4B5478] hover:text-[#9F1239] transition-colors flex items-center gap-1.5 cursor-pointer font-medium whitespace-nowrap shrink-0'
+                : isSaas
+                ? 'text-slate-600 hover:text-rose-600 transition-colors flex items-center gap-1.5 cursor-pointer font-medium whitespace-nowrap shrink-0'
+                : isNordic
+                ? 'text-[#4E5A53] hover:text-[#2D4739] transition-colors flex items-center gap-1.5 cursor-pointer font-medium'
+                : isGlass
+                ? 'text-slate-300 hover:text-sky-300 transition-colors flex items-center gap-1.5 cursor-pointer'
+                : isBrutal
+                ? 'text-black hover:underline font-black flex items-center gap-1 cursor-pointer'
+                : isObsidian
+                ? 'text-[#A39E93] hover:text-[#E5C77B] transition-colors flex items-center gap-1.5 cursor-pointer'
+                : isSlate
+                ? 'text-slate-400 hover:text-teal-300 transition-colors flex items-center gap-1.5 cursor-pointer font-medium whitespace-nowrap shrink-0'
+                : 'text-zinc-500 hover:text-zinc-300 transition-colors flex items-center gap-1 cursor-pointer'
+            }
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            <span>CLEAR SAVED PROGRESS</span>
+          </button>
+        )}
       </div>
 
       {/* Add Custom Reframe Modal */}

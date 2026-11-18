@@ -9,13 +9,19 @@ import {
   CheckCircle2,
   Palette
 } from 'lucide-react';
-import { UI_THEMES_LIST } from '../data/defaultCards';
+import { UI_THEMES_LIST, DEFAULT_CARDS } from '../data/defaultCards';
+import { ReframeCard } from '../types/reframe';
 import { soundEffects } from '../utils/soundEffects';
 import { useTheme, AppTheme } from '../context/ThemeContext';
+import { LeitnerDistributionChart } from './LeitnerDistributionChart';
 
-export const ThemesAndPsychology: React.FC = () => {
+interface ThemesAndPsychologyProps {
+  cards?: ReframeCard[];
+}
+
+export const ThemesAndPsychology: React.FC<ThemesAndPsychologyProps> = ({ cards = DEFAULT_CARDS }) => {
   const { theme, setTheme, isSkeuomorphic, isCyberpunk, isMaterial, isEditorial, isSlate, isClay, isSaas, isNordic, isGlass, isBrutal, isObsidian } = useTheme();
-  const [activeSection, setActiveSection] = useState<'themes' | 'psychology'>('themes');
+  const [activeSection, setActiveSection] = useState<'themes' | 'psychology'>('psychology');
 
   const getInteractiveThemeKey = (rank: number): AppTheme | null => {
     if (rank === 9) return 'skeuomorphic';
@@ -903,6 +909,9 @@ export const ThemesAndPsychology: React.FC = () => {
               The "don't say A, say B" communication style is rooted in behavioral science and cognitive linguistics. The words you choose don't merely convey raw data—they dynamically calibrate how listeners calculate your competence, warmth, and authority, while reinforcing your own internal self-concept.
             </p>
           </div>
+
+          {/* D3 Leitner Box Distribution & Retention Progress Overview */}
+          <LeitnerDistributionChart cards={cards} />
 
           {/* Pillar 1 */}
           <div
