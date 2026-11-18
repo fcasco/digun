@@ -9,7 +9,7 @@ interface KeyboardShortcutsModalProps {
 }
 
 export const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({ isOpen, onClose }) => {
-  const { isSlate, isClay, isSaas, isNordic, isGlass, isBrutal, isObsidian } = useTheme();
+  const { isSkeuomorphic, isCyberpunk, isMaterial, isEditorial, isSlate, isClay, isSaas, isNordic, isGlass, isBrutal, isObsidian } = useTheme();
   if (!isOpen) return null;
 
   const shortcuts = [
@@ -24,7 +24,15 @@ export const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({ 
   return (
     <div
       className={`fixed inset-0 z-50 flex items-center justify-center p-4 ${
-        isSlate
+        isSkeuomorphic
+          ? 'bg-[#120804]/75 backdrop-blur-xs font-sans'
+          : isCyberpunk
+          ? 'bg-[#04050E]/80 backdrop-blur-md font-sans'
+          : isMaterial
+          ? 'bg-slate-900/40 backdrop-blur-xs font-material'
+          : isEditorial
+          ? 'bg-[#1D1814]/45 backdrop-blur-xs font-editorial-body'
+          : isSlate
           ? 'bg-slate-950/75 backdrop-blur-xs font-sans'
           : isClay
           ? 'bg-[#1E2547]/30 backdrop-blur-sm font-sans'
@@ -37,7 +45,15 @@ export const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({ 
     >
       <div
         className={
-          isSlate
+          isSkeuomorphic
+            ? 'skeuo-paper-elevated border-2 border-[#6B4A2B] rounded-lg max-w-md w-full p-6 text-[#1F140E]'
+            : isCyberpunk
+            ? 'cyber-card-elevated border border-cyan-400/45 border-t-2 border-t-[#00F0FF] rounded-sm max-w-md w-full p-6'
+            : isMaterial
+            ? 'material-card-elevated rounded-xl max-w-md w-full p-6'
+            : isEditorial
+            ? 'editorial-card-elevated border-2 border-[#1D1814] rounded-none max-w-md w-full p-6'
+            : isSlate
             ? 'slate-card-elevated border border-slate-700/90 rounded-lg max-w-md w-full p-6'
             : isClay
             ? 'clay-card-elevated border border-white/90 rounded-3xl max-w-md w-full p-6'
@@ -56,7 +72,15 @@ export const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({ 
       >
         <div
           className={`flex items-center justify-between mb-4 pb-3 ${
-            isSlate
+            isSkeuomorphic
+              ? 'border-b-2 border-[#C8B896]'
+              : isCyberpunk
+              ? 'border-b border-cyan-400/25'
+              : isMaterial
+              ? 'border-b border-[#E2E8F0]'
+              : isEditorial
+              ? 'border-b-2 border-double border-[#1D1814]/70'
+              : isSlate
               ? 'border-b border-slate-700/80'
               : isClay
               ? 'border-b border-[#DCE2F7]'
@@ -75,7 +99,15 @@ export const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({ 
         >
           <div
             className={
-              isSlate
+              isSkeuomorphic
+                ? 'flex items-center gap-2 font-editorial-display text-lg font-bold tracking-tight text-[#1F140E]'
+                : isCyberpunk
+                ? 'flex items-center gap-2 font-cyber text-base font-bold tracking-[0.12em] uppercase text-[#00F0FF]'
+                : isMaterial
+                ? 'flex items-center gap-2 text-base font-bold tracking-tight text-[#111827]'
+                : isEditorial
+                ? 'flex items-center gap-2 font-editorial-display text-lg font-bold tracking-tight text-[#1D1814]'
+                : isSlate
                 ? 'flex items-center gap-2 text-sm font-semibold tracking-wide uppercase text-slate-50'
                 : isClay
                 ? 'flex items-center gap-2 text-sm font-bold tracking-wide uppercase text-[#1E2547]'
@@ -92,7 +124,7 @@ export const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({ 
                 : 'flex items-center gap-2 text-sm font-bold text-zinc-100 tracking-wider'
             }
           >
-            <Keyboard className={isSlate ? 'w-4 h-4 text-teal-400' : isClay || isSaas ? 'w-4 h-4 text-indigo-600' : isNordic ? 'w-4 h-4 text-[#527360]' : isBrutal ? 'w-4 h-4 text-black' : isObsidian ? 'w-4 h-4 text-[#D4AF37]' : isGlass ? 'w-4 h-4 text-sky-300' : 'w-4 h-4 text-amber-400'} />
+            <Keyboard className={isSkeuomorphic ? 'w-4 h-4 text-[#8C1D18]' : isCyberpunk ? 'w-4 h-4 text-[#FF2A85]' : isMaterial ? 'w-4 h-4 text-[#1565C0]' : isEditorial ? 'w-4 h-4 text-[#9B2226]' : isSlate ? 'w-4 h-4 text-teal-400' : isClay || isSaas ? 'w-4 h-4 text-indigo-600' : isNordic ? 'w-4 h-4 text-[#527360]' : isBrutal ? 'w-4 h-4 text-black' : isObsidian ? 'w-4 h-4 text-[#D4AF37]' : isGlass ? 'w-4 h-4 text-sky-300' : 'w-4 h-4 text-amber-400'} />
             <span>COMMAND SHORTCUTS</span>
           </div>
           <button
@@ -101,7 +133,15 @@ export const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({ 
               onClose();
             }}
             className={
-              isSlate
+              isSkeuomorphic
+                ? 'text-[#5A3D28] hover:text-[#8C1D18] p-1 rounded-md hover:bg-[#E6D9C0] cursor-pointer transition-colors'
+                : isCyberpunk
+                ? 'text-cyan-300 hover:text-[#FF4DA6] p-1 rounded-sm hover:bg-cyan-400/10 cursor-pointer transition-colors'
+                : isMaterial
+                ? 'text-[#64748B] hover:text-[#1565C0] p-1.5 rounded-lg hover:bg-[#ECEFF4] cursor-pointer transition-colors'
+                : isEditorial
+                ? 'text-[#574D42] hover:text-[#9B2226] p-1 rounded-none hover:bg-[#EAE1D0] cursor-pointer transition-colors'
+                : isSlate
                 ? 'text-slate-400 hover:text-white p-1 rounded-md hover:bg-slate-800 cursor-pointer transition-colors'
                 : isClay
                 ? 'text-[#647094] hover:text-[#1E2547] p-1.5 rounded-xl clay-well cursor-pointer transition-colors'
@@ -127,7 +167,15 @@ export const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({ 
             <div
               key={item.key}
               className={
-                isSlate
+                isSkeuomorphic
+                  ? 'flex items-center justify-between p-2.5 rounded-md skeuo-well'
+                  : isCyberpunk
+                  ? 'flex items-center justify-between p-2.5 rounded-sm cyber-well border border-cyan-400/20'
+                  : isMaterial
+                  ? 'flex items-center justify-between p-3 rounded-lg material-well'
+                  : isEditorial
+                  ? 'flex items-center justify-between p-2.5 rounded-none editorial-well border border-[#C9BFA9]'
+                  : isSlate
                   ? 'flex items-center justify-between p-2.5 rounded-md slate-well border border-slate-800'
                   : isClay
                   ? 'flex items-center justify-between p-2.5 rounded-2xl clay-well border border-white/60'
@@ -144,12 +192,20 @@ export const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({ 
                   : 'flex items-center justify-between p-2 rounded bg-zinc-900 border border-zinc-800'
               }
             >
-              <span className={isSlate ? 'text-slate-200 font-medium' : isClay ? 'text-[#1E2547] font-semibold' : isSaas ? 'text-slate-700 font-medium' : isNordic ? 'text-[#242E28] font-medium' : isBrutal ? 'text-black font-bold' : isObsidian ? 'text-[#F5F0E6]' : isGlass ? 'text-slate-100 font-medium' : 'text-zinc-300'}>
+              <span className={isSkeuomorphic ? 'text-[#2C1B12] font-semibold' : isCyberpunk ? 'text-[#E6F4FF] font-medium' : isMaterial ? 'text-[#1E293B] font-medium' : isEditorial ? 'text-[#1D1814] font-medium' : isSlate ? 'text-slate-200 font-medium' : isClay ? 'text-[#1E2547] font-semibold' : isSaas ? 'text-slate-700 font-medium' : isNordic ? 'text-[#242E28] font-medium' : isBrutal ? 'text-black font-bold' : isObsidian ? 'text-[#F5F0E6]' : isGlass ? 'text-slate-100 font-medium' : 'text-zinc-300'}>
                 {item.label}
               </span>
               <kbd
                 className={
-                  isSlate
+                  isSkeuomorphic
+                    ? 'px-2.5 py-0.5 rounded skeuo-brass-btn border border-[#7A5915] font-mono font-bold'
+                    : isCyberpunk
+                    ? 'px-2.5 py-0.5 rounded-sm bg-[#0D1635] text-[#00F0FF] border border-cyan-400/45 font-mono font-bold'
+                    : isMaterial
+                    ? 'px-2.5 py-0.5 rounded-md bg-white text-[#1565C0] border border-[#CBD5E1] shadow-2xs font-mono font-bold'
+                    : isEditorial
+                    ? 'px-2 py-0.5 rounded-none bg-[#FFFDF7] text-[#9B2226] border border-[#1D1814]/55 font-mono font-semibold'
+                    : isSlate
                     ? 'px-2 py-0.5 rounded bg-[#1E293B] text-teal-300 border border-slate-700 font-mono font-semibold'
                     : isClay
                     ? 'px-2.5 py-0.5 rounded-xl clay-card text-indigo-600 border border-white font-mono font-bold'
@@ -178,7 +234,15 @@ export const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({ 
             onClose();
           }}
           className={
-            isSlate
+            isSkeuomorphic
+              ? 'w-full py-2.5 rounded-md skeuo-brass-btn border border-[#7A5915] font-bold uppercase tracking-wider text-xs cursor-pointer'
+              : isCyberpunk
+              ? 'w-full py-2.5 rounded-sm bg-gradient-to-r from-[#00F0FF] to-[#FF2A85] text-[#060714] border border-cyan-200/80 font-cyber font-bold uppercase tracking-[0.14em] text-xs cursor-pointer cyber-btn'
+              : isMaterial
+              ? 'w-full py-2.5 rounded-lg bg-[#1565C0] hover:bg-[#0D47A1] text-white font-bold uppercase tracking-wider text-xs cursor-pointer material-btn'
+              : isEditorial
+              ? 'w-full py-2.5 rounded-none bg-[#9B2226] hover:bg-[#7F1D1D] text-[#FAF5EA] border border-[#1D1814] font-semibold uppercase tracking-[0.14em] text-xs cursor-pointer shadow-[2px_2px_0_#1D1814] transition-colors'
+              : isSlate
               ? 'w-full py-2.5 rounded-lg bg-teal-400 hover:bg-teal-300 text-slate-950 font-semibold uppercase tracking-wider text-xs cursor-pointer shadow-xs transition-colors'
               : isClay
               ? 'w-full py-2.5 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold uppercase tracking-wider text-xs cursor-pointer clay-btn'

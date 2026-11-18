@@ -34,7 +34,7 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
   onResetDeck,
   onExportJson,
 }) => {
-  const { isSlate, isClay, isSaas, isGlass, isBrutal, isObsidian, isNordic } = useTheme();
+  const { isMaterial, isEditorial, isSlate, isClay, isSaas, isGlass, isBrutal, isObsidian, isNordic, isCyberpunk } = useTheme();
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedBoxFilter, setSelectedBoxFilter] = useState<number | 'all'>('all');
@@ -116,11 +116,17 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
   };
 
   return (
-    <div className={`max-w-5xl mx-auto px-4 py-6 ${isSlate || isBrutal || isObsidian || isGlass || isNordic || isSaas || isClay ? 'font-sans' : 'font-mono'}`}>
+    <div className={`max-w-5xl mx-auto px-4 py-6 ${isMaterial ? 'font-material' : isEditorial ? 'font-editorial-body' : isSlate || isBrutal || isObsidian || isGlass || isNordic || isSaas || isClay || isCyberpunk ? 'font-sans' : 'font-mono'}`}>
       {/* Header & Vault Summary */}
       <div
         className={
-          isSlate
+          isMaterial
+            ? 'border border-slate-200/80 border-t-4 border-t-[#1565C0] material-card-elevated rounded-xl p-5 sm:p-6 mb-6'
+            : isCyberpunk
+            ? 'border border-cyan-400/40 border-t-2 border-t-[#00F0FF] cyber-card-elevated rounded-sm p-5 sm:p-6 mb-6'
+            : isEditorial
+            ? 'border-2 border-[#1D1814] editorial-card rounded-none p-5 sm:p-6 mb-6'
+            : isSlate
             ? 'border border-slate-700/80 slate-card rounded-lg p-5 sm:p-6 mb-6'
             : isClay
             ? 'border border-white/90 clay-card rounded-3xl p-5 sm:p-6 mb-6'
@@ -140,10 +146,16 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <Layers className={isSlate ? 'w-5 h-5 text-teal-400' : isClay ? 'w-5 h-5 text-indigo-500' : isSaas ? 'w-5 h-5 text-indigo-600' : isNordic ? 'w-5 h-5 text-[#527360]' : isGlass ? 'w-5 h-5 text-sky-300' : isBrutal ? 'w-5 h-5 text-black' : isObsidian ? 'w-5 h-5 text-[#D4AF37]' : 'w-5 h-5 text-amber-400'} />
+              <Layers className={isMaterial ? 'w-5 h-5 text-[#1565C0]' : isCyberpunk ? 'w-5 h-5 text-[#00F0FF]' : isEditorial ? 'w-5 h-5 text-[#9B2226]' : isSlate ? 'w-5 h-5 text-teal-400' : isClay ? 'w-5 h-5 text-indigo-500' : isSaas ? 'w-5 h-5 text-indigo-600' : isNordic ? 'w-5 h-5 text-[#527360]' : isGlass ? 'w-5 h-5 text-sky-300' : isBrutal ? 'w-5 h-5 text-black' : isObsidian ? 'w-5 h-5 text-[#D4AF37]' : 'w-5 h-5 text-amber-400'} />
               <h2
                 className={
-                  isSlate
+                  isMaterial
+                    ? 'text-lg sm:text-xl font-bold tracking-tight text-[#111827]'
+                    : isCyberpunk
+                    ? 'font-cyber text-lg sm:text-xl font-bold uppercase tracking-wider text-[#E6F4FF]'
+                    : isEditorial
+                    ? 'font-editorial-display text-2xl sm:text-3xl font-bold tracking-tight text-[#1D1814]'
+                    : isSlate
                     ? 'text-lg sm:text-xl font-bold tracking-tight text-slate-100'
                     : isClay
                     ? 'text-lg sm:text-xl font-bold tracking-tight text-[#1E2547]'
@@ -163,7 +175,7 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                 LEITNER RETENTION VAULT
               </h2>
             </div>
-            <p className={isSlate ? 'text-xs text-slate-300' : isClay ? 'text-xs text-[#4B5478]' : isSaas ? 'text-xs text-slate-500' : isNordic ? 'text-xs text-[#4E5A53]' : isGlass ? 'text-xs text-slate-300' : isBrutal ? 'text-xs text-zinc-700 font-medium' : isObsidian ? 'text-xs text-[#A39E93]' : 'text-xs text-zinc-400'}>
+            <p className={isMaterial ? 'text-xs text-[#475569]' : isCyberpunk ? 'text-xs text-[#9BB8D3]' : isEditorial ? 'text-xs text-[#433A31]' : isSlate ? 'text-xs text-slate-300' : isClay ? 'text-xs text-[#4B5478]' : isSaas ? 'text-xs text-slate-500' : isNordic ? 'text-xs text-[#4E5A53]' : isGlass ? 'text-xs text-slate-300' : isBrutal ? 'text-xs text-zinc-700 font-medium' : isObsidian ? 'text-xs text-[#A39E93]' : 'text-xs text-zinc-400'}>
               Systematic 5-tier spaced repetition storage. Cards migrate to higher intervals as recall strengthens over time.
             </p>
           </div>
@@ -175,7 +187,13 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                 setIsAddModalOpen(true);
               }}
               className={
-                isSlate
+                isMaterial
+                  ? 'px-4 py-2 rounded-lg bg-[#1565C0] hover:bg-[#0D47A1] text-white border border-[#0D47A1] text-xs font-semibold tracking-wide transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0 material-btn'
+                  : isCyberpunk
+                  ? 'px-4 py-2 rounded-sm bg-gradient-to-r from-[#00F0FF] to-[#FF2A85] text-[#060714] border border-cyan-200/80 font-cyber text-xs font-bold uppercase tracking-wider transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0 cyber-btn'
+                  : isEditorial
+                  ? 'px-4 py-2 rounded-none bg-[#9B2226] hover:bg-[#7F1D1D] text-[#FAF5EA] border border-[#1D1814] shadow-[2px_2px_0_#1D1814] font-mono text-xs font-semibold tracking-wider transition-colors cursor-pointer flex items-center gap-1.5 whitespace-nowrap'
+                  : isSlate
                   ? 'px-4 py-2 rounded-md bg-teal-400 hover:bg-teal-300 text-slate-950 border border-teal-300 text-xs font-semibold tracking-wide transition-colors cursor-pointer flex items-center gap-1.5 whitespace-nowrap shadow-xs'
                   : isClay
                   ? 'px-4 py-2 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white border border-indigo-400/60 text-xs font-semibold tracking-wide transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0 clay-btn'
@@ -192,7 +210,7 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                   : 'px-3.5 py-2 rounded bg-zinc-100 hover:bg-white text-zinc-950 text-xs font-bold transition-colors cursor-pointer flex items-center gap-1.5 whitespace-nowrap shadow-sm'
               }
             >
-              <Plus className={isSlate ? 'w-4 h-4 text-slate-950' : isClay || isSaas ? 'w-4 h-4 text-white' : isNordic ? 'w-4 h-4 text-[#FDFBF7]' : isGlass ? 'w-4 h-4 text-slate-950' : isBrutal ? 'w-4 h-4 text-black' : isObsidian ? 'w-4 h-4 text-[#070709]' : 'w-4 h-4 text-amber-600'} />
+              <Plus className={isMaterial ? 'w-4 h-4 text-white' : isCyberpunk ? 'w-4 h-4 text-[#060714]' : isEditorial ? 'w-4 h-4 text-[#FAF5EA]' : isSlate ? 'w-4 h-4 text-slate-950' : isClay || isSaas ? 'w-4 h-4 text-white' : isNordic ? 'w-4 h-4 text-[#FDFBF7]' : isGlass ? 'w-4 h-4 text-slate-950' : isBrutal ? 'w-4 h-4 text-black' : isObsidian ? 'w-4 h-4 text-[#070709]' : 'w-4 h-4 text-amber-600'} />
               <span>ADD REFRAME</span>
             </button>
             <button
@@ -202,7 +220,13 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
               }}
               title="Export backup JSON"
               className={
-                isSlate
+                isMaterial
+                  ? 'p-2 rounded-lg material-well border border-slate-200/80 text-[#475569] hover:text-[#1565C0] hover:bg-[#D5DCE6] text-xs transition-all cursor-pointer material-btn'
+                  : isCyberpunk
+                  ? 'p-2 rounded-sm bg-[#061926] border border-[#00F0FF]/40 text-[#00F0FF] hover:bg-[#0B2A3E] hover:border-[#00F0FF] text-xs transition-all cursor-pointer'
+                  : isEditorial
+                  ? 'p-2 rounded-none bg-[#FFFDF7] border border-[#1D1814]/60 text-[#1D1814] hover:bg-[#EAE1D0] text-xs transition-colors cursor-pointer'
+                  : isSlate
                   ? 'p-2 rounded-md bg-[#0B1220] border border-slate-700 text-slate-300 hover:text-white hover:border-teal-400/50 text-xs transition-colors cursor-pointer'
                   : isClay
                   ? 'p-2 rounded-2xl bg-white border border-white/90 text-[#4B5478] hover:text-[#1E2547] text-xs transition-all cursor-pointer clay-btn-soft'
@@ -240,7 +264,25 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                   setSelectedBoxFilter(prev => prev === boxNum ? 'all' : boxNum);
                 }}
                 className={
-                  isSlate
+                  isMaterial
+                    ? `p-3 rounded-lg border text-left transition-all cursor-pointer ${
+                        isSelected
+                          ? 'bg-[#E3F2FD] border-[#1565C0] ring-2 ring-[#1565C0]'
+                          : 'material-well border-slate-200/80 hover:bg-[#DAE2EE] hover:border-[#1565C0]/40'
+                      }`
+                    : isCyberpunk
+                    ? `p-3 rounded-sm border text-left transition-all cursor-pointer ${
+                        isSelected
+                          ? 'bg-[#061926] border-[#00F0FF] shadow-[0_0_12px_rgba(0,240,255,0.22)]'
+                          : 'cyber-well border-cyan-400/25 hover:border-[#00F0FF]/65'
+                      }`
+                    : isEditorial
+                    ? `p-3 rounded-none border text-left transition-colors cursor-pointer ${
+                        isSelected
+                          ? 'editorial-card-elevated border-2 border-[#9B2226]'
+                          : 'editorial-well border-[#B8AD96] hover:border-[#1D1814]'
+                      }`
+                    : isSlate
                     ? `p-3 rounded-md border text-left transition-colors cursor-pointer ${
                         isSelected
                           ? 'bg-teal-950/35 border-teal-400'
@@ -292,7 +334,13 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                 <div className="flex items-center justify-between text-[11px] mb-1">
                   <span
                     className={
-                      isSlate
+                      isMaterial
+                        ? `font-mono uppercase tracking-wider ${isSelected ? 'text-[#1565C0] font-bold' : 'text-[#111827] font-semibold'}`
+                        : isCyberpunk
+                        ? `font-cyber uppercase tracking-wider ${isSelected ? 'text-[#00F0FF] font-bold' : 'text-[#E6F4FF] font-semibold'}`
+                        : isEditorial
+                        ? `font-mono uppercase tracking-wider ${isSelected ? 'text-[#9B2226] font-bold' : 'text-[#1D1814] font-semibold'}`
+                        : isSlate
                         ? `font-mono uppercase tracking-wider ${isSelected ? 'text-teal-300 font-semibold' : 'text-slate-200 font-medium'}`
                         : isClay
                         ? `font-mono uppercase tracking-wider ${isSelected ? 'text-indigo-600 font-semibold' : 'text-[#1E2547] font-medium'}`
@@ -311,14 +359,14 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                   >
                     BOX {boxNum}
                   </span>
-                  <span className={isSlate ? 'text-[10px] font-mono text-slate-400' : isClay ? 'text-[10px] font-mono text-[#647094]' : isSaas ? 'text-[10px] font-mono text-slate-500' : isNordic ? 'text-[10px] font-mono text-[#5C6962]' : isGlass ? 'text-[10px] font-mono text-slate-400' : isBrutal ? 'text-[10px] font-bold text-zinc-700 font-mono' : isObsidian ? 'text-[10px] font-mono text-[#8E877A]' : 'text-[10px] text-zinc-500'}>
+                  <span className={isMaterial ? 'text-[10px] font-mono text-[#475569]' : isCyberpunk ? 'text-[10px] font-mono text-[#9BB8D3]' : isEditorial ? 'text-[10px] font-mono text-[#574D42]' : isSlate ? 'text-[10px] font-mono text-slate-400' : isClay ? 'text-[10px] font-mono text-[#647094]' : isSaas ? 'text-[10px] font-mono text-slate-500' : isNordic ? 'text-[10px] font-mono text-[#5C6962]' : isGlass ? 'text-[10px] font-mono text-slate-400' : isBrutal ? 'text-[10px] font-bold text-zinc-700 font-mono' : isObsidian ? 'text-[10px] font-mono text-[#8E877A]' : 'text-[10px] text-zinc-500'}>
                     {intervals[boxNum]}
                   </span>
                 </div>
-                <div className={isSlate ? 'text-xl font-bold font-mono text-slate-100 tabular-nums mb-1' : isClay ? 'text-xl font-bold font-mono text-[#1E2547] tabular-nums mb-1' : isSaas ? 'text-xl font-bold font-mono text-slate-900 tabular-nums mb-1' : isNordic ? 'text-xl font-bold font-mono text-[#242E28] tabular-nums mb-1' : isGlass ? 'text-xl font-bold font-mono text-white tabular-nums mb-1' : isBrutal ? 'text-xl font-black text-black tabular-nums mb-1' : isObsidian ? 'text-xl font-mono font-semibold text-[#F5F0E6] tabular-nums mb-1' : 'text-xl font-bold text-zinc-100 tabular-nums mb-1'}>
+                <div className={isMaterial ? 'text-xl font-bold font-mono text-[#111827] tabular-nums mb-1' : isCyberpunk ? `text-xl font-bold font-mono tabular-nums mb-1 ${boxNum === 5 ? 'text-[#00F5D4]' : isSelected ? 'text-[#00F0FF]' : 'text-[#E6F4FF]'}` : isEditorial ? 'text-xl font-bold font-mono text-[#1D1814] tabular-nums mb-1' : isSlate ? 'text-xl font-bold font-mono text-slate-100 tabular-nums mb-1' : isClay ? 'text-xl font-bold font-mono text-[#1E2547] tabular-nums mb-1' : isSaas ? 'text-xl font-bold font-mono text-slate-900 tabular-nums mb-1' : isNordic ? 'text-xl font-bold font-mono text-[#242E28] tabular-nums mb-1' : isGlass ? 'text-xl font-bold font-mono text-white tabular-nums mb-1' : isBrutal ? 'text-xl font-black text-black tabular-nums mb-1' : isObsidian ? 'text-xl font-mono font-semibold text-[#F5F0E6] tabular-nums mb-1' : 'text-xl font-bold text-zinc-100 tabular-nums mb-1'}>
                   {count}
                 </div>
-                <div className={isSlate ? 'text-[10px] font-medium uppercase tracking-wider text-slate-400' : isClay ? 'text-[10px] font-medium uppercase tracking-wider text-[#647094]' : isSaas ? 'text-[10px] font-medium uppercase tracking-wider text-slate-500' : isNordic ? 'text-[10px] font-medium uppercase tracking-wider text-[#5C6962]' : isGlass ? 'text-[10px] font-medium uppercase tracking-wider text-slate-400' : isBrutal ? 'text-[10px] font-extrabold text-zinc-800 tracking-wider' : isObsidian ? 'text-[10px] uppercase tracking-[0.16em] text-[#A39E93]' : 'text-[10px] text-zinc-500 tracking-wider'}>
+                <div className={isMaterial ? 'text-[10px] font-semibold uppercase tracking-wider text-[#475569]' : isCyberpunk ? `font-cyber text-[10px] font-semibold uppercase tracking-wider ${boxNum === 5 ? 'text-[#5EEAD4]' : 'text-[#9BB8D3]'}` : isEditorial ? 'font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-[#574D42]' : isSlate ? 'text-[10px] font-medium uppercase tracking-wider text-slate-400' : isClay ? 'text-[10px] font-medium uppercase tracking-wider text-[#647094]' : isSaas ? 'text-[10px] font-medium uppercase tracking-wider text-slate-500' : isNordic ? 'text-[10px] font-medium uppercase tracking-wider text-[#5C6962]' : isGlass ? 'text-[10px] font-medium uppercase tracking-wider text-slate-400' : isBrutal ? 'text-[10px] font-extrabold text-zinc-800 tracking-wider' : isObsidian ? 'text-[10px] uppercase tracking-[0.16em] text-[#A39E93]' : 'text-[10px] text-zinc-500 tracking-wider'}>
                   {labels[boxNum]}
                 </div>
               </button>
@@ -327,11 +375,11 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
         </div>
 
         {selectedBoxFilter !== 'all' && (
-          <div className={isSlate ? 'flex items-center justify-between text-[11px] uppercase tracking-wider text-slate-400 pt-2.5 border-t border-slate-800' : isClay ? 'flex items-center justify-between text-[11px] uppercase tracking-wider text-[#647094] pt-2.5 border-t border-indigo-900/10' : isSaas ? 'flex items-center justify-between text-[11px] uppercase tracking-wider text-slate-500 pt-2.5 border-t border-slate-200' : isNordic ? 'flex items-center justify-between text-[11px] uppercase tracking-wider text-[#4E5A53] pt-2.5 border-t border-[#E4DFD4]' : isGlass ? 'flex items-center justify-between text-[11px] uppercase tracking-wider text-slate-300 pt-2.5 border-t border-white/15' : isBrutal ? 'flex items-center justify-between text-xs font-bold text-black pt-2 border-t-2 border-black' : isObsidian ? 'flex items-center justify-between text-[11px] uppercase tracking-[0.14em] text-[#A39E93] pt-2.5 border-t border-[#2A241A]' : 'flex items-center justify-between text-xs text-zinc-400 pt-2 border-t border-zinc-800'}>
+          <div className={isMaterial ? 'flex items-center justify-between text-[11px] uppercase tracking-wider text-[#475569] pt-2.5 border-t border-slate-200 font-semibold' : isCyberpunk ? 'flex items-center justify-between text-[11px] uppercase tracking-wider text-[#9BB8D3] pt-2.5 border-t border-cyan-400/25 font-semibold' : isEditorial ? 'flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.14em] text-[#574D42] pt-2.5 border-t border-[#C9BFA9]' : isSlate ? 'flex items-center justify-between text-[11px] uppercase tracking-wider text-slate-400 pt-2.5 border-t border-slate-800' : isClay ? 'flex items-center justify-between text-[11px] uppercase tracking-wider text-[#647094] pt-2.5 border-t border-indigo-900/10' : isSaas ? 'flex items-center justify-between text-[11px] uppercase tracking-wider text-slate-500 pt-2.5 border-t border-slate-200' : isNordic ? 'flex items-center justify-between text-[11px] uppercase tracking-wider text-[#4E5A53] pt-2.5 border-t border-[#E4DFD4]' : isGlass ? 'flex items-center justify-between text-[11px] uppercase tracking-wider text-slate-300 pt-2.5 border-t border-white/15' : isBrutal ? 'flex items-center justify-between text-xs font-bold text-black pt-2 border-t-2 border-black' : isObsidian ? 'flex items-center justify-between text-[11px] uppercase tracking-[0.14em] text-[#A39E93] pt-2.5 border-t border-[#2A241A]' : 'flex items-center justify-between text-xs text-zinc-400 pt-2 border-t border-zinc-800'}>
             <span>FILTERING BY BOX {selectedBoxFilter}</span>
             <button
               onClick={() => setSelectedBoxFilter('all')}
-              className={isSlate ? 'text-teal-300 hover:underline cursor-pointer font-semibold' : isClay ? 'text-indigo-600 hover:underline cursor-pointer font-semibold' : isSaas ? 'text-indigo-600 hover:underline cursor-pointer font-semibold' : isNordic ? 'text-[#3B5948] hover:underline cursor-pointer font-semibold' : isGlass ? 'text-sky-300 hover:underline cursor-pointer font-semibold' : isBrutal ? 'text-black underline font-black cursor-pointer' : isObsidian ? 'text-[#E5C77B] hover:underline cursor-pointer font-semibold' : 'text-zinc-200 hover:underline cursor-pointer'}
+              className={isMaterial ? 'text-[#1565C0] hover:underline cursor-pointer font-bold' : isCyberpunk ? 'text-[#00F0FF] hover:underline cursor-pointer font-cyber font-bold' : isEditorial ? 'text-[#9B2226] hover:underline cursor-pointer font-semibold' : isSlate ? 'text-teal-300 hover:underline cursor-pointer font-semibold' : isClay ? 'text-indigo-600 hover:underline cursor-pointer font-semibold' : isSaas ? 'text-indigo-600 hover:underline cursor-pointer font-semibold' : isNordic ? 'text-[#3B5948] hover:underline cursor-pointer font-semibold' : isGlass ? 'text-sky-300 hover:underline cursor-pointer font-semibold' : isBrutal ? 'text-black underline font-black cursor-pointer' : isObsidian ? 'text-[#E5C77B] hover:underline cursor-pointer font-semibold' : 'text-zinc-200 hover:underline cursor-pointer'}
             >
               SHOW ALL BOXES
             </button>
@@ -342,14 +390,20 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
       {/* Filter and Search Bar */}
       <div className="flex flex-col sm:flex-row items-center gap-3 mb-6">
         <div className="relative flex-1 w-full">
-          <Search className={isSlate ? 'w-4 h-4 text-teal-400 absolute left-3 top-1/2 -translate-y-1/2' : isClay ? 'w-4 h-4 text-[#647094] absolute left-3.5 top-1/2 -translate-y-1/2' : isSaas ? 'w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2' : isNordic ? 'w-4 h-4 text-[#527360] absolute left-3 top-1/2 -translate-y-1/2' : isGlass ? 'w-4 h-4 text-sky-300 absolute left-3 top-1/2 -translate-y-1/2' : isBrutal ? 'w-4 h-4 text-black absolute left-3 top-1/2 -translate-y-1/2' : isObsidian ? 'w-4 h-4 text-[#C5A059] absolute left-3 top-1/2 -translate-y-1/2' : 'w-4 h-4 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2'} />
+          <Search className={isMaterial ? 'w-4 h-4 text-[#1565C0] absolute left-3 top-1/2 -translate-y-1/2' : isCyberpunk ? 'w-4 h-4 text-[#00F0FF] absolute left-3 top-1/2 -translate-y-1/2' : isEditorial ? 'w-4 h-4 text-[#9B2226] absolute left-3 top-1/2 -translate-y-1/2' : isSlate ? 'w-4 h-4 text-teal-400 absolute left-3 top-1/2 -translate-y-1/2' : isClay ? 'w-4 h-4 text-[#647094] absolute left-3.5 top-1/2 -translate-y-1/2' : isSaas ? 'w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2' : isNordic ? 'w-4 h-4 text-[#527360] absolute left-3 top-1/2 -translate-y-1/2' : isGlass ? 'w-4 h-4 text-sky-300 absolute left-3 top-1/2 -translate-y-1/2' : isBrutal ? 'w-4 h-4 text-black absolute left-3 top-1/2 -translate-y-1/2' : isObsidian ? 'w-4 h-4 text-[#C5A059] absolute left-3 top-1/2 -translate-y-1/2' : 'w-4 h-4 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2'} />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search phrases, scenarios, or keywords..."
             className={
-              isSlate
+              isMaterial
+                ? 'w-full material-card border border-slate-200/80 focus:border-[#1565C0] rounded-lg pl-9 pr-3 py-2 text-xs text-[#111827] placeholder-[#64748B] focus:outline-none'
+                : isCyberpunk
+                ? 'w-full cyber-well border border-cyan-400/35 focus:border-[#00F0FF] rounded-sm pl-9 pr-3 py-2 text-xs text-[#E6F4FF] placeholder-[#7A95B0] focus:outline-none'
+                : isEditorial
+                ? 'w-full editorial-card border border-[#1D1814]/50 focus:border-[#9B2226] rounded-none pl-9 pr-3 py-2 text-xs text-[#1D1814] placeholder-[#6E6356] focus:outline-none'
+                : isSlate
                 ? 'w-full slate-well border border-slate-700/80 focus:border-teal-400 rounded-md pl-9 pr-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none'
                 : isClay
                 ? 'w-full clay-card border border-white/90 focus:border-indigo-300 rounded-2xl pl-10 pr-3.5 py-2 text-xs text-[#1E2547] placeholder-[#647094] focus:outline-none'
@@ -376,7 +430,25 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
               setSelectedCategory('all');
             }}
             className={
-              isSlate
+              isMaterial
+                ? `px-3 py-1.5 text-[11px] font-semibold rounded-lg border transition-all cursor-pointer whitespace-nowrap shrink-0 material-btn ${
+                    selectedCategory === 'all'
+                      ? 'bg-[#1565C0] text-white border-[#0D47A1]'
+                      : 'material-card text-[#475569] border-slate-200/80 hover:text-[#111827] hover:border-[#1565C0]/40'
+                  }`
+                : isCyberpunk
+                ? `px-3 py-1.5 font-cyber text-[11px] font-semibold uppercase tracking-wider rounded-sm border transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+                    selectedCategory === 'all'
+                      ? 'bg-[#061926] text-[#00F0FF] border-[#00F0FF] shadow-[0_0_10px_rgba(0,240,255,0.22)]'
+                      : 'cyber-well text-[#9BB8D3] border-cyan-400/25 hover:text-[#E6F4FF] hover:border-[#00F0FF]/60'
+                  }`
+                : isEditorial
+                ? `px-3 py-1.5 font-mono text-[11px] font-semibold rounded-none border transition-colors cursor-pointer whitespace-nowrap ${
+                    selectedCategory === 'all'
+                      ? 'bg-[#9B2226] text-[#FAF5EA] border-[#1D1814] shadow-[2px_2px_0_#1D1814]'
+                      : 'bg-[#FFFDF7] text-[#433A31] border-[#B8AD96] hover:text-[#1D1814] hover:border-[#1D1814]'
+                  }`
+                : isSlate
                 ? `px-3 py-1.5 text-[11px] font-medium rounded-md border transition-colors cursor-pointer whitespace-nowrap ${
                     selectedCategory === 'all'
                       ? 'bg-teal-400 text-slate-950 border-teal-300 font-semibold'
@@ -438,7 +510,25 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                   setSelectedCategory(cat.id);
                 }}
                 className={
-                  isSlate
+                  isMaterial
+                    ? `px-3 py-1.5 text-[11px] font-semibold rounded-lg border transition-all cursor-pointer whitespace-nowrap shrink-0 material-btn ${
+                        isSelected
+                          ? 'bg-[#1565C0] text-white border-[#0D47A1]'
+                          : 'material-card text-[#475569] border-slate-200/80 hover:text-[#111827] hover:border-[#1565C0]/40'
+                      }`
+                    : isCyberpunk
+                    ? `px-3 py-1.5 font-cyber text-[11px] font-semibold uppercase tracking-wider rounded-sm border transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+                        isSelected
+                          ? 'bg-[#061926] text-[#00F0FF] border-[#00F0FF] shadow-[0_0_10px_rgba(0,240,255,0.22)]'
+                          : 'cyber-well text-[#9BB8D3] border-cyan-400/25 hover:text-[#E6F4FF] hover:border-[#00F0FF]/60'
+                      }`
+                    : isEditorial
+                    ? `px-3 py-1.5 font-mono text-[11px] font-semibold rounded-none border transition-colors cursor-pointer whitespace-nowrap ${
+                        isSelected
+                          ? 'bg-[#9B2226] text-[#FAF5EA] border-[#1D1814] shadow-[2px_2px_0_#1D1814]'
+                          : 'bg-[#FFFDF7] text-[#433A31] border-[#B8AD96] hover:text-[#1D1814] hover:border-[#1D1814]'
+                      }`
+                    : isSlate
                     ? `px-3 py-1.5 text-[11px] font-medium rounded-md border transition-colors cursor-pointer whitespace-nowrap ${
                         isSelected
                           ? 'bg-teal-400 text-slate-950 border-teal-300 font-semibold'
@@ -499,7 +589,13 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
         {filteredCards.length === 0 ? (
           <div
             className={
-              isClay
+              isMaterial
+                ? 'border border-slate-200/80 material-card rounded-xl p-8 text-center text-[#475569]'
+                : isCyberpunk
+                ? 'border border-cyan-400/35 cyber-card rounded-sm p-8 text-center text-[#9BB8D3]'
+                : isEditorial
+                ? 'border-2 border-[#1D1814] editorial-card rounded-none p-8 text-center text-[#574D42]'
+                : isClay
                 ? 'border border-white/90 clay-card rounded-3xl p-8 text-center text-[#647094]'
                 : isSaas
                 ? 'border border-slate-200 saas-card rounded-xl p-8 text-center text-slate-500'
@@ -527,7 +623,13 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
               <div
                 key={card.id}
                 className={
-                  isClay
+                  isMaterial
+                    ? 'border border-slate-200/80 hover:border-[#1565C0]/45 material-card rounded-xl transition-all overflow-hidden'
+                    : isCyberpunk
+                    ? 'border border-cyan-400/30 hover:border-[#00F0FF]/70 cyber-card rounded-sm transition-all overflow-hidden'
+                    : isEditorial
+                    ? 'border border-[#C9BFA9] hover:border-[#1D1814] editorial-card rounded-none transition-colors overflow-hidden'
+                    : isClay
                     ? 'border border-white/90 hover:border-indigo-200 clay-card rounded-3xl transition-all overflow-hidden'
                     : isSaas
                     ? 'border border-slate-200 hover:border-indigo-300 saas-card rounded-xl transition-all overflow-hidden'
@@ -555,7 +657,13 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                   <div className="flex-1 min-w-0">
                     <div
                       className={
-                        isClay
+                        isMaterial
+                          ? 'flex items-center gap-2 text-[10px] uppercase tracking-[0.12em] text-[#475569] mb-1.5 font-semibold'
+                          : isCyberpunk
+                          ? 'flex items-center gap-2 text-[10px] uppercase tracking-[0.14em] text-[#9BB8D3] mb-1.5 font-semibold'
+                          : isEditorial
+                          ? 'flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em] text-[#574D42] mb-1.5'
+                          : isClay
                           ? 'flex items-center gap-2 text-[10px] uppercase tracking-[0.14em] text-[#647094] mb-1.5'
                           : isSaas
                           ? 'flex items-center gap-2 text-[10px] uppercase tracking-[0.14em] text-slate-500 mb-1.5'
@@ -572,7 +680,7 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                           : 'flex items-center gap-2 text-[11px] text-zinc-500 mb-1'
                       }
                     >
-                      <span className={isClay ? 'text-indigo-600 font-mono font-semibold tabular-nums' : isSaas ? 'text-indigo-600 font-mono font-semibold tabular-nums' : isNordic ? 'text-[#3B5948] font-mono font-semibold' : isGlass ? 'text-sky-300 font-mono font-semibold' : isBrutal ? 'bg-[#FFE500] border border-black px-1 py-0.2 text-black font-black font-mono' : isObsidian ? 'text-[#D4AF37] font-mono font-semibold' : isSlate ? 'text-teal-300 font-mono font-semibold tabular-nums' : 'text-zinc-200 font-bold'}>
+                      <span className={isMaterial ? 'text-[#1565C0] font-mono font-bold tabular-nums' : isCyberpunk ? 'text-[#00F0FF] font-mono font-bold tabular-nums' : isEditorial ? 'text-[#9B2226] font-mono font-bold tabular-nums' : isClay ? 'text-indigo-600 font-mono font-semibold tabular-nums' : isSaas ? 'text-indigo-600 font-mono font-semibold tabular-nums' : isNordic ? 'text-[#3B5948] font-mono font-semibold' : isGlass ? 'text-sky-300 font-mono font-semibold' : isBrutal ? 'bg-[#FFE500] border border-black px-1 py-0.2 text-black font-black font-mono' : isObsidian ? 'text-[#D4AF37] font-mono font-semibold' : isSlate ? 'text-teal-300 font-mono font-semibold tabular-nums' : 'text-zinc-200 font-bold'}>
                         [BOX {card.box}]
                       </span>
                       <span>·</span>
@@ -582,7 +690,7 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                       {card.isCustom && (
                         <>
                           <span>·</span>
-                          <span className={isClay ? 'text-indigo-600 font-semibold' : isSaas ? 'text-indigo-700 font-semibold' : isNordic ? 'text-[#3B5948] font-semibold' : isGlass ? 'text-sky-200 font-semibold' : isBrutal ? 'bg-[#7DD3FC] border border-black px-1 text-black font-black' : isObsidian ? 'text-[#E5C77B] font-semibold' : isSlate ? 'text-teal-200 font-semibold' : 'text-amber-400 font-bold'}>
+                          <span className={isMaterial ? 'text-[#00695C] font-bold' : isCyberpunk ? 'text-[#FF66B3] font-bold' : isEditorial ? 'text-[#9B2226] font-semibold' : isClay ? 'text-indigo-600 font-semibold' : isSaas ? 'text-indigo-700 font-semibold' : isNordic ? 'text-[#3B5948] font-semibold' : isGlass ? 'text-sky-200 font-semibold' : isBrutal ? 'bg-[#7DD3FC] border border-black px-1 text-black font-black' : isObsidian ? 'text-[#E5C77B] font-semibold' : isSlate ? 'text-teal-200 font-semibold' : 'text-amber-400 font-bold'}>
                             [CUSTOM]
                           </span>
                         </>
@@ -591,11 +699,11 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
 
                     {/* Compact preview comparison */}
                     <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 text-sm">
-                      <div className={isClay ? 'text-[#647094] line-through truncate' : isSaas ? 'text-slate-400 line-through truncate' : isNordic ? 'text-[#5C6962] line-through truncate' : isGlass ? 'text-slate-400 line-through truncate' : isBrutal ? 'text-zinc-600 line-through truncate font-medium' : isObsidian ? 'text-[#8E877A] line-through truncate' : isSlate ? 'text-slate-400 line-through truncate' : 'text-zinc-400 line-through truncate'}>
+                      <div className={isMaterial ? 'text-[#64748B] line-through truncate' : isCyberpunk ? 'text-[#FF85C0]/80 line-through truncate' : isEditorial ? 'text-[#6E6356] line-through truncate' : isClay ? 'text-[#647094] line-through truncate' : isSaas ? 'text-slate-400 line-through truncate' : isNordic ? 'text-[#5C6962] line-through truncate' : isGlass ? 'text-slate-400 line-through truncate' : isBrutal ? 'text-zinc-600 line-through truncate font-medium' : isObsidian ? 'text-[#8E877A] line-through truncate' : isSlate ? 'text-slate-400 line-through truncate' : 'text-zinc-400 line-through truncate'}>
                         "{card.dangerPhrase}"
                       </div>
-                      <span className={isClay ? 'hidden sm:inline text-indigo-500' : isSaas ? 'hidden sm:inline text-indigo-500' : isNordic ? 'hidden sm:inline text-[#527360]' : isGlass ? 'hidden sm:inline text-sky-300' : isBrutal ? 'hidden sm:inline text-black font-black' : isObsidian ? 'hidden sm:inline text-[#D4AF37]' : isSlate ? 'hidden sm:inline text-teal-400' : 'hidden sm:inline text-zinc-600'}>→</span>
-                      <div className={isClay ? 'text-[#1E2547] font-semibold truncate' : isSaas ? 'text-slate-900 font-semibold truncate' : isNordic ? 'text-[#242E28] font-semibold truncate' : isGlass ? 'text-white font-semibold truncate' : isBrutal ? 'text-black font-black truncate' : isObsidian ? 'text-[#F3E5AB] font-medium truncate' : isSlate ? 'text-slate-100 font-semibold truncate' : 'text-zinc-100 font-bold truncate'}>
+                      <span className={isMaterial ? 'hidden sm:inline text-[#1565C0] font-bold' : isCyberpunk ? 'hidden sm:inline text-[#00F0FF] font-bold' : isEditorial ? 'hidden sm:inline text-[#9B2226] font-bold' : isClay ? 'hidden sm:inline text-indigo-500' : isSaas ? 'hidden sm:inline text-indigo-500' : isNordic ? 'hidden sm:inline text-[#527360]' : isGlass ? 'hidden sm:inline text-sky-300' : isBrutal ? 'hidden sm:inline text-black font-black' : isObsidian ? 'hidden sm:inline text-[#D4AF37]' : isSlate ? 'hidden sm:inline text-teal-400' : 'hidden sm:inline text-zinc-600'}>→</span>
+                      <div className={isMaterial ? 'text-[#111827] font-bold truncate' : isCyberpunk ? 'font-cyber text-[#E6F4FF] font-semibold tracking-wide truncate' : isEditorial ? 'font-editorial-display text-base text-[#1D1814] font-bold truncate' : isClay ? 'text-[#1E2547] font-semibold truncate' : isSaas ? 'text-slate-900 font-semibold truncate' : isNordic ? 'text-[#242E28] font-semibold truncate' : isGlass ? 'text-white font-semibold truncate' : isBrutal ? 'text-black font-black truncate' : isObsidian ? 'text-[#F3E5AB] font-medium truncate' : isSlate ? 'text-slate-100 font-semibold truncate' : 'text-zinc-100 font-bold truncate'}>
                         "{card.powerPhrase}"
                       </div>
                     </div>
@@ -610,7 +718,13 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                         handleSpeak(card.powerPhrase);
                       }}
                       className={
-                        isClay
+                        isMaterial
+                          ? 'p-1.5 rounded-lg material-well border border-slate-200/80 text-[#475569] hover:text-[#1565C0] hover:border-[#1565C0]/40 transition-all cursor-pointer material-btn'
+                          : isCyberpunk
+                          ? 'p-1.5 rounded-sm bg-[#061926] border border-[#00F0FF]/35 text-[#00F0FF] hover:bg-[#0B2A3E] hover:border-[#00F0FF] transition-all cursor-pointer'
+                          : isEditorial
+                          ? 'p-1.5 rounded-none bg-[#FFFDF7] border border-[#1D1814]/50 text-[#1D1814] hover:text-[#9B2226] hover:border-[#9B2226] transition-colors cursor-pointer'
+                          : isClay
                           ? 'p-2 rounded-2xl clay-well border border-white/80 text-[#4B5478] hover:text-indigo-600 hover:border-indigo-200 transition-all cursor-pointer clay-btn-soft'
                           : isSaas
                           ? 'p-1.5 rounded-lg saas-well border border-slate-200 text-slate-500 hover:text-indigo-600 hover:border-indigo-300 transition-all cursor-pointer'
@@ -630,7 +744,7 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                     >
                       <Volume2 className="w-4 h-4" />
                     </button>
-                    <div className={isClay ? 'text-[#647094]' : isSaas ? 'text-slate-400' : isNordic ? 'text-[#5C6962]' : isGlass ? 'text-slate-300' : isBrutal ? 'text-black' : isObsidian ? 'text-[#A39E93]' : isSlate ? 'text-slate-400' : 'text-zinc-500'}>
+                    <div className={isMaterial ? 'text-[#475569]' : isCyberpunk ? 'text-[#00F0FF]' : isEditorial ? 'text-[#574D42]' : isClay ? 'text-[#647094]' : isSaas ? 'text-slate-400' : isNordic ? 'text-[#5C6962]' : isGlass ? 'text-slate-300' : isBrutal ? 'text-black' : isObsidian ? 'text-[#A39E93]' : isSlate ? 'text-slate-400' : 'text-zinc-500'}>
                       {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                     </div>
                   </div>
@@ -640,7 +754,13 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                 {isExpanded && (
                   <div
                     className={
-                      isClay
+                      isMaterial
+                        ? 'px-4 pb-4 pt-3 border-t border-slate-200 bg-[#F8FAFC] text-xs space-y-3'
+                        : isCyberpunk
+                        ? 'px-4 pb-4 pt-3 border-t border-cyan-400/25 bg-[#050816]/90 text-xs space-y-3'
+                        : isEditorial
+                        ? 'px-4 pb-4 pt-3 border-t border-[#C9BFA9] bg-[#F3ECE0]/85 text-xs space-y-3'
+                        : isClay
                         ? 'px-4 pb-4 pt-3 border-t border-indigo-900/10 bg-[#EEF2FA]/80 text-xs space-y-3'
                         : isSaas
                         ? 'px-4 pb-4 pt-3 border-t border-slate-200 bg-slate-50/90 text-xs space-y-3'
@@ -660,38 +780,38 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                     
                     {/* Scenario */}
                     <div>
-                      <div className={isClay ? 'text-[10px] uppercase tracking-[0.14em] text-[#647094] mb-1 font-semibold' : isSaas ? 'text-[10px] uppercase tracking-[0.14em] text-slate-500 mb-1 font-semibold' : isNordic ? 'text-[10px] uppercase tracking-[0.14em] text-[#5C6962] mb-1 font-semibold' : isGlass ? 'text-[10px] uppercase tracking-[0.14em] text-slate-400 mb-1 font-semibold' : isBrutal ? 'text-[11px] uppercase tracking-wider text-zinc-700 mb-1 font-black' : isObsidian ? 'text-[10px] uppercase tracking-[0.16em] text-[#8E877A] mb-1 font-semibold' : isSlate ? 'text-[10px] uppercase tracking-[0.14em] text-slate-400 mb-1 font-semibold' : 'text-[11px] uppercase tracking-wider text-zinc-500 mb-1 font-bold'}>
+                      <div className={isMaterial ? 'text-[10px] uppercase tracking-[0.12em] text-[#475569] mb-1 font-bold' : isCyberpunk ? 'font-cyber text-[10px] uppercase tracking-[0.14em] text-[#9BB8D3] mb-1 font-semibold' : isEditorial ? 'font-mono text-[10px] uppercase tracking-[0.14em] text-[#574D42] mb-1 font-semibold' : isClay ? 'text-[10px] uppercase tracking-[0.14em] text-[#647094] mb-1 font-semibold' : isSaas ? 'text-[10px] uppercase tracking-[0.14em] text-slate-500 mb-1 font-semibold' : isNordic ? 'text-[10px] uppercase tracking-[0.14em] text-[#5C6962] mb-1 font-semibold' : isGlass ? 'text-[10px] uppercase tracking-[0.14em] text-slate-400 mb-1 font-semibold' : isBrutal ? 'text-[11px] uppercase tracking-wider text-zinc-700 mb-1 font-black' : isObsidian ? 'text-[10px] uppercase tracking-[0.16em] text-[#8E877A] mb-1 font-semibold' : isSlate ? 'text-[10px] uppercase tracking-[0.14em] text-slate-400 mb-1 font-semibold' : 'text-[11px] uppercase tracking-wider text-zinc-500 mb-1 font-bold'}>
                         SITUATION CONTEXT:
                       </div>
-                      <div className={isClay ? 'text-[#4B5478] italic' : isSaas ? 'text-slate-600 italic' : isNordic ? 'text-[#4E5A53] italic' : isGlass ? 'text-slate-200 italic' : isBrutal ? 'text-zinc-900 font-semibold italic' : isObsidian ? 'text-[#DDD6C8] italic' : isSlate ? 'text-slate-300 italic' : 'text-zinc-300 italic'}>
+                      <div className={isMaterial ? 'text-[#334155] italic' : isCyberpunk ? 'text-[#E6F4FF] italic' : isEditorial ? 'text-[#433A31] italic' : isClay ? 'text-[#4B5478] italic' : isSaas ? 'text-slate-600 italic' : isNordic ? 'text-[#4E5A53] italic' : isGlass ? 'text-slate-200 italic' : isBrutal ? 'text-zinc-900 font-semibold italic' : isObsidian ? 'text-[#DDD6C8] italic' : isSlate ? 'text-slate-300 italic' : 'text-zinc-300 italic'}>
                         "{card.context}"
                       </div>
                     </div>
 
                     {/* Psychological Shift & Rationale */}
-                    <div className={isClay ? 'bg-white border border-white/90 rounded-2xl p-3.5 shadow-xs' : isSaas ? 'bg-white border border-slate-200 rounded-lg p-3.5' : isNordic ? 'nordic-card border border-[#DDD7C8] rounded-xl p-3.5' : isGlass ? 'glass-well border border-white/12 rounded-xl p-3.5' : isBrutal ? 'bg-white border-2 border-black p-3' : isObsidian ? 'bg-[#0B0B0E] border border-[#2A241A] p-3.5' : isSlate ? 'slate-card border border-slate-700/80 rounded-lg p-3.5' : 'bg-zinc-900/60 border border-zinc-800 p-3 rounded'}>
-                      <div className={isClay ? 'text-[11px] uppercase tracking-wider text-indigo-700 mb-1.5 font-semibold flex items-center gap-1.5' : isSaas ? 'text-[11px] uppercase tracking-wider text-indigo-700 mb-1.5 font-semibold flex items-center gap-1.5' : isNordic ? 'text-[11px] uppercase tracking-wider text-[#3B5948] mb-1.5 font-semibold flex items-center gap-1.5' : isGlass ? 'text-[11px] uppercase tracking-wider text-sky-200 mb-1.5 font-semibold flex items-center gap-1.5' : isBrutal ? 'text-[11px] uppercase tracking-wider text-black mb-1 font-black flex items-center gap-1.5' : isObsidian ? 'text-[11px] uppercase tracking-[0.14em] text-[#E5C77B] mb-1.5 font-semibold flex items-center gap-1.5' : isSlate ? 'text-[11px] uppercase tracking-wider text-teal-300 mb-1.5 font-semibold flex items-center gap-1.5' : 'text-[11px] uppercase tracking-wider text-zinc-200 mb-1 font-bold flex items-center gap-1.5'}>
-                        <Sparkles className={isClay ? 'w-3.5 h-3.5 text-indigo-600' : isSaas ? 'w-3.5 h-3.5 text-indigo-600' : isNordic ? 'w-3.5 h-3.5 text-[#527360]' : isGlass ? 'w-3.5 h-3.5 text-sky-300' : isBrutal ? 'w-3.5 h-3.5 text-black' : isObsidian ? 'w-3.5 h-3.5 text-[#D4AF37]' : isSlate ? 'w-3.5 h-3.5 text-teal-400' : 'w-3.5 h-3.5 text-zinc-400'} />
+                    <div className={isMaterial ? 'material-card border border-slate-200/80 rounded-lg p-3.5' : isCyberpunk ? 'cyber-card border border-cyan-400/30 rounded-sm p-3.5' : isEditorial ? 'editorial-card border border-[#B8AD96] rounded-none p-3.5' : isClay ? 'bg-white border border-white/90 rounded-2xl p-3.5 shadow-xs' : isSaas ? 'bg-white border border-slate-200 rounded-lg p-3.5' : isNordic ? 'nordic-card border border-[#DDD7C8] rounded-xl p-3.5' : isGlass ? 'glass-well border border-white/12 rounded-xl p-3.5' : isBrutal ? 'bg-white border-2 border-black p-3' : isObsidian ? 'bg-[#0B0B0E] border border-[#2A241A] p-3.5' : isSlate ? 'slate-card border border-slate-700/80 rounded-lg p-3.5' : 'bg-zinc-900/60 border border-zinc-800 p-3 rounded'}>
+                      <div className={isMaterial ? 'text-[11px] uppercase tracking-[0.08em] text-[#1565C0] mb-1.5 font-bold flex items-center gap-1.5' : isCyberpunk ? 'font-cyber text-[11px] uppercase tracking-wider text-[#00F0FF] mb-1.5 font-semibold flex items-center gap-1.5' : isEditorial ? 'font-mono text-[11px] uppercase tracking-[0.14em] text-[#9B2226] mb-1.5 font-semibold flex items-center gap-1.5' : isClay ? 'text-[11px] uppercase tracking-wider text-indigo-700 mb-1.5 font-semibold flex items-center gap-1.5' : isSaas ? 'text-[11px] uppercase tracking-wider text-indigo-700 mb-1.5 font-semibold flex items-center gap-1.5' : isNordic ? 'text-[11px] uppercase tracking-wider text-[#3B5948] mb-1.5 font-semibold flex items-center gap-1.5' : isGlass ? 'text-[11px] uppercase tracking-wider text-sky-200 mb-1.5 font-semibold flex items-center gap-1.5' : isBrutal ? 'text-[11px] uppercase tracking-wider text-black mb-1 font-black flex items-center gap-1.5' : isObsidian ? 'text-[11px] uppercase tracking-[0.14em] text-[#E5C77B] mb-1.5 font-semibold flex items-center gap-1.5' : isSlate ? 'text-[11px] uppercase tracking-wider text-teal-300 mb-1.5 font-semibold flex items-center gap-1.5' : 'text-[11px] uppercase tracking-wider text-zinc-200 mb-1 font-bold flex items-center gap-1.5'}>
+                        <Sparkles className={isMaterial ? 'w-3.5 h-3.5 text-[#1565C0]' : isCyberpunk ? 'w-3.5 h-3.5 text-[#00F0FF]' : isEditorial ? 'w-3.5 h-3.5 text-[#9B2226]' : isClay ? 'w-3.5 h-3.5 text-indigo-600' : isSaas ? 'w-3.5 h-3.5 text-indigo-600' : isNordic ? 'w-3.5 h-3.5 text-[#527360]' : isGlass ? 'w-3.5 h-3.5 text-sky-300' : isBrutal ? 'w-3.5 h-3.5 text-black' : isObsidian ? 'w-3.5 h-3.5 text-[#D4AF37]' : isSlate ? 'w-3.5 h-3.5 text-teal-400' : 'w-3.5 h-3.5 text-zinc-400'} />
                         <span>THE PSYCHOLOGY: {card.psychologicalShift}</span>
                       </div>
-                      <p className={isClay ? 'text-[#4B5478] leading-relaxed' : isSaas ? 'text-slate-600 leading-relaxed' : isNordic ? 'text-[#4E5A53] leading-relaxed' : isGlass ? 'text-slate-200 leading-relaxed' : isBrutal ? 'text-zinc-900 font-medium leading-relaxed' : isObsidian ? 'text-[#DDD6C8] leading-relaxed' : isSlate ? 'text-slate-300 leading-relaxed' : 'text-zinc-300 leading-relaxed'}>
+                      <p className={isMaterial ? 'text-[#334155] leading-relaxed' : isCyberpunk ? 'text-[#D6EEFF] leading-relaxed' : isEditorial ? 'text-[#1D1814] leading-relaxed' : isClay ? 'text-[#4B5478] leading-relaxed' : isSaas ? 'text-slate-600 leading-relaxed' : isNordic ? 'text-[#4E5A53] leading-relaxed' : isGlass ? 'text-slate-200 leading-relaxed' : isBrutal ? 'text-zinc-900 font-medium leading-relaxed' : isObsidian ? 'text-[#DDD6C8] leading-relaxed' : isSlate ? 'text-slate-300 leading-relaxed' : 'text-zinc-300 leading-relaxed'}>
                         {card.rationale}
                       </p>
                     </div>
 
                     {/* Delivery Advice */}
-                    <div className={isClay ? 'bg-[#E3FCEC] border border-white/80 rounded-2xl p-3.5 shadow-xs' : isSaas ? 'bg-emerald-50/70 border border-emerald-200 rounded-lg p-3.5' : isNordic ? 'nordic-card border border-[#B8CBBF] rounded-xl p-3.5' : isGlass ? 'glass-well border border-white/12 rounded-xl p-3.5' : isBrutal ? 'bg-[#DCFCE7] border-2 border-black p-3' : isObsidian ? 'bg-[#0B0B0E] border border-[#2A241A] p-3.5' : isSlate ? 'bg-teal-950/35 border border-teal-400/35 rounded-lg p-3.5' : 'bg-zinc-900/60 border border-zinc-800 p-3 rounded'}>
-                      <div className={isClay ? 'text-[11px] uppercase tracking-wider text-[#065F46] mb-1.5 font-semibold flex items-center gap-1.5' : isSaas ? 'text-[11px] uppercase tracking-wider text-emerald-800 mb-1.5 font-semibold flex items-center gap-1.5' : isNordic ? 'text-[11px] uppercase tracking-wider text-[#2D4739] mb-1.5 font-semibold flex items-center gap-1.5' : isGlass ? 'text-[11px] uppercase tracking-wider text-sky-200 mb-1.5 font-semibold flex items-center gap-1.5' : isBrutal ? 'text-[11px] uppercase tracking-wider text-black mb-1 font-black flex items-center gap-1.5' : isObsidian ? 'text-[11px] uppercase tracking-[0.14em] text-[#E5C77B] mb-1.5 font-semibold flex items-center gap-1.5' : isSlate ? 'text-[11px] uppercase tracking-wider text-teal-300 mb-1.5 font-semibold flex items-center gap-1.5' : 'text-[11px] uppercase tracking-wider text-zinc-200 mb-1 font-bold flex items-center gap-1.5'}>
-                        <CheckCircle2 className={isClay ? 'w-3.5 h-3.5 text-[#065F46]' : isSaas ? 'w-3.5 h-3.5 text-emerald-600' : isNordic ? 'w-3.5 h-3.5 text-[#527360]' : isGlass ? 'w-3.5 h-3.5 text-sky-300' : isBrutal ? 'w-3.5 h-3.5 text-black' : isObsidian ? 'w-3.5 h-3.5 text-[#D4AF37]' : isSlate ? 'w-3.5 h-3.5 text-teal-400' : 'w-3.5 h-3.5 text-zinc-400'} />
+                    <div className={isMaterial ? 'bg-[#E0F2F1] border border-[#B2DFDB] rounded-lg p-3.5' : isCyberpunk ? 'bg-[#051F20] border border-[#00F5D4]/40 rounded-sm p-3.5' : isEditorial ? 'bg-[#E6EDE9] border border-[#1E4D40]/40 rounded-none p-3.5' : isClay ? 'bg-[#E3FCEC] border border-white/80 rounded-2xl p-3.5 shadow-xs' : isSaas ? 'bg-emerald-50/70 border border-emerald-200 rounded-lg p-3.5' : isNordic ? 'nordic-card border border-[#B8CBBF] rounded-xl p-3.5' : isGlass ? 'glass-well border border-white/12 rounded-xl p-3.5' : isBrutal ? 'bg-[#DCFCE7] border-2 border-black p-3' : isObsidian ? 'bg-[#0B0B0E] border border-[#2A241A] p-3.5' : isSlate ? 'bg-teal-950/35 border border-teal-400/35 rounded-lg p-3.5' : 'bg-zinc-900/60 border border-zinc-800 p-3 rounded'}>
+                      <div className={isMaterial ? 'text-[11px] uppercase tracking-[0.08em] text-[#00695C] mb-1.5 font-bold flex items-center gap-1.5' : isCyberpunk ? 'font-cyber text-[11px] uppercase tracking-wider text-[#5EEAD4] mb-1.5 font-semibold flex items-center gap-1.5' : isEditorial ? 'font-mono text-[11px] uppercase tracking-[0.14em] text-[#1E4D40] mb-1.5 font-semibold flex items-center gap-1.5' : isClay ? 'text-[11px] uppercase tracking-wider text-[#065F46] mb-1.5 font-semibold flex items-center gap-1.5' : isSaas ? 'text-[11px] uppercase tracking-wider text-emerald-800 mb-1.5 font-semibold flex items-center gap-1.5' : isNordic ? 'text-[11px] uppercase tracking-wider text-[#2D4739] mb-1.5 font-semibold flex items-center gap-1.5' : isGlass ? 'text-[11px] uppercase tracking-wider text-sky-200 mb-1.5 font-semibold flex items-center gap-1.5' : isBrutal ? 'text-[11px] uppercase tracking-wider text-black mb-1 font-black flex items-center gap-1.5' : isObsidian ? 'text-[11px] uppercase tracking-[0.14em] text-[#E5C77B] mb-1.5 font-semibold flex items-center gap-1.5' : isSlate ? 'text-[11px] uppercase tracking-wider text-teal-300 mb-1.5 font-semibold flex items-center gap-1.5' : 'text-[11px] uppercase tracking-wider text-zinc-200 mb-1 font-bold flex items-center gap-1.5'}>
+                        <CheckCircle2 className={isMaterial ? 'w-3.5 h-3.5 text-[#00897B]' : isCyberpunk ? 'w-3.5 h-3.5 text-[#00F5D4]' : isEditorial ? 'w-3.5 h-3.5 text-[#1E4D40]' : isClay ? 'w-3.5 h-3.5 text-[#065F46]' : isSaas ? 'w-3.5 h-3.5 text-emerald-600' : isNordic ? 'w-3.5 h-3.5 text-[#527360]' : isGlass ? 'w-3.5 h-3.5 text-sky-300' : isBrutal ? 'w-3.5 h-3.5 text-black' : isObsidian ? 'w-3.5 h-3.5 text-[#D4AF37]' : isSlate ? 'w-3.5 h-3.5 text-teal-400' : 'w-3.5 h-3.5 text-zinc-400'} />
                         <span>VOCAL DELIVERY TIP:</span>
                       </div>
-                      <p className={isClay ? 'text-[#1E3B2F] leading-relaxed' : isSaas ? 'text-slate-700 leading-relaxed' : isNordic ? 'text-[#242E28] leading-relaxed' : isGlass ? 'text-slate-200 leading-relaxed' : isBrutal ? 'text-zinc-900 font-medium leading-relaxed' : isObsidian ? 'text-[#DDD6C8] leading-relaxed' : isSlate ? 'text-teal-50 leading-relaxed' : 'text-zinc-300 leading-relaxed'}>
+                      <p className={isMaterial ? 'text-[#004D40] leading-relaxed' : isCyberpunk ? 'text-[#E6FFFA] leading-relaxed' : isEditorial ? 'text-[#18382F] leading-relaxed' : isClay ? 'text-[#1E3B2F] leading-relaxed' : isSaas ? 'text-slate-700 leading-relaxed' : isNordic ? 'text-[#242E28] leading-relaxed' : isGlass ? 'text-slate-200 leading-relaxed' : isBrutal ? 'text-zinc-900 font-medium leading-relaxed' : isObsidian ? 'text-[#DDD6C8] leading-relaxed' : isSlate ? 'text-teal-50 leading-relaxed' : 'text-zinc-300 leading-relaxed'}>
                         {card.deliveryTip}
                       </p>
                     </div>
 
                     {/* Leitner metadata footer */}
-                    <div className={isClay ? 'flex items-center justify-between text-[10px] uppercase tracking-wider text-[#647094] pt-2.5 border-t border-indigo-900/10 tabular-nums' : isSaas ? 'flex items-center justify-between text-[10px] uppercase tracking-wider text-slate-500 pt-2.5 border-t border-slate-200 tabular-nums' : isNordic ? 'flex items-center justify-between text-[10px] uppercase tracking-wider text-[#5C6962] pt-2.5 border-t border-[#E4DFD4]' : isGlass ? 'flex items-center justify-between text-[10px] uppercase tracking-wider text-slate-400 pt-2.5 border-t border-white/15' : isBrutal ? 'flex items-center justify-between text-[11px] font-bold text-zinc-700 pt-2 border-t-2 border-black' : isObsidian ? 'flex items-center justify-between text-[10px] uppercase tracking-[0.14em] text-[#8E877A] pt-2.5 border-t border-[#2A241A]' : isSlate ? 'flex items-center justify-between text-[10px] uppercase tracking-wider text-slate-400 pt-2.5 border-t border-slate-800 tabular-nums' : 'flex items-center justify-between text-[11px] text-zinc-500 pt-2 border-t border-zinc-800'}>
+                    <div className={isMaterial ? 'flex items-center justify-between text-[10px] uppercase tracking-wider text-[#475569] pt-2.5 border-t border-slate-200 tabular-nums font-medium' : isCyberpunk ? 'flex items-center justify-between text-[10px] uppercase tracking-wider text-[#9BB8D3] pt-2.5 border-t border-cyan-400/25 tabular-nums font-medium' : isEditorial ? 'flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.14em] text-[#574D42] pt-2.5 border-t border-[#C9BFA9] tabular-nums' : isClay ? 'flex items-center justify-between text-[10px] uppercase tracking-wider text-[#647094] pt-2.5 border-t border-indigo-900/10 tabular-nums' : isSaas ? 'flex items-center justify-between text-[10px] uppercase tracking-wider text-slate-500 pt-2.5 border-t border-slate-200 tabular-nums' : isNordic ? 'flex items-center justify-between text-[10px] uppercase tracking-wider text-[#5C6962] pt-2.5 border-t border-[#E4DFD4]' : isGlass ? 'flex items-center justify-between text-[10px] uppercase tracking-wider text-slate-400 pt-2.5 border-t border-white/15' : isBrutal ? 'flex items-center justify-between text-[11px] font-bold text-zinc-700 pt-2 border-t-2 border-black' : isObsidian ? 'flex items-center justify-between text-[10px] uppercase tracking-[0.14em] text-[#8E877A] pt-2.5 border-t border-[#2A241A]' : isSlate ? 'flex items-center justify-between text-[10px] uppercase tracking-wider text-slate-400 pt-2.5 border-t border-slate-800 tabular-nums' : 'flex items-center justify-between text-[11px] text-zinc-500 pt-2 border-t border-zinc-800'}>
                       <div>
                         NEXT DUE: {card.lastReviewedAt ? new Date(card.nextDueAt).toLocaleDateString() : 'IMMEDIATE'} · REVIEWS: {card.timesReviewed}
                       </div>
@@ -703,7 +823,13 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                             onDeleteCard(card.id);
                           }}
                           className={
-                            isClay
+                            isMaterial
+                              ? 'text-[#C62828] hover:text-[#7F1D1D] border border-[#FFCDD2] bg-[#FFEBEE] hover:bg-[#FFCDD2]/60 rounded-lg px-2.5 py-0.5 flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0 font-semibold'
+                              : isCyberpunk
+                              ? 'text-[#FFB3D9] hover:text-white border border-[#FF2A85]/45 bg-[#19091E] hover:bg-[#2A0E31] hover:border-[#FF2A85] rounded-sm px-2.5 py-0.5 flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0 font-cyber font-semibold'
+                              : isEditorial
+                              ? 'text-[#7F1D1D] hover:text-[#1D1814] border border-[#9B2226]/40 bg-[#F6E5E2] hover:bg-[#EED3CE] rounded-none px-2.5 py-0.5 flex items-center gap-1 cursor-pointer font-semibold'
+                              : isClay
                               ? 'text-[#9F1239] hover:text-rose-900 border border-white/80 bg-[#FFE8EC] hover:bg-[#FFD8DF] rounded-xl px-2.5 py-1 flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0 clay-btn-soft font-semibold'
                               : isSaas
                               ? 'text-rose-700 hover:text-rose-900 border border-rose-200 bg-rose-50 hover:bg-rose-100 rounded-lg px-2.5 py-0.5 flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0'
@@ -737,7 +863,13 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
       {/* Footer Utility Options */}
       <div
         className={
-          isClay
+          isMaterial
+            ? 'mt-8 pt-4 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3 text-[11px] uppercase tracking-wider text-[#475569] tabular-nums font-medium'
+            : isCyberpunk
+            ? 'mt-8 pt-4 border-t border-cyan-400/25 flex flex-wrap items-center justify-between gap-3 text-[11px] uppercase tracking-wider text-[#9BB8D3] tabular-nums font-medium'
+            : isEditorial
+            ? 'mt-8 pt-4 border-t-2 border-double border-[#1D1814]/60 flex flex-wrap items-center justify-between gap-3 font-mono text-[11px] uppercase tracking-[0.14em] text-[#574D42] tabular-nums'
+            : isClay
             ? 'mt-8 pt-4 border-t border-indigo-900/10 flex flex-wrap items-center justify-between gap-3 text-[11px] uppercase tracking-wider text-[#647094] tabular-nums'
             : isSaas
             ? 'mt-8 pt-4 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3 text-[11px] uppercase tracking-wider text-slate-500 tabular-nums'
@@ -765,7 +897,13 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
             }
           }}
           className={
-            isClay
+            isMaterial
+              ? 'text-[#475569] hover:text-[#C62828] transition-colors flex items-center gap-1.5 cursor-pointer font-semibold whitespace-nowrap shrink-0'
+              : isCyberpunk
+              ? 'text-[#9BB8D3] hover:text-[#FF66B3] transition-colors flex items-center gap-1.5 cursor-pointer font-cyber font-semibold whitespace-nowrap shrink-0'
+              : isEditorial
+              ? 'text-[#574D42] hover:text-[#9B2226] transition-colors flex items-center gap-1.5 cursor-pointer font-semibold whitespace-nowrap shrink-0'
+              : isClay
               ? 'text-[#4B5478] hover:text-[#9F1239] transition-colors flex items-center gap-1.5 cursor-pointer font-medium whitespace-nowrap shrink-0'
               : isSaas
               ? 'text-slate-600 hover:text-rose-600 transition-colors flex items-center gap-1.5 cursor-pointer font-medium whitespace-nowrap shrink-0'
@@ -789,10 +927,16 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
 
       {/* Add Custom Reframe Modal */}
       {isAddModalOpen && (
-        <div className={`fixed inset-0 z-50 backdrop-blur-sm flex items-center justify-center p-4 ${isClay ? 'bg-[#1E2547]/30' : isSaas ? 'bg-slate-900/35' : isNordic ? 'bg-[#242E28]/35' : isSlate ? 'bg-slate-950/75' : 'bg-black/75'}`}>
+        <div className={`fixed inset-0 z-50 backdrop-blur-sm flex items-center justify-center p-4 ${isMaterial ? 'bg-slate-900/40' : isCyberpunk ? 'bg-[#060714]/80' : isEditorial ? 'bg-[#1D1814]/45' : isClay ? 'bg-[#1E2547]/30' : isSaas ? 'bg-slate-900/35' : isNordic ? 'bg-[#242E28]/35' : isSlate ? 'bg-slate-950/75' : 'bg-black/75'}`}>
           <div
             className={
-              isClay
+              isMaterial
+                ? 'material-card-elevated border border-slate-200/80 border-t-4 border-t-[#1565C0] rounded-xl max-w-lg w-full p-6'
+                : isCyberpunk
+                ? 'cyber-card-elevated border border-cyan-400/45 border-t-2 border-t-[#00F0FF] rounded-sm max-w-lg w-full p-6'
+                : isEditorial
+                ? 'editorial-card-elevated border-2 border-[#1D1814] rounded-none max-w-lg w-full p-6'
+                : isClay
                 ? 'clay-card-elevated border border-white/95 rounded-3xl max-w-lg w-full p-6'
                 : isSaas
                 ? 'saas-card-elevated border border-slate-200 rounded-xl max-w-lg w-full p-6'
@@ -809,10 +953,16 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                 : 'bg-zinc-950 border border-zinc-750 rounded-lg max-w-lg w-full p-6 shadow-2xl'
             }
           >
-            <div className={`flex items-center justify-between mb-4 pb-3 ${isClay ? 'border-b border-indigo-900/10' : isSaas ? 'border-b border-slate-200' : isNordic ? 'border-b border-[#E4DFD4]' : isGlass ? 'border-b border-white/15' : isBrutal ? 'border-b-2 border-black' : isObsidian ? 'border-b border-[#2A241A]' : isSlate ? 'border-b border-slate-800' : 'border-b border-zinc-800'}`}>
+            <div className={`flex items-center justify-between mb-4 pb-3 ${isMaterial ? 'border-b border-slate-200' : isCyberpunk ? 'border-b border-cyan-400/25' : isEditorial ? 'border-b-2 border-double border-[#1D1814]/60' : isClay ? 'border-b border-indigo-900/10' : isSaas ? 'border-b border-slate-200' : isNordic ? 'border-b border-[#E4DFD4]' : isGlass ? 'border-b border-white/15' : isBrutal ? 'border-b-2 border-black' : isObsidian ? 'border-b border-[#2A241A]' : isSlate ? 'border-b border-slate-800' : 'border-b border-zinc-800'}`}>
               <div
                 className={
-                  isClay
+                  isMaterial
+                    ? 'text-base font-bold text-[#111827] tracking-tight'
+                    : isCyberpunk
+                    ? 'font-cyber text-base font-bold uppercase tracking-wider text-[#E6F4FF]'
+                    : isEditorial
+                    ? 'font-editorial-display text-lg font-bold text-[#1D1814] tracking-tight'
+                    : isClay
                     ? 'text-base font-bold text-[#1E2547] tracking-tight'
                     : isSaas
                     ? 'text-base font-bold text-slate-900 tracking-tight'
@@ -834,7 +984,13 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
               <button
                 onClick={() => setIsAddModalOpen(false)}
                 className={
-                  isClay
+                  isMaterial
+                    ? 'text-[#64748B] hover:text-[#1565C0] font-mono text-xs font-semibold cursor-pointer'
+                    : isCyberpunk
+                    ? 'text-[#9BB8D3] hover:text-[#00F0FF] font-mono text-xs font-semibold cursor-pointer'
+                    : isEditorial
+                    ? 'text-[#574D42] hover:text-[#9B2226] font-mono text-xs font-semibold cursor-pointer'
+                    : isClay
                     ? 'text-[#647094] hover:text-[#1E2547] font-mono text-xs cursor-pointer'
                     : isSaas
                     ? 'text-slate-500 hover:text-slate-900 font-mono text-xs cursor-pointer'
@@ -855,16 +1011,22 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
               </button>
             </div>
 
-            <form onSubmit={handleCreateCard} className={`space-y-4 text-xs ${isBrutal || isObsidian || isGlass || isNordic || isSaas || isClay || isSlate ? 'font-sans' : 'font-mono'}`}>
+            <form onSubmit={handleCreateCard} className={`space-y-4 text-xs ${isMaterial ? 'font-material' : isEditorial ? 'font-editorial-body' : isBrutal || isObsidian || isGlass || isNordic || isSaas || isClay || isSlate || isCyberpunk ? 'font-sans' : 'font-mono'}`}>
               <div>
-                <label className={isClay ? 'block text-[10px] uppercase tracking-wider text-[#647094] mb-1.5 font-semibold' : isSaas ? 'block text-[10px] uppercase tracking-wider text-slate-500 mb-1.5 font-semibold' : isNordic ? 'block text-[10px] uppercase tracking-wider text-[#5C6962] mb-1.5 font-semibold' : isGlass ? 'block text-[10px] uppercase tracking-wider text-slate-300 mb-1.5 font-semibold' : isBrutal ? 'block text-black mb-1 font-extrabold' : isObsidian ? 'block text-[10px] uppercase tracking-[0.14em] text-[#A39E93] mb-1.5 font-semibold' : isSlate ? 'block text-[10px] uppercase tracking-wider text-slate-400 mb-1.5 font-semibold' : 'block text-zinc-400 mb-1 font-bold'}>
+                <label className={isMaterial ? 'block text-[10px] uppercase tracking-wider text-[#475569] mb-1.5 font-bold' : isCyberpunk ? 'block font-cyber text-[10px] uppercase tracking-wider text-[#9BB8D3] mb-1.5 font-semibold' : isEditorial ? 'block font-mono text-[10px] uppercase tracking-[0.14em] text-[#574D42] mb-1.5 font-semibold' : isClay ? 'block text-[10px] uppercase tracking-wider text-[#647094] mb-1.5 font-semibold' : isSaas ? 'block text-[10px] uppercase tracking-wider text-slate-500 mb-1.5 font-semibold' : isNordic ? 'block text-[10px] uppercase tracking-wider text-[#5C6962] mb-1.5 font-semibold' : isGlass ? 'block text-[10px] uppercase tracking-wider text-slate-300 mb-1.5 font-semibold' : isBrutal ? 'block text-black mb-1 font-extrabold' : isObsidian ? 'block text-[10px] uppercase tracking-[0.14em] text-[#A39E93] mb-1.5 font-semibold' : isSlate ? 'block text-[10px] uppercase tracking-wider text-slate-400 mb-1.5 font-semibold' : 'block text-zinc-400 mb-1 font-bold'}>
                   COMMUNICATION CATEGORY:
                 </label>
                 <select
                   value={newCategory}
                   onChange={(e) => setNewCategory(e.target.value as CategoryId)}
                   className={
-                    isClay
+                    isMaterial
+                      ? 'w-full material-well border border-slate-200/80 rounded-lg px-3 py-2 text-[#111827] font-medium focus:border-[#1565C0] focus:outline-none cursor-pointer'
+                      : isCyberpunk
+                      ? 'w-full cyber-well border border-cyan-400/35 rounded-sm px-3 py-2 text-[#E6F4FF] focus:border-[#00F0FF] focus:outline-none cursor-pointer'
+                      : isEditorial
+                      ? 'w-full editorial-well border border-[#B8AD96] rounded-none px-3 py-2 text-[#1D1814] focus:border-[#9B2226] focus:outline-none cursor-pointer'
+                      : isClay
                       ? 'w-full clay-well border border-white/80 rounded-2xl px-3.5 py-2.5 text-[#1E2547] focus:border-indigo-400 focus:outline-none cursor-pointer'
                       : isSaas
                       ? 'w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:border-indigo-500 focus:outline-none cursor-pointer'
@@ -882,13 +1044,13 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                   }
                 >
                   {CATEGORIES.map(c => (
-                    <option key={c.id} value={c.id} className={isClay ? 'bg-white text-[#1E2547]' : isSaas ? 'bg-white text-slate-900' : isNordic ? 'bg-[#FDFBF7] text-[#242E28]' : isGlass ? 'bg-[#0B192C] text-slate-100' : isSlate ? 'bg-[#0B1220] text-slate-100' : ''}>{c.name}</option>
+                    <option key={c.id} value={c.id} className={isMaterial ? 'bg-white text-[#111827]' : isCyberpunk ? 'bg-[#060714] text-[#E6F4FF]' : isEditorial ? 'bg-[#FAF5EA] text-[#1D1814]' : isClay ? 'bg-white text-[#1E2547]' : isSaas ? 'bg-white text-slate-900' : isNordic ? 'bg-[#FDFBF7] text-[#242E28]' : isGlass ? 'bg-[#0B192C] text-slate-100' : isSlate ? 'bg-[#0B1220] text-slate-100' : ''}>{c.name}</option>
                   ))}
                 </select>
               </div>
 
               <div>
-                <label className={isClay ? 'block text-[10px] uppercase tracking-wider text-[#9F1239] mb-1.5 font-semibold' : isSaas ? 'block text-[10px] uppercase tracking-wider text-rose-700 mb-1.5 font-semibold' : isNordic ? 'block text-[10px] uppercase tracking-wider text-[#964B36] mb-1.5 font-semibold' : isGlass ? 'block text-[10px] uppercase tracking-wider text-rose-200 mb-1.5 font-semibold' : isBrutal ? 'block text-black mb-1 font-extrabold' : isObsidian ? 'block text-[10px] uppercase tracking-[0.14em] text-[#E8A5A5] mb-1.5 font-semibold' : isSlate ? 'block text-[10px] uppercase tracking-wider text-rose-300 mb-1.5 font-semibold' : 'block text-zinc-300 mb-1 font-bold'}>
+                <label className={isMaterial ? 'block text-[10px] uppercase tracking-wider text-[#C62828] mb-1.5 font-bold' : isCyberpunk ? 'block font-cyber text-[10px] uppercase tracking-wider text-[#FF66B3] mb-1.5 font-semibold' : isEditorial ? 'block font-mono text-[10px] uppercase tracking-[0.14em] text-[#9B2226] mb-1.5 font-semibold' : isClay ? 'block text-[10px] uppercase tracking-wider text-[#9F1239] mb-1.5 font-semibold' : isSaas ? 'block text-[10px] uppercase tracking-wider text-rose-700 mb-1.5 font-semibold' : isNordic ? 'block text-[10px] uppercase tracking-wider text-[#964B36] mb-1.5 font-semibold' : isGlass ? 'block text-[10px] uppercase tracking-wider text-rose-200 mb-1.5 font-semibold' : isBrutal ? 'block text-black mb-1 font-extrabold' : isObsidian ? 'block text-[10px] uppercase tracking-[0.14em] text-[#E8A5A5] mb-1.5 font-semibold' : isSlate ? 'block text-[10px] uppercase tracking-wider text-rose-300 mb-1.5 font-semibold' : 'block text-zinc-300 mb-1 font-bold'}>
                   DON'T SAY (THE DANGER PHRASE):
                 </label>
                 <input
@@ -898,7 +1060,13 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                   value={newDangerPhrase}
                   onChange={(e) => setNewDangerPhrase(e.target.value)}
                   className={
-                    isClay
+                    isMaterial
+                      ? 'w-full material-well border border-slate-200/80 rounded-lg px-3 py-2 text-[#111827] placeholder-[#64748B] focus:border-[#1565C0] focus:outline-none'
+                      : isCyberpunk
+                      ? 'w-full cyber-well border border-[#FF2A85]/40 rounded-sm px-3 py-2 text-[#E6F4FF] placeholder-[#7A95B0] focus:border-[#FF2A85] focus:outline-none'
+                      : isEditorial
+                      ? 'w-full editorial-well border border-[#B8AD96] rounded-none px-3 py-2 text-[#1D1814] placeholder-[#6E6356] focus:border-[#9B2226] focus:outline-none'
+                      : isClay
                       ? 'w-full clay-well border border-white/80 rounded-2xl px-3.5 py-2.5 text-[#1E2547] placeholder-[#647094] focus:border-indigo-400 focus:outline-none'
                       : isSaas
                       ? 'w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 placeholder-slate-400 focus:border-indigo-500 focus:outline-none'
@@ -918,7 +1086,7 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
               </div>
 
               <div>
-                <label className={isClay ? 'block text-[10px] uppercase tracking-wider text-indigo-700 mb-1.5 font-semibold' : isSaas ? 'block text-[10px] uppercase tracking-wider text-indigo-700 mb-1.5 font-semibold' : isNordic ? 'block text-[10px] uppercase tracking-wider text-[#3B5948] mb-1.5 font-semibold' : isGlass ? 'block text-[10px] uppercase tracking-wider text-sky-300 mb-1.5 font-semibold' : isBrutal ? 'block text-black mb-1 font-extrabold' : isObsidian ? 'block text-[10px] uppercase tracking-[0.14em] text-[#E5C77B] mb-1.5 font-semibold' : isSlate ? 'block text-[10px] uppercase tracking-wider text-teal-300 mb-1.5 font-semibold' : 'block text-zinc-300 mb-1 font-bold'}>
+                <label className={isMaterial ? 'block text-[10px] uppercase tracking-wider text-[#00695C] mb-1.5 font-bold' : isCyberpunk ? 'block font-cyber text-[10px] uppercase tracking-wider text-[#00F0FF] mb-1.5 font-semibold' : isEditorial ? 'block font-mono text-[10px] uppercase tracking-[0.14em] text-[#1E4D40] mb-1.5 font-semibold' : isClay ? 'block text-[10px] uppercase tracking-wider text-indigo-700 mb-1.5 font-semibold' : isSaas ? 'block text-[10px] uppercase tracking-wider text-indigo-700 mb-1.5 font-semibold' : isNordic ? 'block text-[10px] uppercase tracking-wider text-[#3B5948] mb-1.5 font-semibold' : isGlass ? 'block text-[10px] uppercase tracking-wider text-sky-300 mb-1.5 font-semibold' : isBrutal ? 'block text-black mb-1 font-extrabold' : isObsidian ? 'block text-[10px] uppercase tracking-[0.14em] text-[#E5C77B] mb-1.5 font-semibold' : isSlate ? 'block text-[10px] uppercase tracking-wider text-teal-300 mb-1.5 font-semibold' : 'block text-zinc-300 mb-1 font-bold'}>
                   SAY INSTEAD (THE POWER REFRAME):
                 </label>
                 <input
@@ -928,7 +1096,13 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                   value={newPowerPhrase}
                   onChange={(e) => setNewPowerPhrase(e.target.value)}
                   className={
-                    isClay
+                    isMaterial
+                      ? 'w-full material-well border border-slate-200/80 rounded-lg px-3 py-2 text-[#111827] placeholder-[#64748B] focus:border-[#1565C0] focus:outline-none'
+                      : isCyberpunk
+                      ? 'w-full cyber-well border border-[#00F0FF]/40 rounded-sm px-3 py-2 text-[#E6F4FF] placeholder-[#7A95B0] focus:border-[#00F0FF] focus:outline-none'
+                      : isEditorial
+                      ? 'w-full editorial-well border border-[#B8AD96] rounded-none px-3 py-2 text-[#1D1814] placeholder-[#6E6356] focus:border-[#9B2226] focus:outline-none'
+                      : isClay
                       ? 'w-full clay-well border border-white/80 rounded-2xl px-3.5 py-2.5 text-[#1E2547] placeholder-[#647094] focus:border-indigo-400 focus:outline-none'
                       : isSaas
                       ? 'w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 placeholder-slate-400 focus:border-indigo-500 focus:outline-none'
@@ -948,7 +1122,7 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
               </div>
 
               <div>
-                <label className={isClay ? 'block text-[10px] uppercase tracking-wider text-[#647094] mb-1.5 font-semibold' : isSaas ? 'block text-[10px] uppercase tracking-wider text-slate-500 mb-1.5 font-semibold' : isNordic ? 'block text-[10px] uppercase tracking-wider text-[#5C6962] mb-1.5 font-semibold' : isGlass ? 'block text-[10px] uppercase tracking-wider text-slate-300 mb-1.5 font-semibold' : isBrutal ? 'block text-black mb-1 font-extrabold' : isObsidian ? 'block text-[10px] uppercase tracking-[0.14em] text-[#A39E93] mb-1.5 font-semibold' : isSlate ? 'block text-[10px] uppercase tracking-wider text-slate-400 mb-1.5 font-semibold' : 'block text-zinc-400 mb-1 font-bold'}>
+                <label className={isMaterial ? 'block text-[10px] uppercase tracking-wider text-[#475569] mb-1.5 font-bold' : isCyberpunk ? 'block font-cyber text-[10px] uppercase tracking-wider text-[#9BB8D3] mb-1.5 font-semibold' : isEditorial ? 'block font-mono text-[10px] uppercase tracking-[0.14em] text-[#574D42] mb-1.5 font-semibold' : isClay ? 'block text-[10px] uppercase tracking-wider text-[#647094] mb-1.5 font-semibold' : isSaas ? 'block text-[10px] uppercase tracking-wider text-slate-500 mb-1.5 font-semibold' : isNordic ? 'block text-[10px] uppercase tracking-wider text-[#5C6962] mb-1.5 font-semibold' : isGlass ? 'block text-[10px] uppercase tracking-wider text-slate-300 mb-1.5 font-semibold' : isBrutal ? 'block text-black mb-1 font-extrabold' : isObsidian ? 'block text-[10px] uppercase tracking-[0.14em] text-[#A39E93] mb-1.5 font-semibold' : isSlate ? 'block text-[10px] uppercase tracking-wider text-slate-400 mb-1.5 font-semibold' : 'block text-zinc-400 mb-1 font-bold'}>
                   SITUATIONAL CONTEXT TRIGGER:
                 </label>
                 <input
@@ -957,7 +1131,13 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                   value={newContext}
                   onChange={(e) => setNewContext(e.target.value)}
                   className={
-                    isClay
+                    isMaterial
+                      ? 'w-full material-well border border-slate-200/80 rounded-lg px-3 py-2 text-[#111827] placeholder-[#64748B] focus:border-[#1565C0] focus:outline-none'
+                      : isCyberpunk
+                      ? 'w-full cyber-well border border-cyan-400/35 rounded-sm px-3 py-2 text-[#E6F4FF] placeholder-[#7A95B0] focus:border-[#00F0FF] focus:outline-none'
+                      : isEditorial
+                      ? 'w-full editorial-well border border-[#B8AD96] rounded-none px-3 py-2 text-[#1D1814] placeholder-[#6E6356] focus:border-[#9B2226] focus:outline-none'
+                      : isClay
                       ? 'w-full clay-well border border-white/80 rounded-2xl px-3.5 py-2.5 text-[#1E2547] placeholder-[#647094] focus:border-indigo-400 focus:outline-none'
                       : isSaas
                       ? 'w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 placeholder-slate-400 focus:border-indigo-500 focus:outline-none'
@@ -977,7 +1157,7 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
               </div>
 
               <div>
-                <label className={isClay ? 'block text-[10px] uppercase tracking-wider text-[#647094] mb-1.5 font-semibold' : isSaas ? 'block text-[10px] uppercase tracking-wider text-slate-500 mb-1.5 font-semibold' : isNordic ? 'block text-[10px] uppercase tracking-wider text-[#5C6962] mb-1.5 font-semibold' : isGlass ? 'block text-[10px] uppercase tracking-wider text-slate-300 mb-1.5 font-semibold' : isBrutal ? 'block text-black mb-1 font-extrabold' : isObsidian ? 'block text-[10px] uppercase tracking-[0.14em] text-[#A39E93] mb-1.5 font-semibold' : isSlate ? 'block text-[10px] uppercase tracking-wider text-slate-400 mb-1.5 font-semibold' : 'block text-zinc-400 mb-1 font-bold'}>
+                <label className={isMaterial ? 'block text-[10px] uppercase tracking-wider text-[#475569] mb-1.5 font-bold' : isCyberpunk ? 'block font-cyber text-[10px] uppercase tracking-wider text-[#9BB8D3] mb-1.5 font-semibold' : isEditorial ? 'block font-mono text-[10px] uppercase tracking-[0.14em] text-[#574D42] mb-1.5 font-semibold' : isClay ? 'block text-[10px] uppercase tracking-wider text-[#647094] mb-1.5 font-semibold' : isSaas ? 'block text-[10px] uppercase tracking-wider text-slate-500 mb-1.5 font-semibold' : isNordic ? 'block text-[10px] uppercase tracking-wider text-[#5C6962] mb-1.5 font-semibold' : isGlass ? 'block text-[10px] uppercase tracking-wider text-slate-300 mb-1.5 font-semibold' : isBrutal ? 'block text-black mb-1 font-extrabold' : isObsidian ? 'block text-[10px] uppercase tracking-[0.14em] text-[#A39E93] mb-1.5 font-semibold' : isSlate ? 'block text-[10px] uppercase tracking-wider text-slate-400 mb-1.5 font-semibold' : 'block text-zinc-400 mb-1 font-bold'}>
                   PSYCHOLOGICAL SHIFT:
                 </label>
                 <input
@@ -986,7 +1166,13 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                   value={newPsychShift}
                   onChange={(e) => setNewPsychShift(e.target.value)}
                   className={
-                    isClay
+                    isMaterial
+                      ? 'w-full material-well border border-slate-200/80 rounded-lg px-3 py-2 text-[#111827] placeholder-[#64748B] focus:border-[#1565C0] focus:outline-none'
+                      : isCyberpunk
+                      ? 'w-full cyber-well border border-cyan-400/35 rounded-sm px-3 py-2 text-[#E6F4FF] placeholder-[#7A95B0] focus:border-[#00F0FF] focus:outline-none'
+                      : isEditorial
+                      ? 'w-full editorial-well border border-[#B8AD96] rounded-none px-3 py-2 text-[#1D1814] placeholder-[#6E6356] focus:border-[#9B2226] focus:outline-none'
+                      : isClay
                       ? 'w-full clay-well border border-white/80 rounded-2xl px-3.5 py-2.5 text-[#1E2547] placeholder-[#647094] focus:border-indigo-400 focus:outline-none'
                       : isSaas
                       ? 'w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 placeholder-slate-400 focus:border-indigo-500 focus:outline-none'
@@ -1005,12 +1191,18 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                 />
               </div>
 
-              <div className={`flex items-center justify-end gap-3 pt-3 ${isClay ? 'border-t border-indigo-900/10' : isSaas ? 'border-t border-slate-200' : isNordic ? 'border-t border-[#E4DFD4]' : isGlass ? 'border-t border-white/15' : isBrutal ? 'border-t-2 border-black' : isObsidian ? 'border-t border-[#2A241A]' : isSlate ? 'border-t border-slate-800' : 'border-t border-zinc-800'}`}>
+              <div className={`flex items-center justify-end gap-3 pt-3 ${isMaterial ? 'border-t border-slate-200' : isCyberpunk ? 'border-t border-cyan-400/25' : isEditorial ? 'border-t-2 border-double border-[#1D1814]/60' : isClay ? 'border-t border-indigo-900/10' : isSaas ? 'border-t border-slate-200' : isNordic ? 'border-t border-[#E4DFD4]' : isGlass ? 'border-t border-white/15' : isBrutal ? 'border-t-2 border-black' : isObsidian ? 'border-t border-[#2A241A]' : isSlate ? 'border-t border-slate-800' : 'border-t border-zinc-800'}`}>
                 <button
                   type="button"
                   onClick={() => setIsAddModalOpen(false)}
                   className={
-                    isClay
+                    isMaterial
+                      ? 'px-4 py-2 rounded-lg bg-white border border-slate-200 text-[#475569] hover:text-[#111827] hover:border-slate-300 text-xs font-semibold cursor-pointer material-btn whitespace-nowrap shrink-0'
+                      : isCyberpunk
+                      ? 'px-4 py-2 rounded-sm bg-[#061926] border border-cyan-400/35 text-[#9BB8D3] hover:text-[#00F0FF] hover:border-[#00F0FF] font-cyber text-xs font-semibold uppercase tracking-wider cursor-pointer whitespace-nowrap shrink-0'
+                      : isEditorial
+                      ? 'px-4 py-2 rounded-none bg-[#FFFDF7] border border-[#1D1814]/60 text-[#1D1814] hover:bg-[#EAE1D0] font-mono text-xs font-semibold cursor-pointer'
+                      : isClay
                       ? 'px-4 py-2 rounded-2xl bg-white border border-white/90 text-[#4B5478] hover:text-[#1E2547] text-xs font-semibold cursor-pointer whitespace-nowrap shrink-0 clay-btn-soft'
                       : isSaas
                       ? 'px-4 py-2 rounded-lg bg-slate-50 border border-slate-200 text-slate-700 hover:text-slate-900 hover:border-slate-300 text-xs font-medium cursor-pointer whitespace-nowrap shrink-0'
@@ -1032,7 +1224,13 @@ export const LeitnerVault: React.FC<LeitnerVaultProps> = ({
                 <button
                   type="submit"
                   className={
-                    isClay
+                    isMaterial
+                      ? 'px-5 py-2 rounded-lg bg-[#1565C0] hover:bg-[#0D47A1] text-white border border-[#0D47A1] text-xs font-semibold cursor-pointer material-btn whitespace-nowrap shrink-0'
+                      : isCyberpunk
+                      ? 'px-5 py-2 rounded-sm bg-gradient-to-r from-[#00F0FF] to-[#FF2A85] text-[#060714] border border-cyan-200/80 font-cyber text-xs font-bold uppercase tracking-wider cursor-pointer cyber-btn whitespace-nowrap shrink-0'
+                      : isEditorial
+                      ? 'px-5 py-2 rounded-none bg-[#9B2226] hover:bg-[#7F1D1D] text-[#FAF5EA] border border-[#1D1814] shadow-[2px_2px_0_#1D1814] font-mono text-xs font-semibold cursor-pointer'
+                      : isClay
                       ? 'px-5 py-2 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white border border-indigo-400/60 text-xs font-semibold cursor-pointer clay-btn whitespace-nowrap shrink-0'
                       : isSaas
                       ? 'px-5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white border border-indigo-600 text-xs font-semibold cursor-pointer shadow-sm whitespace-nowrap shrink-0'

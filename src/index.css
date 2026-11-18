@@ -6,12 +6,40 @@
     --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     --font-serif: 'Cormorant Garamond', Georgia, Cambria, serif;
+    --font-editorial-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    --font-editorial-body: 'Source Serif 4', Georgia, Cambria, serif;
+    --font-material: 'DM Sans', system-ui, -apple-system, sans-serif;
+    --font-cyber: 'Chakra Petch', 'Plus Jakarta Sans', system-ui, sans-serif;
   }
 
   body {
     font-family: var(--font-sans);
-    background-color: #0F172A;
-    color: #F1F5F9;
+    background-color: #23130B;
+    color: #F5ECD8;
+  }
+
+  html[data-theme="skeuomorphic"] body {
+    font-family: var(--font-sans);
+    background-color: #23130B;
+    color: #F5ECD8;
+  }
+
+  html[data-theme="cyberpunk"] body {
+    font-family: var(--font-sans);
+    background-color: #060714;
+    color: #E6F4FF;
+  }
+
+  html[data-theme="material"] body {
+    font-family: var(--font-material);
+    background-color: #ECEFF4;
+    color: #111827;
+  }
+
+  html[data-theme="editorial"] body {
+    font-family: var(--font-editorial-body);
+    background-color: #F3ECE0;
+    color: #1D1814;
   }
 
   html[data-theme="slate"] body {
@@ -65,6 +93,301 @@
 
 .font-luxury {
   font-family: var(--font-serif);
+}
+
+.font-editorial-display {
+  font-family: var(--font-editorial-display);
+}
+
+.font-editorial-body {
+  font-family: var(--font-editorial-body);
+}
+
+.font-material {
+  font-family: var(--font-material);
+}
+
+.font-cyber {
+  font-family: var(--font-cyber);
+}
+
+.font-skeuo {
+  font-family: var(--font-editorial-body);
+}
+
+/* Theme #09: Skeuomorphic Physical Desk — Mahogany wood grain, stitched leather blotter, brass switches & manila index cards */
+.skeuo-canvas {
+  background-color: #23130B;
+  background-image:
+    radial-gradient(ellipse 75% 48% at 50% 0%, rgba(255, 212, 130, 0.14), transparent 70%),
+    radial-gradient(ellipse 90% 60% at 50% 100%, rgba(10, 4, 1, 0.65), transparent 78%),
+    repeating-linear-gradient(
+      90deg,
+      rgba(68, 36, 20, 0.22) 0px,
+      rgba(44, 22, 12, 0.18) 2px,
+      rgba(26, 12, 6, 0.24) 5px,
+      rgba(56, 29, 15, 0.16) 9px,
+      rgba(34, 17, 9, 0.2) 14px
+    ),
+    linear-gradient(180deg, #2D180E 0%, #1E0F08 100%);
+  background-attachment: fixed;
+}
+
+.skeuo-leather {
+  background: linear-gradient(180deg, #43281A 0%, #311C11 55%, #26150C 100%);
+  box-shadow:
+    0 14px 28px -10px rgba(8, 3, 1, 0.78),
+    0 2px 6px rgba(8, 3, 1, 0.55),
+    inset 0 1px 0 0 rgba(255, 224, 175, 0.18),
+    inset 0 -2px 4px rgba(10, 4, 1, 0.65);
+}
+
+.skeuo-leather-well {
+  background: linear-gradient(180deg, #1B0E08 0%, #24140C 100%);
+  box-shadow:
+    inset 0 2px 5px rgba(5, 2, 0, 0.85),
+    inset 0 0 0 1px rgba(16, 7, 3, 0.7),
+    0 1px 0 0 rgba(255, 224, 175, 0.1);
+}
+
+.skeuo-paper {
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      transparent 27px,
+      rgba(139, 108, 72, 0.08) 27px,
+      rgba(139, 108, 72, 0.08) 28px
+    ),
+    linear-gradient(175deg, #FBF6EA 0%, #F2E8D2 100%);
+  box-shadow:
+    0 18px 34px -12px rgba(8, 3, 1, 0.72),
+    0 4px 10px -2px rgba(14, 6, 2, 0.45),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.85),
+    inset 0 -2px 0 0 rgba(168, 144, 108, 0.45);
+}
+
+.skeuo-paper-elevated {
+  background: linear-gradient(175deg, #FFFDF6 0%, #F5ECDA 100%);
+  box-shadow:
+    0 24px 44px -14px rgba(6, 2, 0, 0.82),
+    0 6px 14px -3px rgba(14, 6, 2, 0.5),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.95),
+    inset 0 -2px 0 0 rgba(168, 144, 108, 0.5);
+}
+
+.skeuo-well {
+  background: linear-gradient(180deg, #E3D6BC 0%, #EAE0CA 100%);
+  box-shadow:
+    inset 0 2px 4px rgba(58, 36, 20, 0.18),
+    inset 0 0 0 1px rgba(124, 93, 60, 0.22),
+    0 1px 0 0 rgba(255, 255, 255, 0.65);
+}
+
+.skeuo-brass-btn {
+  background: linear-gradient(180deg, #E8C978 0%, #CFA646 52%, #A88024 100%);
+  color: #1F1209;
+  box-shadow:
+    0 3px 6px -1px rgba(8, 3, 1, 0.55),
+    0 1px 2px rgba(8, 3, 1, 0.45),
+    inset 0 1px 0 0 rgba(255, 246, 205, 0.72),
+    inset 0 -1px 0 0 rgba(102, 72, 14, 0.65);
+  transition: transform 130ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 130ms cubic-bezier(0.16, 1, 0.3, 1), filter 130ms ease;
+}
+
+.skeuo-brass-btn:hover:not(:disabled) {
+  filter: brightness(1.05);
+  box-shadow:
+    0 5px 10px -2px rgba(8, 3, 1, 0.65),
+    0 0 14px -4px rgba(232, 201, 120, 0.35),
+    inset 0 1px 0 0 rgba(255, 249, 222, 0.85),
+    inset 0 -1px 0 0 rgba(102, 72, 14, 0.65);
+}
+
+.skeuo-brass-btn:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow:
+    0 1px 2px rgba(8, 3, 1, 0.5),
+    inset 0 2px 3px rgba(92, 64, 12, 0.45);
+}
+
+.skeuo-leather-btn {
+  background: linear-gradient(180deg, #4E3020 0%, #351E13 100%);
+  color: #F5ECD8;
+  box-shadow:
+    0 3px 6px -1px rgba(6, 2, 0, 0.55),
+    inset 0 1px 0 0 rgba(255, 224, 175, 0.2),
+    inset 0 -1px 0 0 rgba(12, 5, 2, 0.7);
+  transition: transform 130ms cubic-bezier(0.16, 1, 0.3, 1), filter 130ms ease;
+}
+
+.skeuo-leather-btn:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.skeuo-leather-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.skeuo-stamp {
+  border: 2px solid rgba(140, 29, 24, 0.75);
+  box-shadow: inset 0 0 0 1px rgba(140, 29, 24, 0.22);
+}
+
+/* Theme #08: Cyberpunk Neon Grid — Isometric synthwave grids, cyan/magenta energy, futuristic HUDs */
+.cyber-canvas {
+  background-color: #060714;
+  background-image:
+    radial-gradient(ellipse 68% 45% at 15% 0%, rgba(0, 240, 255, 0.14), transparent 68%),
+    radial-gradient(ellipse 60% 42% at 88% 8%, rgba(255, 42, 133, 0.14), transparent 68%),
+    radial-gradient(ellipse 75% 50% at 50% 100%, rgba(168, 85, 247, 0.12), transparent 72%),
+    linear-gradient(150deg, rgba(0, 240, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(30deg, rgba(255, 42, 133, 0.045) 1px, transparent 1px),
+    linear-gradient(to right, rgba(0, 240, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 240, 255, 0.035) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 48px 28px, 48px 28px, 48px 48px, 48px 48px;
+  background-attachment: fixed;
+}
+
+.cyber-card {
+  background: linear-gradient(165deg, rgba(13, 18, 43, 0.94) 0%, rgba(8, 11, 28, 0.97) 100%);
+  box-shadow:
+    0 16px 36px -14px rgba(2, 4, 16, 0.9),
+    0 0 24px -10px rgba(0, 240, 255, 0.22),
+    inset 0 1px 0 0 rgba(0, 240, 255, 0.22);
+}
+
+.cyber-card-elevated {
+  background: linear-gradient(165deg, rgba(16, 23, 54, 0.96) 0%, rgba(9, 13, 33, 0.98) 100%);
+  box-shadow:
+    0 22px 48px -14px rgba(2, 4, 16, 0.95),
+    0 0 34px -8px rgba(0, 240, 255, 0.28),
+    0 0 28px -10px rgba(255, 42, 133, 0.22),
+    inset 0 1px 0 0 rgba(0, 240, 255, 0.34);
+}
+
+.cyber-well {
+  background-color: #050816;
+  box-shadow:
+    inset 0 1px 3px rgba(0, 0, 0, 0.75),
+    inset 0 0 0 1px rgba(0, 240, 255, 0.12);
+}
+
+.cyber-btn {
+  box-shadow:
+    0 0 18px -4px rgba(0, 240, 255, 0.45),
+    0 0 12px -4px rgba(255, 42, 133, 0.3);
+  transition: transform 150ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 150ms cubic-bezier(0.16, 1, 0.3, 1), filter 150ms ease;
+}
+
+.cyber-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow:
+    0 0 26px -2px rgba(0, 240, 255, 0.65),
+    0 0 18px -4px rgba(255, 42, 133, 0.45);
+  filter: brightness(1.06);
+}
+
+.cyber-btn:active:not(:disabled) {
+  transform: translateY(0px);
+}
+
+/* Theme #07: Flat Design 2.0 / Material — Clean paper tiers, predictable grid math, elevation ripples */
+.material-canvas {
+  background-color: #ECEFF4;
+}
+
+.material-card {
+  background-color: #FFFFFF;
+  box-shadow:
+    0 1px 3px 0 rgba(15, 23, 42, 0.10),
+    0 1px 2px -1px rgba(15, 23, 42, 0.06);
+  transition: box-shadow 180ms cubic-bezier(0.16, 1, 0.3, 1), transform 180ms cubic-bezier(0.16, 1, 0.3, 1), border-color 180ms ease;
+}
+
+.material-card-elevated {
+  background-color: #FFFFFF;
+  box-shadow:
+    0 8px 24px -4px rgba(15, 23, 42, 0.14),
+    0 2px 6px -1px rgba(15, 23, 42, 0.08);
+}
+
+.material-well {
+  background-color: #E4E9F2;
+}
+
+.material-btn {
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 2px 4px -1px rgba(15, 23, 42, 0.18),
+    0 1px 2px 0 rgba(15, 23, 42, 0.10);
+  transition: transform 150ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 150ms cubic-bezier(0.16, 1, 0.3, 1), background-color 150ms ease;
+}
+
+.material-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.38) 10%, transparent 70%);
+  opacity: 0;
+  transform: scale(0.25);
+  transition: transform 280ms cubic-bezier(0.16, 1, 0.3, 1), opacity 280ms ease;
+  pointer-events: none;
+}
+
+.material-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow:
+    0 4px 10px -2px rgba(21, 101, 192, 0.28),
+    0 2px 4px -1px rgba(15, 23, 42, 0.12);
+}
+
+.material-btn:active:not(:disabled) {
+  transform: translateY(0px);
+  box-shadow:
+    0 1px 2px 0 rgba(15, 23, 42, 0.18);
+}
+
+.material-btn:active:not(:disabled)::after {
+  opacity: 1;
+  transform: scale(1.8);
+  transition: 0s;
+}
+
+/* Theme #05: 1950s Editorial Newspaper & Warm Serif — Aged broadsheet newsprint & pressroom ink */
+.editorial-canvas {
+  background-color: #F3ECE0;
+  background-image:
+    radial-gradient(rgba(43, 33, 24, 0.045) 0.75px, transparent 0.75px),
+    radial-gradient(ellipse 85% 55% at 50% 0%, rgba(255, 251, 242, 0.65), transparent 72%),
+    radial-gradient(ellipse 90% 60% at 50% 100%, rgba(180, 158, 126, 0.14), transparent 75%);
+  background-size: 16px 16px, 100% 100%, 100% 100%;
+  background-attachment: fixed;
+}
+
+.editorial-card {
+  background-color: #FAF5EA;
+  box-shadow:
+    0 2px 0 rgba(29, 24, 20, 0.09),
+    0 10px 24px -18px rgba(43, 33, 24, 0.25);
+}
+
+.editorial-card-elevated {
+  background-color: #FFFDF7;
+  box-shadow:
+    0 3px 0 rgba(29, 24, 20, 0.14),
+    0 18px 36px -20px rgba(43, 33, 24, 0.32);
+}
+
+.editorial-well {
+  background-color: #EAE1D0;
+  box-shadow: inset 0 1px 2px rgba(43, 33, 24, 0.08);
+}
+
+.editorial-double-rule {
+  border-top: 3px double rgba(29, 24, 20, 0.78);
+  border-bottom: 1px solid rgba(29, 24, 20, 0.32);
 }
 
 /* Theme #02: Modern Slate Dark Mode — Deep #0F172A engineering micro-dot canvas & specular matte rims */
@@ -442,3 +765,61 @@ html[data-theme="slate"] ::-webkit-scrollbar-thumb {
 html[data-theme="slate"] ::-webkit-scrollbar-thumb:hover {
   background: #2DD4BF;
 }
+
+/* Theme #05: 1950s Editorial Newspaper scrollbars */
+html[data-theme="editorial"] ::-webkit-scrollbar-track {
+  background: #F3ECE0;
+}
+
+html[data-theme="editorial"] ::-webkit-scrollbar-thumb {
+  background: #C4B7A0;
+  border-radius: 0px;
+}
+
+html[data-theme="editorial"] ::-webkit-scrollbar-thumb:hover {
+  background: #9B2226;
+}
+
+/* Theme #07: Flat Design 2.0 / Material scrollbars */
+html[data-theme="material"] ::-webkit-scrollbar-track {
+  background: #ECEFF4;
+}
+
+html[data-theme="material"] ::-webkit-scrollbar-thumb {
+  background: #B0BEC5;
+  border-radius: 4px;
+}
+
+html[data-theme="material"] ::-webkit-scrollbar-thumb:hover {
+  background: #1565C0;
+}
+
+/* Theme #08: Cyberpunk Neon Grid scrollbars */
+html[data-theme="cyberpunk"] ::-webkit-scrollbar-track {
+  background: #060714;
+}
+
+html[data-theme="cyberpunk"] ::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #00F0FF 0%, #FF2A85 100%);
+  border-radius: 2px;
+}
+
+html[data-theme="cyberpunk"] ::-webkit-scrollbar-thumb:hover {
+  background: #00F0FF;
+}
+
+/* Theme #09: Skeuomorphic Physical Desk scrollbars */
+html[data-theme="skeuomorphic"] ::-webkit-scrollbar-track {
+  background: #1C0F08;
+}
+
+html[data-theme="skeuomorphic"] ::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #9C7838 0%, #6A4922 100%);
+  border-radius: 3px;
+  border: 1px solid #2C180E;
+}
+
+html[data-theme="skeuomorphic"] ::-webkit-scrollbar-thumb:hover {
+  background: #CFA646;
+}
+

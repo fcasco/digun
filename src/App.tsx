@@ -12,7 +12,7 @@ import { soundEffects } from './utils/soundEffects';
 import { useTheme } from './context/ThemeContext';
 
 export default function App() {
-  const { theme, setTheme, isSlate, isClay, isSaas, isNordic, isGlass, isBrutal, isObsidian } = useTheme();
+  const { theme, setTheme, isSkeuomorphic, isCyberpunk, isMaterial, isEditorial, isSlate, isClay, isSaas, isNordic, isGlass, isBrutal, isObsidian } = useTheme();
   const [cards, setCards] = useState<ReframeCard[]>(() => {
     try {
       return leitnerStorage.loadCards();
@@ -91,7 +91,15 @@ export default function App() {
     return success;
   }, []);
 
-  const rootClass = isSlate
+  const rootClass = isSkeuomorphic
+    ? 'min-h-screen skeuo-canvas text-[#F5ECD8] flex flex-col relative font-sans selection:bg-[#C89E3A]/30 selection:text-[#FFF8EA]'
+    : isCyberpunk
+    ? 'min-h-screen cyber-canvas text-[#E6F4FF] flex flex-col relative font-sans selection:bg-[#00F0FF]/25 selection:text-[#00F0FF]'
+    : isMaterial
+    ? 'min-h-screen material-canvas text-[#111827] flex flex-col relative font-material selection:bg-[#1565C0]/20 selection:text-[#0D47A1]'
+    : isEditorial
+    ? 'min-h-screen editorial-canvas text-[#1D1814] flex flex-col relative font-editorial-body selection:bg-[#9B2226]/20 selection:text-[#1D1814]'
+    : isSlate
     ? 'min-h-screen slate-canvas text-slate-100 flex flex-col relative font-sans selection:bg-teal-400/25 selection:text-teal-100'
     : isClay
     ? 'min-h-screen clay-canvas text-[#1E2547] flex flex-col relative font-sans selection:bg-indigo-500/20 selection:text-indigo-950'
@@ -109,7 +117,15 @@ export default function App() {
         isCrtScanlinesEnabled ? 'crt-scanlines' : ''
       }`;
 
-  const switcherInactiveClass = isSlate
+  const switcherInactiveClass = isSkeuomorphic
+    ? 'px-2.5 py-1 text-[11px] font-semibold tracking-wide rounded-md skeuo-leather-btn border border-[#5B3926] text-[#E6D6B8] hover:text-[#FFE39A] hover:border-[#C89E3A]/60 cursor-pointer whitespace-nowrap'
+    : isCyberpunk
+    ? 'px-2.5 py-1 text-[11px] font-cyber font-semibold uppercase tracking-wider rounded-sm bg-[#0C122B]/90 text-cyan-200/80 border border-cyan-400/25 hover:border-[#00F0FF] hover:text-[#00F0FF] hover:shadow-[0_0_12px_rgba(0,240,255,0.28)] cursor-pointer whitespace-nowrap transition-all'
+    : isMaterial
+    ? 'px-3 py-1 text-[11px] font-semibold rounded-md bg-white text-[#334155] border border-[#CBD5E1] hover:border-[#1565C0] hover:text-[#1565C0] shadow-[0_1px_2px_rgba(15,23,42,0.06)] cursor-pointer whitespace-nowrap transition-all'
+    : isEditorial
+    ? 'px-2.5 py-1 text-[11px] font-medium rounded-none bg-[#FAF5EA] text-[#433A31] border border-[#C9BFA9] hover:border-[#1D1814] hover:text-[#1D1814] cursor-pointer whitespace-nowrap transition-colors'
+    : isSlate
     ? 'px-2.5 py-1 text-[11px] font-medium rounded-md bg-[#1E293B] text-slate-300 border border-slate-700/80 hover:border-teal-400/50 hover:text-white cursor-pointer whitespace-nowrap transition-colors'
     : isClay
     ? 'px-2.5 py-1 text-[11px] font-semibold rounded-xl clay-card clay-btn-soft text-[#4B5478] border border-white/80 hover:text-[#1E2547] cursor-pointer whitespace-nowrap transition-all'
@@ -139,7 +155,15 @@ export default function App() {
       {/* Workspace Theme Strip (outside top header to preserve 3-zone contract) */}
       <div
         className={
-          isSlate
+          isSkeuomorphic
+            ? 'border-b border-[#160B05] bg-[#2D190F]/95 shadow-[inset_0_1px_0_rgba(255,224,175,0.12),0_6px_16px_-6px_rgba(0,0,0,0.65)]'
+            : isCyberpunk
+            ? 'border-b border-cyan-400/25 bg-[#080C20]/90 backdrop-blur-md shadow-[0_6px_24px_-12px_rgba(0,240,255,0.28)]'
+            : isMaterial
+            ? 'border-b border-[#D5DCE6] bg-[#FFFFFF] shadow-[0_1px_3px_rgba(15,23,42,0.06)]'
+            : isEditorial
+            ? 'border-b border-[#1D1814]/35 bg-[#EAE1D0]/75'
+            : isSlate
             ? 'border-b border-slate-800 bg-[#0B1220]/90'
             : isClay
             ? 'border-b border-white/70 bg-[#E6ECFA]/80 backdrop-blur-md'
@@ -159,7 +183,15 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs">
           <div
             className={
-              isSlate
+              isSkeuomorphic
+                ? 'flex items-center gap-2 text-[11px] uppercase tracking-[0.14em] text-[#E6D6B8] font-semibold'
+                : isCyberpunk
+                ? 'flex items-center gap-2 text-[11px] font-cyber uppercase tracking-[0.14em] text-[#00F0FF] font-semibold'
+                : isMaterial
+                ? 'flex items-center gap-2 text-[11px] uppercase tracking-[0.1em] text-[#334155] font-bold'
+                : isEditorial
+                ? 'flex items-center gap-2 text-[11px] uppercase tracking-[0.14em] text-[#433A31] font-semibold'
+                : isSlate
                 ? 'flex items-center gap-2 text-[11px] uppercase tracking-[0.08em] text-slate-400 font-semibold'
                 : isClay
                 ? 'flex items-center gap-2 text-[11px] uppercase tracking-[0.08em] text-[#4B5478] font-bold'
@@ -176,9 +208,17 @@ export default function App() {
                 : 'flex items-center gap-2 font-mono text-zinc-400'
             }
           >
-            <Palette className={isSlate ? 'w-3.5 h-3.5 text-teal-400' : isClay ? 'w-3.5 h-3.5 text-indigo-600' : isSaas ? 'w-3.5 h-3.5 text-indigo-600' : isNordic ? 'w-3.5 h-3.5 text-[#527360]' : isBrutal ? 'w-3.5 h-3.5 text-black' : isObsidian ? 'w-3.5 h-3.5 text-[#D4AF37]' : isGlass ? 'w-3.5 h-3.5 text-sky-300' : 'w-3.5 h-3.5 text-amber-400'} />
+            <Palette className={isSkeuomorphic ? 'w-3.5 h-3.5 text-[#E8C978]' : isCyberpunk ? 'w-3.5 h-3.5 text-[#FF2A85]' : isMaterial ? 'w-3.5 h-3.5 text-[#1565C0]' : isEditorial ? 'w-3.5 h-3.5 text-[#9B2226]' : isSlate ? 'w-3.5 h-3.5 text-teal-400' : isClay ? 'w-3.5 h-3.5 text-indigo-600' : isSaas ? 'w-3.5 h-3.5 text-indigo-600' : isNordic ? 'w-3.5 h-3.5 text-[#527360]' : isBrutal ? 'w-3.5 h-3.5 text-black' : isObsidian ? 'w-3.5 h-3.5 text-[#D4AF37]' : isGlass ? 'w-3.5 h-3.5 text-sky-300' : 'w-3.5 h-3.5 text-amber-400'} />
             <span className="uppercase">
-              {isSlate
+              {isSkeuomorphic
+                ? 'THEME #09 · SKEUOMORPHIC PHYSICAL DESK'
+                : isCyberpunk
+                ? 'THEME #08 · CYBERPUNK NEON GRID'
+                : isMaterial
+                ? 'THEME #07 · FLAT DESIGN 2.0 / MATERIAL'
+                : isEditorial
+                ? "THEME #05 · EDITORIAL NEWSPAPER ('50s BROADSHEET)"
+                : isSlate
                 ? 'THEME #02 · MODERN SLATE DARK MODE'
                 : isClay
                 ? 'THEME #06 · CLAYMORPHISM / SOFT 3D'
@@ -197,6 +237,62 @@ export default function App() {
           </div>
 
           <div className="flex flex-wrap items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => {
+                soundEffects.playKeyClick();
+                setTheme('skeuomorphic');
+              }}
+              className={
+                isSkeuomorphic
+                  ? 'px-2.5 py-1 text-[11px] font-bold tracking-[0.06em] uppercase rounded-md skeuo-brass-btn border border-[#7A5915] cursor-pointer whitespace-nowrap'
+                  : switcherInactiveClass
+              }
+            >
+              #09 SKEUOMORPHIC DESK
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                soundEffects.playKeyClick();
+                setTheme('cyberpunk');
+              }}
+              className={
+                isCyberpunk
+                  ? 'px-2.5 py-1 text-[11px] font-cyber font-bold tracking-[0.08em] uppercase rounded-sm bg-gradient-to-r from-[#00F0FF] to-[#FF2A85] text-[#060714] border border-cyan-200/80 cursor-pointer whitespace-nowrap cyber-btn'
+                  : switcherInactiveClass
+              }
+            >
+              #08 CYBERPUNK NEON
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                soundEffects.playKeyClick();
+                setTheme('material');
+              }}
+              className={
+                isMaterial
+                  ? 'px-3 py-1 text-[11px] font-bold tracking-[0.06em] uppercase rounded-md bg-[#1565C0] text-white border border-[#0D47A1] cursor-pointer whitespace-nowrap material-btn'
+                  : switcherInactiveClass
+              }
+            >
+              #07 MATERIAL 2.0
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                soundEffects.playKeyClick();
+                setTheme('editorial');
+              }}
+              className={
+                isEditorial
+                  ? "px-2.5 py-1 text-[11px] font-semibold tracking-[0.08em] uppercase rounded-none bg-[#9B2226] text-[#FAF5EA] border border-[#1D1814] cursor-pointer whitespace-nowrap shadow-[1px_1px_0_#1D1814]"
+                  : switcherInactiveClass
+              }
+            >
+              #05 EDITORIAL '50s
+            </button>
             <button
               type="button"
               onClick={() => {
@@ -347,7 +443,15 @@ export default function App() {
       {/* Bottom Status & Theme Information Footer */}
       <footer
         className={
-          isSlate
+          isSkeuomorphic
+            ? 'border-t border-[#4B2C1B] skeuo-leather py-4 px-4 text-xs text-[#E6D6B8]'
+            : isCyberpunk
+            ? 'border-t border-cyan-400/25 bg-[#080C20]/90 backdrop-blur-md py-4 px-4 text-xs text-slate-300'
+            : isMaterial
+            ? 'border-t border-[#D5DCE6] bg-white py-4 px-4 text-xs text-[#475569]'
+            : isEditorial
+            ? 'border-t-2 border-[#1D1814] bg-[#FAF5EA] py-4 px-4 text-xs text-[#574D42]'
+            : isSlate
             ? 'border-t border-slate-800 bg-[#0B1220] py-4 px-4 text-xs text-slate-400'
             : isClay
             ? 'border-t border-white/75 bg-[#F4F7FF]/90 py-4 px-4 text-xs text-[#4B5478]'
@@ -367,7 +471,15 @@ export default function App() {
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
           <div
             className={
-              isSlate
+              isSkeuomorphic
+                ? 'flex items-center gap-2 text-[11px] uppercase tracking-[0.12em] text-[#E6D6B8] font-medium'
+                : isCyberpunk
+                ? 'flex items-center gap-2 text-[11px] uppercase tracking-[0.12em] text-slate-300 font-medium'
+                : isMaterial
+                ? 'flex items-center gap-2 text-[11px] uppercase tracking-[0.08em] text-[#475569] font-medium'
+                : isEditorial
+                ? 'flex items-center gap-2 text-[11px] uppercase tracking-[0.12em] text-[#574D42]'
+                : isSlate
                 ? 'flex items-center gap-2 text-[11px] uppercase tracking-[0.08em] text-slate-400'
                 : isClay
                 ? 'flex items-center gap-2 text-[11px] uppercase tracking-[0.08em] text-[#4B5478] font-medium'
@@ -386,7 +498,15 @@ export default function App() {
           >
             <span
               className={
-                isSlate
+                isSkeuomorphic
+                  ? 'text-[#E8C978] font-editorial-display font-bold tracking-wider'
+                  : isCyberpunk
+                  ? 'text-[#00F0FF] font-cyber font-bold tracking-wider'
+                  : isMaterial
+                  ? 'text-[#1565C0] font-bold tracking-wider'
+                  : isEditorial
+                  ? 'text-[#9B2226] font-editorial-display font-bold tracking-wider'
+                  : isSlate
                   ? 'text-teal-400 font-semibold'
                   : isClay
                   ? 'text-indigo-600 font-bold'
@@ -403,7 +523,15 @@ export default function App() {
                   : 'text-zinc-200 font-bold'
               }
             >
-              {theme === 'slate'
+              {theme === 'skeuomorphic'
+                ? 'THEME #09'
+                : theme === 'cyberpunk'
+                ? 'THEME #08'
+                : theme === 'material'
+                ? 'THEME #07'
+                : theme === 'editorial'
+                ? 'THEME #05'
+                : theme === 'slate'
                 ? 'THEME #02'
                 : theme === 'clay'
                 ? 'THEME #06'
@@ -420,7 +548,15 @@ export default function App() {
                 : 'THEME #12'}
             </span>
             <span>
-              {theme === 'slate'
+              {theme === 'skeuomorphic'
+                ? 'SKEUOMORPHIC PHYSICAL DESK'
+                : theme === 'cyberpunk'
+                ? 'CYBERPUNK NEON GRID'
+                : theme === 'material'
+                ? 'FLAT DESIGN 2.0 / MATERIAL'
+                : theme === 'editorial'
+                ? "1950s EDITORIAL BROADSHEET & WARM SERIF"
+                : theme === 'slate'
                 ? 'MODERN SLATE DARK MODE'
                 : theme === 'clay'
                 ? 'CLAYMORPHISM / SOFT 3D'
@@ -442,7 +578,15 @@ export default function App() {
 
           <div
             className={
-              isSlate
+              isSkeuomorphic
+                ? 'flex flex-wrap items-center justify-center gap-3 text-[11px] tracking-[0.12em] uppercase text-[#E6D6B8] font-medium'
+                : isCyberpunk
+                ? 'flex flex-wrap items-center justify-center gap-3 text-[11px] tracking-[0.12em] uppercase text-slate-300 font-medium'
+                : isMaterial
+                ? 'flex flex-wrap items-center justify-center gap-3 text-[11px] tracking-[0.08em] uppercase text-[#475569] font-medium'
+                : isEditorial
+                ? 'flex flex-wrap items-center justify-center gap-3 text-[11px] tracking-[0.12em] uppercase text-[#574D42]'
+                : isSlate
                 ? 'flex flex-wrap items-center justify-center gap-3 text-[11px] tracking-[0.08em] uppercase text-slate-400'
                 : isClay
                 ? 'flex flex-wrap items-center justify-center gap-3 text-[11px] tracking-[0.08em] uppercase text-[#4B5478] font-medium'
@@ -474,7 +618,15 @@ export default function App() {
             <span className="hidden sm:inline">·</span>
             <span
               className={
-                isSlate
+                isSkeuomorphic
+                  ? 'text-[#E8C978] font-mono font-bold tabular-nums'
+                  : isCyberpunk
+                  ? 'text-[#FF4DA6] font-mono font-bold tabular-nums'
+                  : isMaterial
+                  ? 'text-[#00695C] font-mono font-bold tabular-nums'
+                  : isEditorial
+                  ? 'text-[#9B2226] font-mono font-semibold tabular-nums'
+                  : isSlate
                   ? 'text-teal-400 font-semibold font-mono tabular-nums'
                   : isClay
                   ? 'text-indigo-600 font-bold font-mono tabular-nums'

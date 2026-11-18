@@ -14,10 +14,14 @@ import { soundEffects } from '../utils/soundEffects';
 import { useTheme, AppTheme } from '../context/ThemeContext';
 
 export const ThemesAndPsychology: React.FC = () => {
-  const { theme, setTheme, isSlate, isClay, isSaas, isNordic, isGlass, isBrutal, isObsidian } = useTheme();
+  const { theme, setTheme, isSkeuomorphic, isCyberpunk, isMaterial, isEditorial, isSlate, isClay, isSaas, isNordic, isGlass, isBrutal, isObsidian } = useTheme();
   const [activeSection, setActiveSection] = useState<'themes' | 'psychology'>('themes');
 
   const getInteractiveThemeKey = (rank: number): AppTheme | null => {
+    if (rank === 9) return 'skeuomorphic';
+    if (rank === 8) return 'cyberpunk';
+    if (rank === 7) return 'material';
+    if (rank === 5) return 'editorial';
     if (rank === 2) return 'slate';
     if (rank === 6) return 'clay';
     if (rank === 1) return 'saas';
@@ -30,11 +34,19 @@ export const ThemesAndPsychology: React.FC = () => {
   };
 
   return (
-    <div className={`max-w-5xl mx-auto px-4 py-6 ${isSlate || isBrutal || isObsidian || isGlass || isNordic || isSaas || isClay ? 'font-sans' : 'font-mono'}`}>
+    <div className={`max-w-5xl mx-auto px-4 py-6 ${isMaterial ? 'font-material' : isEditorial ? 'font-editorial-body' : isSkeuomorphic || isCyberpunk || isSlate || isBrutal || isObsidian || isGlass || isNordic || isSaas || isClay ? 'font-sans' : 'font-mono'}`}>
       {/* Sub-navigation tabs */}
       <div
         className={`flex flex-wrap items-center gap-2.5 mb-6 pb-3.5 ${
-          isSlate
+          isSkeuomorphic
+            ? 'border-b border-[#5B3926]'
+            : isCyberpunk
+            ? 'border-b border-cyan-400/25'
+            : isMaterial
+            ? 'border-b border-[#CBD5E1]'
+            : isEditorial
+            ? 'border-b-2 border-double border-[#1D1814]/70'
+            : isSlate
             ? 'border-b border-slate-800'
             : isClay
             ? 'border-b border-indigo-900/10'
@@ -57,7 +69,31 @@ export const ThemesAndPsychology: React.FC = () => {
             setActiveSection('themes');
           }}
           className={
-            isSlate
+            isSkeuomorphic
+              ? `px-4 py-2 rounded-md text-xs uppercase tracking-[0.08em] cursor-pointer flex items-center gap-2 border transition-all whitespace-nowrap shrink-0 ${
+                  activeSection === 'themes'
+                    ? 'skeuo-brass-btn border-[#7A5915] font-bold'
+                    : 'skeuo-leather-btn border-[#5B3926] text-[#E6D6B8] hover:text-[#FFE39A]'
+                }`
+              : isCyberpunk
+              ? `px-4 py-2 rounded-sm text-xs font-cyber uppercase tracking-[0.08em] cursor-pointer flex items-center gap-2 border transition-all whitespace-nowrap shrink-0 ${
+                  activeSection === 'themes'
+                    ? 'bg-gradient-to-r from-[#00F0FF] to-[#FF2A85] text-[#060714] border-cyan-200/80 font-bold cyber-btn'
+                    : 'cyber-card text-cyan-200 border-cyan-400/25 hover:border-[#00F0FF] hover:text-[#00F0FF]'
+                }`
+              : isMaterial
+              ? `px-4 py-2 rounded-lg text-xs tracking-wide cursor-pointer flex items-center gap-2 transition-all whitespace-nowrap shrink-0 ${
+                  activeSection === 'themes'
+                    ? 'bg-[#1565C0] text-white font-bold material-btn'
+                    : 'material-card text-[#334155] hover:text-[#1565C0] font-semibold'
+                }`
+              : isEditorial
+              ? `px-4 py-2 rounded-none text-[11px] font-mono uppercase tracking-[0.14em] cursor-pointer flex items-center gap-2 border transition-colors whitespace-nowrap shrink-0 ${
+                  activeSection === 'themes'
+                    ? 'bg-[#9B2226] text-[#FAF5EA] border-[#1D1814] font-semibold shadow-[2px_2px_0_#1D1814]'
+                    : 'editorial-card text-[#433A31] border-[#C9BFA9] hover:border-[#1D1814] hover:text-[#1D1814]'
+                }`
+              : isSlate
               ? `px-4 py-2 rounded-lg text-xs tracking-wide cursor-pointer flex items-center gap-2 border transition-colors whitespace-nowrap shrink-0 ${
                   activeSection === 'themes'
                     ? 'bg-teal-400 text-slate-950 border-teal-300 font-semibold shadow-xs'
@@ -116,7 +152,31 @@ export const ThemesAndPsychology: React.FC = () => {
             setActiveSection('psychology');
           }}
           className={
-            isSlate
+            isSkeuomorphic
+              ? `px-4 py-2 rounded-md text-xs uppercase tracking-[0.08em] cursor-pointer flex items-center gap-2 border transition-all whitespace-nowrap shrink-0 ${
+                  activeSection === 'psychology'
+                    ? 'skeuo-brass-btn border-[#7A5915] font-bold'
+                    : 'skeuo-leather-btn border-[#5B3926] text-[#E6D6B8] hover:text-[#FFE39A]'
+                }`
+              : isCyberpunk
+              ? `px-4 py-2 rounded-sm text-xs font-cyber uppercase tracking-[0.08em] cursor-pointer flex items-center gap-2 border transition-all whitespace-nowrap shrink-0 ${
+                  activeSection === 'psychology'
+                    ? 'bg-gradient-to-r from-[#00F0FF] to-[#FF2A85] text-[#060714] border-cyan-200/80 font-bold cyber-btn'
+                    : 'cyber-card text-cyan-200 border-cyan-400/25 hover:border-[#00F0FF] hover:text-[#00F0FF]'
+                }`
+              : isMaterial
+              ? `px-4 py-2 rounded-lg text-xs tracking-wide cursor-pointer flex items-center gap-2 transition-all whitespace-nowrap shrink-0 ${
+                  activeSection === 'psychology'
+                    ? 'bg-[#1565C0] text-white font-bold material-btn'
+                    : 'material-card text-[#334155] hover:text-[#1565C0] font-semibold'
+                }`
+              : isEditorial
+              ? `px-4 py-2 rounded-none text-[11px] font-mono uppercase tracking-[0.14em] cursor-pointer flex items-center gap-2 border transition-colors whitespace-nowrap shrink-0 ${
+                  activeSection === 'psychology'
+                    ? 'bg-[#9B2226] text-[#FAF5EA] border-[#1D1814] font-semibold shadow-[2px_2px_0_#1D1814]'
+                    : 'editorial-card text-[#433A31] border-[#C9BFA9] hover:border-[#1D1814] hover:text-[#1D1814]'
+                }`
+              : isSlate
               ? `px-4 py-2 rounded-lg text-xs tracking-wide cursor-pointer flex items-center gap-2 border transition-colors whitespace-nowrap shrink-0 ${
                   activeSection === 'psychology'
                     ? 'bg-teal-400 text-slate-950 border-teal-300 font-semibold shadow-xs'
@@ -175,7 +235,15 @@ export const ThemesAndPsychology: React.FC = () => {
         <div className="space-y-6">
           <div
             className={
-              isSlate
+              isSkeuomorphic
+                ? 'skeuo-paper-elevated border-2 border-[#6B4A2B] rounded-lg p-6 sm:p-7 text-[#1F140E]'
+                : isCyberpunk
+                ? 'cyber-card-elevated rounded-sm p-6 sm:p-7 border border-cyan-400/35 border-t-2 border-t-[#00F0FF]'
+                : isMaterial
+                ? 'material-card-elevated rounded-xl p-6 sm:p-7 border-t-4 border-[#1565C0]'
+                : isEditorial
+                ? 'border border-[#1D1814]/35 editorial-card rounded-none p-6 sm:p-7'
+                : isSlate
                 ? 'border border-slate-700/80 slate-card rounded-lg p-6 sm:p-7'
                 : isClay
                 ? 'border border-white/90 clay-card rounded-3xl p-6 sm:p-7'
@@ -193,10 +261,18 @@ export const ThemesAndPsychology: React.FC = () => {
             }
           >
             <div className="flex items-center gap-2.5 mb-2">
-              <Terminal className={isSlate ? 'w-5 h-5 text-teal-400' : isClay ? 'w-5 h-5 text-indigo-500' : isSaas ? 'w-5 h-5 text-indigo-600' : isNordic ? 'w-5 h-5 text-[#527360]' : isBrutal ? 'w-5 h-5 text-black' : isObsidian ? 'w-5 h-5 text-[#D4AF37]' : isGlass ? 'w-5 h-5 text-sky-300' : 'w-5 h-5 text-amber-400'} />
+              <Terminal className={isSkeuomorphic ? 'w-5 h-5 text-[#8C1D18]' : isCyberpunk ? 'w-5 h-5 text-[#FF2A85]' : isMaterial ? 'w-5 h-5 text-[#1565C0]' : isEditorial ? 'w-5 h-5 text-[#9B2226]' : isSlate ? 'w-5 h-5 text-teal-400' : isClay ? 'w-5 h-5 text-indigo-500' : isSaas ? 'w-5 h-5 text-indigo-600' : isNordic ? 'w-5 h-5 text-[#527360]' : isBrutal ? 'w-5 h-5 text-black' : isObsidian ? 'w-5 h-5 text-[#D4AF37]' : isGlass ? 'w-5 h-5 text-sky-300' : 'w-5 h-5 text-amber-400'} />
               <h2
                 className={
-                  isSlate
+                  isSkeuomorphic
+                    ? 'font-editorial-display text-2xl sm:text-3xl font-bold tracking-tight text-[#1F140E]'
+                    : isCyberpunk
+                    ? 'font-cyber text-xl sm:text-2xl font-bold tracking-[0.06em] uppercase text-[#F0F9FF]'
+                    : isMaterial
+                    ? 'text-xl sm:text-2xl font-bold tracking-tight text-[#111827]'
+                    : isEditorial
+                    ? 'font-editorial-display text-2xl sm:text-3xl font-bold tracking-tight text-[#1D1814]'
+                    : isSlate
                     ? 'text-xl sm:text-2xl font-bold tracking-tight text-slate-50'
                     : isClay
                     ? 'text-xl sm:text-2xl font-bold tracking-tight text-[#1E2547]'
@@ -216,16 +292,20 @@ export const ThemesAndPsychology: React.FC = () => {
                 Taxonomy: The 12 Most Prevalent UI Design Themes
               </h2>
             </div>
-            <p className={isSlate ? 'text-sm text-slate-300 leading-relaxed' : isClay ? 'text-sm text-[#4B5478] leading-relaxed' : isSaas ? 'text-sm text-slate-600 leading-relaxed' : isNordic ? 'text-sm text-[#4E5A53] leading-relaxed' : isBrutal ? 'text-xs text-zinc-800 font-medium leading-relaxed' : isObsidian ? 'text-sm text-[#A39E93] leading-relaxed' : isGlass ? 'text-sm text-slate-300 leading-relaxed' : 'text-xs text-zinc-400 leading-relaxed'}>
+            <p className={isSkeuomorphic ? 'text-sm text-[#4A3326] leading-relaxed' : isCyberpunk ? 'text-sm text-slate-300 leading-relaxed' : isMaterial ? 'text-sm text-[#475569] leading-relaxed' : isEditorial ? 'text-sm text-[#433A31] leading-relaxed' : isSlate ? 'text-sm text-slate-300 leading-relaxed' : isClay ? 'text-sm text-[#4B5478] leading-relaxed' : isSaas ? 'text-sm text-slate-600 leading-relaxed' : isNordic ? 'text-sm text-[#4E5A53] leading-relaxed' : isBrutal ? 'text-xs text-zinc-800 font-medium leading-relaxed' : isObsidian ? 'text-sm text-[#A39E93] leading-relaxed' : isGlass ? 'text-sm text-slate-300 leading-relaxed' : 'text-xs text-zinc-400 leading-relaxed'}>
               Explore the 12 core visual themes in modern web design.{' '}
-              <strong className={isSlate ? 'text-teal-300' : isClay ? 'text-indigo-600' : isSaas ? 'text-indigo-700' : isNordic ? 'text-[#3B5948]' : isObsidian ? 'text-[#E5C77B]' : isGlass ? 'text-sky-300' : ''}>Theme #02 (Modern Slate Dark Mode)</strong>,{' '}
-              <strong className={isSlate ? 'text-teal-300' : isClay ? 'text-indigo-600' : isSaas ? 'text-indigo-700' : isNordic ? 'text-[#3B5948]' : isObsidian ? 'text-[#E5C77B]' : isGlass ? 'text-sky-300' : ''}>Theme #06 (Claymorphism / Soft 3D)</strong>,{' '}
-              <strong className={isSlate ? 'text-teal-300' : isClay ? 'text-indigo-600' : isSaas ? 'text-indigo-700' : isNordic ? 'text-[#3B5948]' : isObsidian ? 'text-[#E5C77B]' : isGlass ? 'text-sky-300' : ''}>Theme #01 (Clean SaaS Minimalist)</strong>,{' '}
-              <strong className={isSlate ? 'text-teal-300' : isClay ? 'text-indigo-600' : isSaas ? 'text-indigo-700' : isNordic ? 'text-[#3B5948]' : isObsidian ? 'text-[#E5C77B]' : isGlass ? 'text-sky-300' : ''}>Theme #11 (Nordic Organic Pastel)</strong>,{' '}
-              <strong className={isSlate ? 'text-teal-300' : isClay ? 'text-indigo-600' : isSaas ? 'text-indigo-700' : isNordic ? 'text-[#3B5948]' : isObsidian ? 'text-[#E5C77B]' : isGlass ? 'text-sky-300' : ''}>Theme #03 (Glassmorphism / Frosted Glass)</strong>,{' '}
-              <strong className={isSlate ? 'text-teal-300' : isClay ? 'text-indigo-600' : isSaas ? 'text-indigo-700' : isNordic ? 'text-[#3B5948]' : isObsidian ? 'text-[#E5C77B]' : isGlass ? 'text-sky-300' : ''}>Theme #10 (Luxury Obsidian &amp; Warm Brass)</strong>,{' '}
-              <strong className={isSlate ? 'text-teal-300' : isClay ? 'text-indigo-600' : isSaas ? 'text-indigo-700' : isNordic ? 'text-[#3B5948]' : isObsidian ? 'text-[#E5C77B]' : isGlass ? 'text-sky-300' : ''}>Theme #04 (Neo-Brutalism)</strong>, and{' '}
-              <strong className={isSlate ? 'text-teal-300' : isClay ? 'text-indigo-600' : isSaas ? 'text-indigo-700' : isNordic ? 'text-[#3B5948]' : isObsidian ? 'text-[#E5C77B]' : isGlass ? 'text-sky-300' : ''}>Theme #12 (Retro Terminal Console)</strong> are all fully interactive — switch live below or from the workspace toolbar.
+              <strong className={isSkeuomorphic ? 'text-[#8C1D18]' : isCyberpunk ? 'text-[#00F0FF]' : isMaterial ? 'text-[#1565C0]' : isEditorial ? 'text-[#1D1814]' : isSlate ? 'text-teal-300' : isClay ? 'text-indigo-600' : isSaas ? 'text-indigo-700' : isNordic ? 'text-[#3B5948]' : isObsidian ? 'text-[#E5C77B]' : isGlass ? 'text-sky-300' : ''}>Theme #09 (Skeuomorphic Physical Desk)</strong>,{' '}
+              <strong className={isSkeuomorphic ? 'text-[#1F140E]' : isCyberpunk ? 'text-[#00F0FF]' : isMaterial ? 'text-[#1565C0]' : isEditorial ? 'text-[#1D1814]' : isSlate ? 'text-teal-300' : isClay ? 'text-indigo-600' : isSaas ? 'text-indigo-700' : isNordic ? 'text-[#3B5948]' : isObsidian ? 'text-[#E5C77B]' : isGlass ? 'text-sky-300' : ''}>Theme #08 (Cyberpunk Neon Grid)</strong>,{' '}
+              <strong className={isSkeuomorphic ? 'text-[#1F140E]' : isCyberpunk ? 'text-[#00F0FF]' : isMaterial ? 'text-[#1565C0]' : isEditorial ? 'text-[#1D1814]' : isSlate ? 'text-teal-300' : isClay ? 'text-indigo-600' : isSaas ? 'text-indigo-700' : isNordic ? 'text-[#3B5948]' : isObsidian ? 'text-[#E5C77B]' : isGlass ? 'text-sky-300' : ''}>Theme #07 (Flat Design 2.0 / Material)</strong>,{' '}
+              <strong className={isSkeuomorphic ? 'text-[#1F140E]' : isCyberpunk ? 'text-cyan-200' : isMaterial ? 'text-[#111827]' : isEditorial ? 'text-[#9B2226]' : isSlate ? 'text-teal-300' : isClay ? 'text-indigo-600' : isSaas ? 'text-indigo-700' : isNordic ? 'text-[#3B5948]' : isObsidian ? 'text-[#E5C77B]' : isGlass ? 'text-sky-300' : ''}>Theme #05 (Editorial Newspaper &amp; Warm Serif)</strong>,{' '}
+              <strong className={isSkeuomorphic ? 'text-[#1F140E]' : isCyberpunk ? 'text-cyan-200' : isMaterial ? 'text-[#111827]' : isEditorial ? 'text-[#1D1814]' : isSlate ? 'text-teal-300' : isClay ? 'text-indigo-600' : isSaas ? 'text-indigo-700' : isNordic ? 'text-[#3B5948]' : isObsidian ? 'text-[#E5C77B]' : isGlass ? 'text-sky-300' : ''}>Theme #02 (Modern Slate Dark Mode)</strong>,{' '}
+              <strong className={isSkeuomorphic ? 'text-[#1F140E]' : isCyberpunk ? 'text-cyan-200' : isMaterial ? 'text-[#111827]' : isEditorial ? 'text-[#1D1814]' : isSlate ? 'text-teal-300' : isClay ? 'text-indigo-600' : isSaas ? 'text-indigo-700' : isNordic ? 'text-[#3B5948]' : isObsidian ? 'text-[#E5C77B]' : isGlass ? 'text-sky-300' : ''}>Theme #06 (Claymorphism / Soft 3D)</strong>,{' '}
+              <strong className={isSkeuomorphic ? 'text-[#1F140E]' : isCyberpunk ? 'text-cyan-200' : isMaterial ? 'text-[#111827]' : isEditorial ? 'text-[#1D1814]' : isSlate ? 'text-teal-300' : isClay ? 'text-indigo-600' : isSaas ? 'text-indigo-700' : isNordic ? 'text-[#3B5948]' : isObsidian ? 'text-[#E5C77B]' : isGlass ? 'text-sky-300' : ''}>Theme #01 (Clean SaaS Minimalist)</strong>,{' '}
+              <strong className={isSkeuomorphic ? 'text-[#1F140E]' : isCyberpunk ? 'text-cyan-200' : isMaterial ? 'text-[#111827]' : isEditorial ? 'text-[#1D1814]' : isSlate ? 'text-teal-300' : isClay ? 'text-indigo-600' : isSaas ? 'text-indigo-700' : isNordic ? 'text-[#3B5948]' : isObsidian ? 'text-[#E5C77B]' : isGlass ? 'text-sky-300' : ''}>Theme #11 (Nordic Organic Pastel)</strong>,{' '}
+              <strong className={isSkeuomorphic ? 'text-[#1F140E]' : isCyberpunk ? 'text-cyan-200' : isMaterial ? 'text-[#111827]' : isEditorial ? 'text-[#1D1814]' : isSlate ? 'text-teal-300' : isClay ? 'text-indigo-600' : isSaas ? 'text-indigo-700' : isNordic ? 'text-[#3B5948]' : isObsidian ? 'text-[#E5C77B]' : isGlass ? 'text-sky-300' : ''}>Theme #03 (Glassmorphism / Frosted Glass)</strong>,{' '}
+              <strong className={isSkeuomorphic ? 'text-[#1F140E]' : isCyberpunk ? 'text-cyan-200' : isMaterial ? 'text-[#111827]' : isEditorial ? 'text-[#1D1814]' : isSlate ? 'text-teal-300' : isClay ? 'text-indigo-600' : isSaas ? 'text-indigo-700' : isNordic ? 'text-[#3B5948]' : isObsidian ? 'text-[#E5C77B]' : isGlass ? 'text-sky-300' : ''}>Theme #10 (Luxury Obsidian &amp; Warm Brass)</strong>,{' '}
+              <strong className={isSkeuomorphic ? 'text-[#1F140E]' : isCyberpunk ? 'text-cyan-200' : isMaterial ? 'text-[#111827]' : isEditorial ? 'text-[#1D1814]' : isSlate ? 'text-teal-300' : isClay ? 'text-indigo-600' : isSaas ? 'text-indigo-700' : isNordic ? 'text-[#3B5948]' : isObsidian ? 'text-[#E5C77B]' : isGlass ? 'text-sky-300' : ''}>Theme #04 (Neo-Brutalism)</strong>, and{' '}
+              <strong className={isSkeuomorphic ? 'text-[#1F140E]' : isCyberpunk ? 'text-cyan-200' : isMaterial ? 'text-[#111827]' : isEditorial ? 'text-[#1D1814]' : isSlate ? 'text-teal-300' : isClay ? 'text-indigo-600' : isSaas ? 'text-indigo-700' : isNordic ? 'text-[#3B5948]' : isObsidian ? 'text-[#E5C77B]' : isGlass ? 'text-sky-300' : ''}>Theme #12 (Retro Terminal Console)</strong> are all fully interactive — switch live below or from the workspace toolbar.
             </p>
           </div>
 
@@ -238,7 +318,39 @@ export const ThemesAndPsychology: React.FC = () => {
                 <div
                   key={themeItem.rank}
                   className={
-                    isSlate
+                    isSkeuomorphic
+                      ? `p-5 rounded-lg border transition-all text-[#1F140E] ${
+                          isActiveTheme
+                            ? 'skeuo-paper-elevated border-2 border-[#B38628] ring-2 ring-[#E8C978]/50'
+                            : interactiveKey
+                            ? 'skeuo-paper border-[#B8A482] hover:border-[#8C6A3E]'
+                            : 'bg-[#EDE3CE] border-[#C9B796]'
+                        }`
+                      : isCyberpunk
+                      ? `p-5 rounded-sm border transition-all ${
+                          isActiveTheme
+                            ? 'cyber-card-elevated border-[#00F0FF] border-t-2 border-t-[#FF2A85]'
+                            : interactiveKey
+                            ? 'cyber-card border-cyan-400/25 hover:border-[#00F0FF]/70'
+                            : 'bg-[#080B1A]/85 border-slate-800/80'
+                        }`
+                      : isMaterial
+                      ? `p-5 rounded-xl transition-all ${
+                          isActiveTheme
+                            ? 'material-card-elevated ring-2 ring-[#1565C0]'
+                            : interactiveKey
+                            ? 'material-card hover:shadow-md'
+                            : 'bg-[#F8FAFC] border border-[#E2E8F0]'
+                        }`
+                      : isEditorial
+                      ? `p-5 rounded-none border transition-all ${
+                          isActiveTheme
+                            ? 'border-2 border-[#1D1814] editorial-card-elevated'
+                            : interactiveKey
+                            ? 'border-[#C9BFA9] editorial-card hover:border-[#1D1814]'
+                            : 'border-[#D5CCB8] bg-[#F8F3E8]'
+                        }`
+                      : isSlate
                       ? `p-5 rounded-lg border transition-all ${
                           isActiveTheme
                             ? 'border-teal-400/75 slate-card-elevated ring-1 ring-teal-400/20'
@@ -306,7 +418,15 @@ export const ThemesAndPsychology: React.FC = () => {
                   <div className="flex items-center justify-between gap-2 text-xs mb-2">
                     <span
                       className={
-                        isSlate
+                        isSkeuomorphic
+                          ? `font-editorial-display text-sm font-bold tracking-tight ${isActiveTheme ? 'text-[#8C1D18]' : interactiveKey ? 'text-[#1F140E]' : 'text-[#5A3D28]'}`
+                          : isCyberpunk
+                          ? `font-cyber text-sm font-bold tracking-wider uppercase ${isActiveTheme ? 'text-[#00F0FF]' : interactiveKey ? 'text-[#E6F4FF]' : 'text-slate-400'}`
+                          : isMaterial
+                          ? `text-sm font-bold tracking-tight ${isActiveTheme ? 'text-[#1565C0]' : interactiveKey ? 'text-[#111827]' : 'text-[#64748B]'}`
+                          : isEditorial
+                          ? `font-editorial-display text-sm font-bold tracking-tight ${isActiveTheme ? 'text-[#9B2226]' : interactiveKey ? 'text-[#1D1814]' : 'text-[#574D42]'}`
+                          : isSlate
                           ? `tracking-tight font-semibold ${isActiveTheme ? 'text-teal-300' : interactiveKey ? 'text-slate-100' : 'text-slate-400'}`
                           : isClay
                           ? `tracking-tight font-semibold ${isActiveTheme ? 'text-indigo-600' : interactiveKey ? 'text-[#1E2547]' : 'text-[#647094]'}`
@@ -334,7 +454,31 @@ export const ThemesAndPsychology: React.FC = () => {
                           setTheme(interactiveKey);
                         }}
                         className={
-                          isSlate
+                          isSkeuomorphic
+                            ? `text-[10px] px-2.5 py-1 rounded-md uppercase tracking-wider font-bold cursor-pointer shrink-0 border transition-all whitespace-nowrap ${
+                                isActiveTheme
+                                  ? 'skeuo-brass-btn border-[#7A5915]'
+                                  : 'skeuo-leather-btn border-[#5B3926] text-[#F5ECD8] hover:text-[#FFE39A]'
+                              }`
+                            : isCyberpunk
+                            ? `text-[10px] px-2.5 py-1 rounded-sm font-cyber uppercase tracking-wider font-bold cursor-pointer shrink-0 border transition-all whitespace-nowrap ${
+                                isActiveTheme
+                                  ? 'bg-gradient-to-r from-[#00F0FF] to-[#FF2A85] text-[#060714] border-cyan-200/80 cyber-btn'
+                                  : 'bg-[#0D1530] text-[#00F0FF] border-cyan-400/40 hover:border-[#00F0FF] hover:bg-cyan-400/10'
+                              }`
+                            : isMaterial
+                            ? `text-[10px] px-3 py-1 rounded-md uppercase tracking-wider font-bold cursor-pointer shrink-0 transition-all whitespace-nowrap ${
+                                isActiveTheme
+                                  ? 'bg-[#1565C0] text-white material-btn'
+                                  : 'bg-[#E3F2FD] text-[#1565C0] hover:bg-[#BBDEFB]'
+                              }`
+                            : isEditorial
+                            ? `text-[10px] font-mono px-2.5 py-1 rounded-none uppercase tracking-wider font-semibold cursor-pointer shrink-0 border transition-colors whitespace-nowrap ${
+                                isActiveTheme
+                                  ? 'bg-[#9B2226] text-[#FAF5EA] border-[#1D1814] shadow-[1px_1px_0_#1D1814]'
+                                  : 'bg-[#FFFDF7] text-[#1D1814] border-[#1D1814]/60 hover:bg-[#EAE1D0]'
+                              }`
+                            : isSlate
                             ? `text-[10px] px-2.5 py-1 rounded-md uppercase tracking-wider font-semibold cursor-pointer shrink-0 border transition-colors ${
                                 isActiveTheme
                                   ? 'bg-teal-400 text-slate-950 border-teal-300'
@@ -388,15 +532,15 @@ export const ThemesAndPsychology: React.FC = () => {
                     )}
                   </div>
 
-                  <p className={isSlate ? 'text-xs text-slate-300 mb-3 leading-relaxed' : isClay ? 'text-xs text-[#4B5478] mb-3 leading-relaxed' : isSaas ? 'text-xs text-slate-600 mb-3 leading-relaxed' : isNordic ? 'text-xs text-[#4E5A53] mb-3 leading-relaxed' : isBrutal ? 'text-xs text-zinc-900 font-medium mb-3 leading-relaxed' : isObsidian ? 'text-xs text-[#C7C1B5] mb-3 leading-relaxed' : isGlass ? 'text-xs text-slate-300 mb-3 leading-relaxed' : 'text-xs text-zinc-300 mb-3 leading-relaxed'}>
+                  <p className={isSkeuomorphic ? 'text-xs text-[#4A3326] mb-3 leading-relaxed' : isCyberpunk ? 'text-xs text-slate-300 mb-3 leading-relaxed' : isMaterial ? 'text-xs text-[#475569] mb-3 leading-relaxed' : isEditorial ? 'text-xs text-[#433A31] mb-3 leading-relaxed' : isSlate ? 'text-xs text-slate-300 mb-3 leading-relaxed' : isClay ? 'text-xs text-[#4B5478] mb-3 leading-relaxed' : isSaas ? 'text-xs text-slate-600 mb-3 leading-relaxed' : isNordic ? 'text-xs text-[#4E5A53] mb-3 leading-relaxed' : isBrutal ? 'text-xs text-zinc-900 font-medium mb-3 leading-relaxed' : isObsidian ? 'text-xs text-[#C7C1B5] mb-3 leading-relaxed' : isGlass ? 'text-xs text-slate-300 mb-3 leading-relaxed' : 'text-xs text-zinc-300 mb-3 leading-relaxed'}>
                     {themeItem.description}
                   </p>
 
-                  <div className={isSlate ? 'flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-slate-400 font-mono' : isClay ? 'flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-[#647094]' : isSaas ? 'flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-slate-500' : isNordic ? 'flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-[#5C6962]' : isObsidian ? 'flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-[#8E877A]' : isGlass ? 'flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-slate-400' : 'flex flex-wrap gap-1.5'}>
+                  <div className={isSkeuomorphic ? 'flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-[#5A3D28] font-mono' : isCyberpunk ? 'flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-cyan-200/75 font-mono' : isMaterial ? 'flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-[#64748B]' : isEditorial ? 'flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-[#574D42] font-mono' : isSlate ? 'flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-slate-400 font-mono' : isClay ? 'flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-[#647094]' : isSaas ? 'flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-slate-500' : isNordic ? 'flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-[#5C6962]' : isObsidian ? 'flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-[#8E877A]' : isGlass ? 'flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-slate-400' : 'flex flex-wrap gap-1.5'}>
                     {themeItem.keyCharacteristics.map((char, i) =>
-                      isSlate || isObsidian || isGlass || isNordic || isSaas || isClay ? (
+                      isSkeuomorphic || isCyberpunk || isMaterial || isEditorial || isSlate || isObsidian || isGlass || isNordic || isSaas || isClay ? (
                         <React.Fragment key={i}>
-                          <span className={isActiveTheme ? (isSlate ? 'text-teal-300 font-medium' : isClay ? 'text-indigo-600 font-medium' : isSaas ? 'text-indigo-700 font-medium' : isNordic ? 'text-[#3B5948] font-medium' : isObsidian ? 'text-[#D4AF37]' : 'text-sky-300') : ''}>{char}</span>
+                          <span className={isActiveTheme ? (isSkeuomorphic ? 'text-[#8C1D18] font-semibold' : isCyberpunk ? 'text-[#00F0FF] font-semibold' : isMaterial ? 'text-[#1565C0] font-semibold' : isEditorial ? 'text-[#9B2226] font-semibold' : isSlate ? 'text-teal-300 font-medium' : isClay ? 'text-indigo-600 font-medium' : isSaas ? 'text-indigo-700 font-medium' : isNordic ? 'text-[#3B5948] font-medium' : isObsidian ? 'text-[#D4AF37]' : 'text-sky-300') : ''}>{char}</span>
                           {i < themeItem.keyCharacteristics.length - 1 && <span aria-hidden="true">·</span>}
                         </React.Fragment>
                       ) : (
@@ -429,7 +573,15 @@ export const ThemesAndPsychology: React.FC = () => {
           {/* Active Theme Architecture Box */}
           <div
             className={
-              isSlate
+              isSkeuomorphic
+                ? 'skeuo-paper-elevated rounded-lg p-6 border-2 border-[#6B4A2B] text-[#1F140E]'
+                : isCyberpunk
+                ? 'cyber-card-elevated rounded-sm p-6 border border-cyan-400/40 border-t-2 border-t-[#FF2A85]'
+                : isMaterial
+                ? 'material-card-elevated rounded-xl p-6 border-t-4 border-[#1565C0]'
+                : isEditorial
+                ? 'border-2 border-[#1D1814] editorial-card-elevated rounded-none p-6'
+                : isSlate
                 ? 'border border-teal-400/35 slate-card-elevated rounded-lg p-6'
                 : isClay
                 ? 'border border-white/95 clay-card-elevated rounded-3xl p-6 sm:p-7'
@@ -448,7 +600,15 @@ export const ThemesAndPsychology: React.FC = () => {
           >
             <h3
               className={
-                isSlate
+                isSkeuomorphic
+                  ? 'font-editorial-display text-lg font-bold text-[#1F140E] tracking-tight mb-3 pb-2 border-b border-[#C8B896] flex items-center gap-2'
+                  : isCyberpunk
+                  ? 'font-cyber text-base font-bold uppercase tracking-[0.08em] text-[#00F0FF] mb-3 flex items-center gap-2'
+                  : isMaterial
+                  ? 'text-base font-bold text-[#111827] tracking-tight mb-3 flex items-center gap-2'
+                  : isEditorial
+                  ? 'font-editorial-display text-lg font-bold text-[#1D1814] tracking-tight mb-3 pb-2 border-b-2 border-double border-[#1D1814]/60 flex items-center gap-2'
+                  : isSlate
                   ? 'text-base font-bold text-slate-100 tracking-tight mb-3 flex items-center gap-2'
                   : isClay
                   ? 'text-base font-bold text-[#1E2547] tracking-tight mb-3 flex items-center gap-2'
@@ -465,9 +625,17 @@ export const ThemesAndPsychology: React.FC = () => {
                   : 'text-sm font-bold text-zinc-200 tracking-wider mb-2 flex items-center gap-2'
               }
             >
-              <Sparkles className={isSlate ? 'w-4 h-4 text-teal-400' : isClay ? 'w-4 h-4 text-indigo-500' : isSaas ? 'w-4 h-4 text-indigo-600' : isNordic ? 'w-4 h-4 text-[#527360]' : isBrutal ? 'w-4 h-4 text-black' : isObsidian ? 'w-4 h-4 text-[#D4AF37]' : isGlass ? 'w-4 h-4 text-sky-300' : 'w-4 h-4 text-amber-400'} />
+              <Sparkles className={isSkeuomorphic ? 'w-4 h-4 text-[#8C1D18]' : isCyberpunk ? 'w-4 h-4 text-[#FF2A85]' : isMaterial ? 'w-4 h-4 text-[#1565C0]' : isEditorial ? 'w-4 h-4 text-[#9B2226]' : isSlate ? 'w-4 h-4 text-teal-400' : isClay ? 'w-4 h-4 text-indigo-500' : isSaas ? 'w-4 h-4 text-indigo-600' : isNordic ? 'w-4 h-4 text-[#527360]' : isBrutal ? 'w-4 h-4 text-black' : isObsidian ? 'w-4 h-4 text-[#D4AF37]' : isGlass ? 'w-4 h-4 text-sky-300' : 'w-4 h-4 text-amber-400'} />
               <span>
-                {isSlate
+                {isSkeuomorphic
+                  ? 'Theme #09 · Skeuomorphic Physical Desk Specification'
+                  : isCyberpunk
+                  ? 'Theme #08 · Cyberpunk Neon Grid Specification'
+                  : isMaterial
+                  ? 'Theme #07 · Flat Design 2.0 / Material Specification'
+                  : isEditorial
+                  ? "Theme #05 · Editorial Newspaper & Warm Serif ('50s Broadsheet)"
+                  : isSlate
                   ? 'Theme #02 · Modern Slate Dark Mode Specification'
                   : isClay
                   ? 'Theme #06 · Claymorphism / Soft 3D Specification'
@@ -484,7 +652,67 @@ export const ThemesAndPsychology: React.FC = () => {
                   : 'THEME #12 MONOCHROME SPECIFICATION'}
               </span>
             </h3>
-            {isSlate ? (
+            {isSkeuomorphic ? (
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 text-xs text-[#4A3326] pt-2">
+                <div>
+                  <span className="text-[#8C1D18] font-mono uppercase tracking-wider font-bold block mb-1.5">Mahogany &amp; Stitched Leather</span>
+                  Oiled mahogany wood-grain desktop (#23130B) illuminated by a warm tungsten banker&apos;s lamp vignette and paired with dark saddle-leather blotter panels.
+                </div>
+                <div>
+                  <span className="text-[#7A5915] font-mono uppercase tracking-wider font-bold block mb-1.5">Burnished Brass &amp; Bevels</span>
+                  Realistic inset specular highlights, multi-layer physical drop shadows, recessed desk wells, and tactile burnished-brass switches that depress on click.
+                </div>
+                <div>
+                  <span className="text-[#164A37] font-mono uppercase tracking-wider font-bold block mb-1.5">Manila Cards &amp; Stamps</span>
+                  Ruled cotton-rag index cards (#FBF6EA), crisp crimson rubber-stamp alerts (#8C1D18), and archival banker&apos;s green felt (#164A37) mastery surfaces.
+                </div>
+              </div>
+            ) : isCyberpunk ? (
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 text-xs text-slate-300 pt-2">
+                <div>
+                  <span className="text-[#00F0FF] font-cyber uppercase tracking-wider font-bold block mb-1.5">Dark Isometric Grid Planes</span>
+                  Midnight void canvas (#060714) layered with dual-tone cyan &amp; magenta isometric gridlines and high-altitude synthwave horizon glows.
+                </div>
+                <div>
+                  <span className="text-[#FF4DA6] font-cyber uppercase tracking-wider font-bold block mb-1.5">Futuristic HUD Geometry</span>
+                  Angular `rounded-sm` command frames (`#0B1024`), recessed `#050816` cyber wells, Chakra Petch display headings, and tabular IBM Plex Mono counters.
+                </div>
+                <div>
+                  <span className="text-[#00F0FF] font-cyber uppercase tracking-wider font-bold block mb-1.5">High-Voltage Cyan &amp; Magenta</span>
+                  Electric Cyan (#00F0FF) mastery pathways paired with Hot Magenta (#FF2A85) danger-phrase alerts and calibrated neon perimeter glows.
+                </div>
+              </div>
+            ) : isMaterial ? (
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 text-xs text-[#475569] pt-2">
+                <div>
+                  <span className="text-[#1565C0] uppercase tracking-wider font-bold block mb-1.5">Material Surface Tiers</span>
+                  Cool paper canvas (#ECEFF4) supporting 1dp standard paper cards (#FFFFFF), 8dp elevated dialogs, and #E4E9F2 recessed wells.
+                </div>
+                <div>
+                  <span className="text-[#1565C0] uppercase tracking-wider font-bold block mb-1.5">Predictable 8px Grid Math</span>
+                  Clean geometric card lists (`rounded-lg`, `rounded-xl`), uniform spacing increments, and crisp DM Sans typographic hierarchy.
+                </div>
+                <div>
+                  <span className="text-[#1565C0] uppercase tracking-wider font-bold block mb-1.5">Primary Color Blocks &amp; Ripples</span>
+                  Vibrant Material Cobalt (#1565C0) AppBar &amp; primary actions paired with Teal (#00897B) and Crimson (#D32F2F) elevation ripples.
+                </div>
+              </div>
+            ) : isEditorial ? (
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 text-xs text-[#433A31] pt-2">
+                <div>
+                  <span className="text-[#9B2226] font-mono uppercase tracking-wider font-semibold block mb-1.5">1950s Aged Newsprint</span>
+                  Warm rag-paper canvas (#F3ECE0) with subtle halftone stipple grain, ivory broadsheet columns (#FAF5EA), and recessed cream wells (#EAE1D0).
+                </div>
+                <div>
+                  <span className="text-[#9B2226] font-mono uppercase tracking-wider font-semibold block mb-1.5">Playfair &amp; Source Serif 4</span>
+                  High-contrast 1950s lead-type display headlines paired with literary Source Serif 4 body prose and tabular IBM Plex Mono pressroom indices.
+                </div>
+                <div>
+                  <span className="text-[#9B2226] font-mono uppercase tracking-wider font-semibold block mb-1.5">Double-Rule &amp; Pressroom Ink</span>
+                  Sharp rectangular broadsheet cuts, double-rule masthead dividers (#1D1814), pressroom crimson (#9B2226) actions, and archival forest ink (#1E4D40).
+                </div>
+              </div>
+            ) : isSlate ? (
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 text-xs text-slate-300 pt-2">
                 <div>
                   <span className="text-teal-300 uppercase tracking-wider font-semibold block mb-1.5">Low-Delta Slate Surfaces</span>
@@ -614,7 +842,15 @@ export const ThemesAndPsychology: React.FC = () => {
         <div className="space-y-6">
           <div
             className={
-              isSlate
+              isSkeuomorphic
+                ? 'skeuo-paper-elevated rounded-lg p-6 sm:p-7 border-2 border-[#6B4A2B] text-[#1F140E]'
+                : isCyberpunk
+                ? 'cyber-card-elevated rounded-sm p-6 sm:p-7 border border-cyan-400/40 border-t-2 border-t-[#00F0FF]'
+                : isMaterial
+                ? 'material-card-elevated rounded-xl p-6 sm:p-7 border-t-4 border-[#1565C0]'
+                : isEditorial
+                ? 'border-2 border-[#1D1814] editorial-card-elevated rounded-none p-6 sm:p-7'
+                : isSlate
                 ? 'border border-teal-400/35 slate-card-elevated rounded-lg p-6 sm:p-7'
                 : isClay
                 ? 'border border-white/95 clay-card-elevated rounded-3xl p-6 sm:p-7'
@@ -632,10 +868,18 @@ export const ThemesAndPsychology: React.FC = () => {
             }
           >
             <div className="flex items-center gap-2.5 mb-2">
-              <Brain className={isSlate ? 'w-5 h-5 text-teal-400' : isClay ? 'w-5 h-5 text-indigo-500' : isSaas ? 'w-5 h-5 text-indigo-600' : isNordic ? 'w-5 h-5 text-[#527360]' : isBrutal ? 'w-5 h-5 text-black' : isObsidian ? 'w-5 h-5 text-[#D4AF37]' : isGlass ? 'w-5 h-5 text-sky-300' : 'w-5 h-5 text-amber-400'} />
+              <Brain className={isSkeuomorphic ? 'w-5 h-5 text-[#8C1D18]' : isCyberpunk ? 'w-5 h-5 text-[#FF2A85]' : isMaterial ? 'w-5 h-5 text-[#1565C0]' : isEditorial ? 'w-5 h-5 text-[#9B2226]' : isSlate ? 'w-5 h-5 text-teal-400' : isClay ? 'w-5 h-5 text-indigo-500' : isSaas ? 'w-5 h-5 text-indigo-600' : isNordic ? 'w-5 h-5 text-[#527360]' : isBrutal ? 'w-5 h-5 text-black' : isObsidian ? 'w-5 h-5 text-[#D4AF37]' : isGlass ? 'w-5 h-5 text-sky-300' : 'w-5 h-5 text-amber-400'} />
               <h2
                 className={
-                  isSlate
+                  isSkeuomorphic
+                    ? 'font-editorial-display text-2xl sm:text-3xl font-bold tracking-tight text-[#1F140E]'
+                    : isCyberpunk
+                    ? 'font-cyber text-xl sm:text-2xl font-bold tracking-[0.06em] uppercase text-[#F0F9FF]'
+                    : isMaterial
+                    ? 'text-xl sm:text-2xl font-bold tracking-tight text-[#111827]'
+                    : isEditorial
+                    ? 'font-editorial-display text-2xl sm:text-3xl font-bold tracking-tight text-[#1D1814]'
+                    : isSlate
                     ? 'text-xl sm:text-2xl font-bold tracking-tight text-slate-100'
                     : isClay
                     ? 'text-xl sm:text-2xl font-bold tracking-tight text-[#1E2547]'
@@ -655,7 +899,7 @@ export const ThemesAndPsychology: React.FC = () => {
                 The Psychology of Strategic Reframing
               </h2>
             </div>
-            <p className={isSlate ? 'text-sm text-slate-300 leading-relaxed' : isClay ? 'text-sm text-[#4B5478] leading-relaxed' : isSaas ? 'text-sm text-slate-600 leading-relaxed' : isNordic ? 'text-sm text-[#3B4B42] leading-relaxed' : isBrutal ? 'text-xs text-black font-medium leading-relaxed' : isObsidian ? 'text-sm text-[#A39E93] leading-relaxed' : isGlass ? 'text-sm text-slate-200 leading-relaxed' : 'text-xs text-zinc-400 leading-relaxed'}>
+            <p className={isSkeuomorphic ? 'text-sm text-[#4A3326] leading-relaxed' : isCyberpunk ? 'text-sm text-slate-300 leading-relaxed' : isMaterial ? 'text-sm text-[#475569] leading-relaxed' : isEditorial ? 'text-sm text-[#433A31] leading-relaxed' : isSlate ? 'text-sm text-slate-300 leading-relaxed' : isClay ? 'text-sm text-[#4B5478] leading-relaxed' : isSaas ? 'text-sm text-slate-600 leading-relaxed' : isNordic ? 'text-sm text-[#3B4B42] leading-relaxed' : isBrutal ? 'text-xs text-black font-medium leading-relaxed' : isObsidian ? 'text-sm text-[#A39E93] leading-relaxed' : isGlass ? 'text-sm text-slate-200 leading-relaxed' : 'text-xs text-zinc-400 leading-relaxed'}>
               The "don't say A, say B" communication style is rooted in behavioral science and cognitive linguistics. The words you choose don't merely convey raw data—they dynamically calibrate how listeners calculate your competence, warmth, and authority, while reinforcing your own internal self-concept.
             </p>
           </div>
@@ -663,7 +907,15 @@ export const ThemesAndPsychology: React.FC = () => {
           {/* Pillar 1 */}
           <div
             className={
-              isSlate
+              isSkeuomorphic
+                ? 'skeuo-paper border border-[#B8A482] rounded-lg p-6 space-y-3 text-[#1F140E]'
+                : isCyberpunk
+                ? 'cyber-card border border-cyan-400/25 rounded-sm p-6 space-y-3'
+                : isMaterial
+                ? 'material-card rounded-xl p-6 space-y-3'
+                : isEditorial
+                ? 'border border-[#1D1814]/35 editorial-card rounded-none p-6 space-y-3'
+                : isSlate
                 ? 'border border-slate-700/80 slate-card rounded-lg p-6 space-y-3'
                 : isClay
                 ? 'border border-white/90 clay-card rounded-3xl p-6 space-y-3'
@@ -682,7 +934,15 @@ export const ThemesAndPsychology: React.FC = () => {
           >
             <div
               className={
-                isSlate
+                isSkeuomorphic
+                  ? 'flex items-center gap-2 text-[#8C1D18] text-xs font-mono uppercase tracking-wider font-bold pb-2 border-b border-[#D2C1A1]'
+                  : isCyberpunk
+                  ? 'flex items-center gap-2 text-[#00F0FF] font-cyber text-xs uppercase tracking-[0.12em] font-bold'
+                  : isMaterial
+                  ? 'flex items-center gap-2 text-[#1565C0] text-xs uppercase tracking-wider font-bold'
+                  : isEditorial
+                  ? 'flex items-center gap-2 text-[#9B2226] text-xs font-mono uppercase tracking-wider font-semibold pb-2 border-b border-[#C9BFA9]'
+                  : isSlate
                   ? 'flex items-center gap-2 text-teal-300 text-xs uppercase tracking-wider font-semibold'
                   : isClay
                   ? 'flex items-center gap-2 text-indigo-600 text-xs uppercase tracking-wider font-semibold'
@@ -699,13 +959,13 @@ export const ThemesAndPsychology: React.FC = () => {
                   : 'flex items-center gap-2 text-zinc-200 text-sm font-bold'
               }
             >
-              <Scale className={isSlate ? 'w-4 h-4 text-teal-400' : isClay ? 'w-4 h-4 text-indigo-500' : isSaas ? 'w-4 h-4 text-indigo-600' : isNordic ? 'w-4 h-4 text-[#527360]' : isBrutal ? 'w-4 h-4 text-black' : isObsidian ? 'w-4 h-4 text-[#D4AF37]' : isGlass ? 'w-4 h-4 text-sky-300' : 'w-4 h-4 text-zinc-400'} />
+              <Scale className={isSkeuomorphic ? 'w-4 h-4 text-[#8C1D18]' : isCyberpunk ? 'w-4 h-4 text-[#00F0FF]' : isMaterial ? 'w-4 h-4 text-[#1565C0]' : isEditorial ? 'w-4 h-4 text-[#9B2226]' : isSlate ? 'w-4 h-4 text-teal-400' : isClay ? 'w-4 h-4 text-indigo-500' : isSaas ? 'w-4 h-4 text-indigo-600' : isNordic ? 'w-4 h-4 text-[#527360]' : isBrutal ? 'w-4 h-4 text-black' : isObsidian ? 'w-4 h-4 text-[#D4AF37]' : isGlass ? 'w-4 h-4 text-sky-300' : 'w-4 h-4 text-zinc-400'} />
               <span>THE COMPETENCE-WARMTH TRADE-OFF (RESPONSIBILITY EXCHANGE THEORY)</span>
             </div>
-            <p className={isSlate ? 'text-sm text-slate-300 leading-relaxed' : isClay ? 'text-sm text-[#4B5478] leading-relaxed' : isSaas ? 'text-sm text-slate-600 leading-relaxed' : isNordic ? 'text-sm text-[#4E5A53] leading-relaxed' : isBrutal ? 'text-xs text-zinc-900 font-medium leading-relaxed' : isObsidian ? 'text-sm text-[#DDD6C8] leading-relaxed' : isGlass ? 'text-sm text-slate-200 leading-relaxed' : 'text-xs text-zinc-300 leading-relaxed'}>
+            <p className={isSkeuomorphic ? 'text-sm text-[#2C1B12] leading-relaxed' : isCyberpunk ? 'text-sm text-slate-200 leading-relaxed' : isMaterial ? 'text-sm text-[#334155] leading-relaxed' : isEditorial ? 'text-sm text-[#1D1814] leading-relaxed' : isSlate ? 'text-sm text-slate-300 leading-relaxed' : isClay ? 'text-sm text-[#4B5478] leading-relaxed' : isSaas ? 'text-sm text-slate-600 leading-relaxed' : isNordic ? 'text-sm text-[#4E5A53] leading-relaxed' : isBrutal ? 'text-xs text-zinc-900 font-medium leading-relaxed' : isObsidian ? 'text-sm text-[#DDD6C8] leading-relaxed' : isGlass ? 'text-sm text-slate-200 leading-relaxed' : 'text-xs text-zinc-300 leading-relaxed'}>
               Social psychology research shows that interpersonal judgment rests on two primary axes: <strong>Competence</strong> (capability, intelligence, authority) and <strong>Warmth</strong> (friendliness, trustworthiness, empathy). 
             </p>
-            <p className={isSlate ? 'text-sm text-slate-300 leading-relaxed' : isClay ? 'text-sm text-[#4B5478] leading-relaxed' : isSaas ? 'text-sm text-slate-600 leading-relaxed' : isNordic ? 'text-sm text-[#4E5A53] leading-relaxed' : isBrutal ? 'text-xs text-zinc-900 font-medium leading-relaxed' : isObsidian ? 'text-sm text-[#DDD6C8] leading-relaxed' : isGlass ? 'text-sm text-slate-200 leading-relaxed' : 'text-xs text-zinc-300 leading-relaxed'}>
+            <p className={isSkeuomorphic ? 'text-sm text-[#2C1B12] leading-relaxed' : isCyberpunk ? 'text-sm text-slate-200 leading-relaxed' : isMaterial ? 'text-sm text-[#334155] leading-relaxed' : isEditorial ? 'text-sm text-[#1D1814] leading-relaxed' : isSlate ? 'text-sm text-slate-300 leading-relaxed' : isClay ? 'text-sm text-[#4B5478] leading-relaxed' : isSaas ? 'text-sm text-slate-600 leading-relaxed' : isNordic ? 'text-sm text-[#4E5A53] leading-relaxed' : isBrutal ? 'text-xs text-zinc-900 font-medium leading-relaxed' : isObsidian ? 'text-sm text-[#DDD6C8] leading-relaxed' : isGlass ? 'text-sm text-slate-200 leading-relaxed' : 'text-xs text-zinc-300 leading-relaxed'}>
               Over-apologizing (e.g. <em>"Sorry I'm late"</em>, <em>"Sorry for the typo"</em>) trades away competence in an attempt to show warmth. It inadvertently creates a <strong>"debt mindset"</strong>, framing your very presence as an inconvenience. Strategic reframes (e.g. <em>"Thank you for waiting"</em>) break this trade-off by projecting high warmth AND high competence simultaneously.
             </p>
           </div>
@@ -713,7 +973,15 @@ export const ThemesAndPsychology: React.FC = () => {
           {/* Pillar 2 */}
           <div
             className={
-              isSlate
+              isSkeuomorphic
+                ? 'skeuo-paper border border-[#B8A482] rounded-lg p-6 space-y-3 text-[#1F140E]'
+                : isCyberpunk
+                ? 'cyber-card border border-cyan-400/25 rounded-sm p-6 space-y-3'
+                : isMaterial
+                ? 'material-card rounded-xl p-6 space-y-3'
+                : isEditorial
+                ? 'border border-[#1D1814]/35 editorial-card rounded-none p-6 space-y-3'
+                : isSlate
                 ? 'border border-slate-700/80 slate-card rounded-lg p-6 space-y-3'
                 : isClay
                 ? 'border border-white/90 clay-card rounded-3xl p-6 space-y-3'
@@ -732,7 +1000,15 @@ export const ThemesAndPsychology: React.FC = () => {
           >
             <div
               className={
-                isSlate
+                isSkeuomorphic
+                  ? 'flex items-center gap-2 text-[#8C1D18] text-xs font-mono uppercase tracking-wider font-bold pb-2 border-b border-[#D2C1A1]'
+                  : isCyberpunk
+                  ? 'flex items-center gap-2 text-[#00F0FF] font-cyber text-xs uppercase tracking-[0.12em] font-bold'
+                  : isMaterial
+                  ? 'flex items-center gap-2 text-[#1565C0] text-xs uppercase tracking-wider font-bold'
+                  : isEditorial
+                  ? 'flex items-center gap-2 text-[#9B2226] text-xs font-mono uppercase tracking-wider font-semibold pb-2 border-b border-[#C9BFA9]'
+                  : isSlate
                   ? 'flex items-center gap-2 text-teal-300 text-xs uppercase tracking-wider font-semibold'
                   : isClay
                   ? 'flex items-center gap-2 text-indigo-600 text-xs uppercase tracking-wider font-semibold'
@@ -749,19 +1025,19 @@ export const ThemesAndPsychology: React.FC = () => {
                   : 'flex items-center gap-2 text-zinc-200 text-sm font-bold'
               }
             >
-              <HeartHandshake className={isSlate ? 'w-4 h-4 text-teal-400' : isClay ? 'w-4 h-4 text-indigo-500' : isSaas ? 'w-4 h-4 text-indigo-600' : isNordic ? 'w-4 h-4 text-[#527360]' : isBrutal ? 'w-4 h-4 text-black' : isObsidian ? 'w-4 h-4 text-[#D4AF37]' : isGlass ? 'w-4 h-4 text-sky-300' : 'w-4 h-4 text-zinc-400'} />
+              <HeartHandshake className={isSkeuomorphic ? 'w-4 h-4 text-[#8C1D18]' : isCyberpunk ? 'w-4 h-4 text-[#00F0FF]' : isMaterial ? 'w-4 h-4 text-[#1565C0]' : isEditorial ? 'w-4 h-4 text-[#9B2226]' : isSlate ? 'w-4 h-4 text-teal-400' : isClay ? 'w-4 h-4 text-indigo-500' : isSaas ? 'w-4 h-4 text-indigo-600' : isNordic ? 'w-4 h-4 text-[#527360]' : isBrutal ? 'w-4 h-4 text-black' : isObsidian ? 'w-4 h-4 text-[#D4AF37]' : isGlass ? 'w-4 h-4 text-sky-300' : 'w-4 h-4 text-zinc-400'} />
               <span>FROM APOLOGY TO GRATITUDE (VALIDATING THE LISTENER)</span>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-              <div className={isSlate ? 'border border-rose-500/35 bg-rose-950/35 rounded-md p-4' : isClay ? 'border border-white/80 bg-[#FFE8EC] rounded-2xl p-4 shadow-sm' : isSaas ? 'border border-rose-200 bg-rose-50/70 rounded-lg p-4' : isNordic ? 'border border-[#E4C5B9] bg-[#FAF0EC] rounded-xl p-4' : isBrutal ? 'border-2 border-black bg-[#FFE4E6] p-3' : isObsidian ? 'border border-[#3D2225] bg-[#140D0E] p-4' : isGlass ? 'border border-rose-300/25 bg-rose-950/30 rounded-xl p-4' : 'border border-zinc-800 bg-zinc-900/50 p-3 rounded'}>
-                <div className={isSlate ? 'text-rose-300 uppercase tracking-wider font-semibold mb-1.5' : isClay ? 'text-[#9F1239] uppercase tracking-wider font-semibold mb-1.5' : isSaas ? 'text-rose-700 uppercase tracking-wider font-semibold mb-1.5' : isNordic ? 'text-[#964B36] uppercase tracking-wider font-semibold mb-1.5' : isBrutal ? 'text-black font-black mb-1' : isObsidian ? 'text-[#E8A5A5] uppercase tracking-[0.14em] font-semibold mb-1.5' : isGlass ? 'text-rose-200 uppercase tracking-wider font-semibold mb-1.5' : 'text-zinc-400 font-bold mb-1'}>THE "DANGER" APOLOGY PATTERN</div>
-                <div className={isSlate ? 'text-rose-100/90 leading-relaxed' : isClay ? 'text-[#4B2D38] leading-relaxed' : isSaas ? 'text-slate-700 leading-relaxed' : isNordic ? 'text-[#4E3832] leading-relaxed' : isBrutal ? 'text-zinc-900 font-medium leading-relaxed' : isObsidian ? 'text-[#C7C1B5] leading-relaxed' : isGlass ? 'text-slate-200 leading-relaxed' : 'text-zinc-400 leading-relaxed'}>
+              <div className={isSkeuomorphic ? 'skeuo-stamp bg-[#F9EAE7] rounded-md p-4' : isCyberpunk ? 'border border-[#FF2A85]/45 bg-[#19091E] rounded-sm p-4' : isMaterial ? 'bg-[#FFEBEE] border border-[#FFCDD2] rounded-lg p-4' : isEditorial ? 'border border-[#9B2226]/35 bg-[#F6E5E2] rounded-none p-4' : isSlate ? 'border border-rose-500/35 bg-rose-950/35 rounded-md p-4' : isClay ? 'border border-white/80 bg-[#FFE8EC] rounded-2xl p-4 shadow-sm' : isSaas ? 'border border-rose-200 bg-rose-50/70 rounded-lg p-4' : isNordic ? 'border border-[#E4C5B9] bg-[#FAF0EC] rounded-xl p-4' : isBrutal ? 'border-2 border-black bg-[#FFE4E6] p-3' : isObsidian ? 'border border-[#3D2225] bg-[#140D0E] p-4' : isGlass ? 'border border-rose-300/25 bg-rose-950/30 rounded-xl p-4' : 'border border-zinc-800 bg-zinc-900/50 p-3 rounded'}>
+                <div className={isSkeuomorphic ? 'text-[#8C1D18] font-mono uppercase tracking-wider font-bold mb-1.5' : isCyberpunk ? 'text-[#FF66B3] font-cyber uppercase tracking-wider font-bold mb-1.5' : isMaterial ? 'text-[#C62828] uppercase tracking-wider font-bold mb-1.5' : isEditorial ? 'text-[#7F1D1D] font-mono uppercase tracking-wider font-semibold mb-1.5' : isSlate ? 'text-rose-300 uppercase tracking-wider font-semibold mb-1.5' : isClay ? 'text-[#9F1239] uppercase tracking-wider font-semibold mb-1.5' : isSaas ? 'text-rose-700 uppercase tracking-wider font-semibold mb-1.5' : isNordic ? 'text-[#964B36] uppercase tracking-wider font-semibold mb-1.5' : isBrutal ? 'text-black font-black mb-1' : isObsidian ? 'text-[#E8A5A5] uppercase tracking-[0.14em] font-semibold mb-1.5' : isGlass ? 'text-rose-200 uppercase tracking-wider font-semibold mb-1.5' : 'text-zinc-400 font-bold mb-1'}>THE "DANGER" APOLOGY PATTERN</div>
+                <div className={isSkeuomorphic ? 'text-[#3F1412] leading-relaxed' : isCyberpunk ? 'text-rose-100 leading-relaxed' : isMaterial ? 'text-[#7F1D1D] leading-relaxed' : isEditorial ? 'text-[#431818] leading-relaxed' : isSlate ? 'text-rose-100/90 leading-relaxed' : isClay ? 'text-[#4B2D38] leading-relaxed' : isSaas ? 'text-slate-700 leading-relaxed' : isNordic ? 'text-[#4E3832] leading-relaxed' : isBrutal ? 'text-zinc-900 font-medium leading-relaxed' : isObsidian ? 'text-[#C7C1B5] leading-relaxed' : isGlass ? 'text-slate-200 leading-relaxed' : 'text-zinc-400 leading-relaxed'}>
                   Focuses inward on self-guilt, weakness, and embarrassment. Forces the listener into the awkward emotional labor of having to soothe you: <em>"Oh no, it's fine, don't worry about it."</em>
                 </div>
               </div>
-              <div className={isSlate ? 'border border-teal-400/35 bg-teal-950/35 rounded-md p-4' : isClay ? 'border border-white/80 bg-[#E3FCEC] rounded-2xl p-4 shadow-sm' : isSaas ? 'border border-emerald-200 bg-emerald-50/70 rounded-lg p-4' : isNordic ? 'border border-[#B8CBBF] bg-[#E7EFEA] rounded-xl p-4' : isBrutal ? 'border-2 border-black bg-[#DCFCE7] p-3' : isObsidian ? 'border border-[#D4AF37]/35 bg-[#14110C] p-4' : isGlass ? 'border border-sky-300/35 bg-sky-950/30 rounded-xl p-4' : 'border border-zinc-700 bg-zinc-900 p-3 rounded'}>
-                <div className={isSlate ? 'text-teal-300 uppercase tracking-wider font-semibold mb-1.5' : isClay ? 'text-[#065F46] uppercase tracking-wider font-semibold mb-1.5' : isSaas ? 'text-emerald-700 uppercase tracking-wider font-semibold mb-1.5' : isNordic ? 'text-[#2D4739] uppercase tracking-wider font-semibold mb-1.5' : isBrutal ? 'text-black font-black mb-1' : isObsidian ? 'text-[#E5C77B] uppercase tracking-[0.14em] font-semibold mb-1.5' : isGlass ? 'text-sky-200 uppercase tracking-wider font-semibold mb-1.5' : 'text-zinc-100 font-bold mb-1'}>THE "POWER" GRATITUDE REFRAME</div>
-                <div className={isSlate ? 'text-teal-50 leading-relaxed' : isClay ? 'text-[#1E3B2F] leading-relaxed' : isSaas ? 'text-slate-800 leading-relaxed' : isNordic ? 'text-[#242E28] leading-relaxed' : isBrutal ? 'text-zinc-900 font-medium leading-relaxed' : isObsidian ? 'text-[#F5F0E6] leading-relaxed' : isGlass ? 'text-white leading-relaxed' : 'text-zinc-300 leading-relaxed'}>
+              <div className={isSkeuomorphic ? 'border-2 border-[#164A37]/70 bg-[#E5EFE9] rounded-md p-4 shadow-2xs' : isCyberpunk ? 'border border-[#00F0FF]/45 bg-[#061926] rounded-sm p-4' : isMaterial ? 'bg-[#E0F2F1] border border-[#B2DFDB] rounded-lg p-4' : isEditorial ? 'border border-[#1E4D40]/40 bg-[#E6EDE9] rounded-none p-4' : isSlate ? 'border border-teal-400/35 bg-teal-950/35 rounded-md p-4' : isClay ? 'border border-white/80 bg-[#E3FCEC] rounded-2xl p-4 shadow-sm' : isSaas ? 'border border-emerald-200 bg-emerald-50/70 rounded-lg p-4' : isNordic ? 'border border-[#B8CBBF] bg-[#E7EFEA] rounded-xl p-4' : isBrutal ? 'border-2 border-black bg-[#DCFCE7] p-3' : isObsidian ? 'border border-[#D4AF37]/35 bg-[#14110C] p-4' : isGlass ? 'border border-sky-300/35 bg-sky-950/30 rounded-xl p-4' : 'border border-zinc-700 bg-zinc-900 p-3 rounded'}>
+                <div className={isSkeuomorphic ? 'text-[#164A37] font-mono uppercase tracking-wider font-bold mb-1.5' : isCyberpunk ? 'text-[#00F0FF] font-cyber uppercase tracking-wider font-bold mb-1.5' : isMaterial ? 'text-[#00695C] uppercase tracking-wider font-bold mb-1.5' : isEditorial ? 'text-[#1E4D40] font-mono uppercase tracking-wider font-semibold mb-1.5' : isSlate ? 'text-teal-300 uppercase tracking-wider font-semibold mb-1.5' : isClay ? 'text-[#065F46] uppercase tracking-wider font-semibold mb-1.5' : isSaas ? 'text-emerald-700 uppercase tracking-wider font-semibold mb-1.5' : isNordic ? 'text-[#2D4739] uppercase tracking-wider font-semibold mb-1.5' : isBrutal ? 'text-black font-black mb-1' : isObsidian ? 'text-[#E5C77B] uppercase tracking-[0.14em] font-semibold mb-1.5' : isGlass ? 'text-sky-200 uppercase tracking-wider font-semibold mb-1.5' : 'text-zinc-100 font-bold mb-1'}>THE "POWER" GRATITUDE REFRAME</div>
+                <div className={isSkeuomorphic ? 'text-[#133829] leading-relaxed' : isCyberpunk ? 'text-cyan-50 leading-relaxed' : isMaterial ? 'text-[#004D40] leading-relaxed' : isEditorial ? 'text-[#18382F] leading-relaxed' : isSlate ? 'text-teal-50 leading-relaxed' : isClay ? 'text-[#1E3B2F] leading-relaxed' : isSaas ? 'text-slate-800 leading-relaxed' : isNordic ? 'text-[#242E28] leading-relaxed' : isBrutal ? 'text-zinc-900 font-medium leading-relaxed' : isObsidian ? 'text-[#F5F0E6] leading-relaxed' : isGlass ? 'text-white leading-relaxed' : 'text-zinc-300 leading-relaxed'}>
                   Focuses outward on honoring the listener's patience, generosity, or diligence. Gives them credit and positive reinforcement while preserving your own professional dignity.
                 </div>
               </div>
@@ -771,7 +1047,15 @@ export const ThemesAndPsychology: React.FC = () => {
           {/* Pillar 3 */}
           <div
             className={
-              isSlate
+              isSkeuomorphic
+                ? 'skeuo-paper border border-[#B8A482] rounded-lg p-6 space-y-3 text-[#1F140E]'
+                : isCyberpunk
+                ? 'cyber-card border border-cyan-400/25 rounded-sm p-6 space-y-3'
+                : isMaterial
+                ? 'material-card rounded-xl p-6 space-y-3'
+                : isEditorial
+                ? 'border border-[#1D1814]/35 editorial-card rounded-none p-6 space-y-3'
+                : isSlate
                 ? 'border border-slate-700/80 slate-card rounded-lg p-6 space-y-3'
                 : isClay
                 ? 'border border-white/90 clay-card rounded-3xl p-6 space-y-3'
@@ -790,7 +1074,15 @@ export const ThemesAndPsychology: React.FC = () => {
           >
             <div
               className={
-                isSlate
+                isSkeuomorphic
+                  ? 'flex items-center gap-2 text-[#8C1D18] text-xs font-mono uppercase tracking-wider font-bold pb-2 border-b border-[#D2C1A1]'
+                  : isCyberpunk
+                  ? 'flex items-center gap-2 text-[#00F0FF] font-cyber text-xs uppercase tracking-[0.12em] font-bold'
+                  : isMaterial
+                  ? 'flex items-center gap-2 text-[#1565C0] text-xs uppercase tracking-wider font-bold'
+                  : isEditorial
+                  ? 'flex items-center gap-2 text-[#9B2226] text-xs font-mono uppercase tracking-wider font-semibold pb-2 border-b border-[#C9BFA9]'
+                  : isSlate
                   ? 'flex items-center gap-2 text-teal-300 text-xs uppercase tracking-wider font-semibold'
                   : isClay
                   ? 'flex items-center gap-2 text-indigo-600 text-xs uppercase tracking-wider font-semibold'
@@ -807,10 +1099,10 @@ export const ThemesAndPsychology: React.FC = () => {
                   : 'flex items-center gap-2 text-zinc-200 text-sm font-bold'
               }
             >
-              <ShieldCheck className={isSlate ? 'w-4 h-4 text-teal-400' : isClay ? 'w-4 h-4 text-indigo-500' : isSaas ? 'w-4 h-4 text-indigo-600' : isNordic ? 'w-4 h-4 text-[#527360]' : isBrutal ? 'w-4 h-4 text-black' : isObsidian ? 'w-4 h-4 text-[#D4AF37]' : isGlass ? 'w-4 h-4 text-sky-300' : 'w-4 h-4 text-zinc-400'} />
+              <ShieldCheck className={isSkeuomorphic ? 'w-4 h-4 text-[#8C1D18]' : isCyberpunk ? 'w-4 h-4 text-[#00F0FF]' : isMaterial ? 'w-4 h-4 text-[#1565C0]' : isEditorial ? 'w-4 h-4 text-[#9B2226]' : isSlate ? 'w-4 h-4 text-teal-400' : isClay ? 'w-4 h-4 text-indigo-500' : isSaas ? 'w-4 h-4 text-indigo-600' : isNordic ? 'w-4 h-4 text-[#527360]' : isBrutal ? 'w-4 h-4 text-black' : isObsidian ? 'w-4 h-4 text-[#D4AF37]' : isGlass ? 'w-4 h-4 text-sky-300' : 'w-4 h-4 text-zinc-400'} />
               <span>FROM PASSIVE PERMISSION-SEEKING TO DECLARATIVE OWNERSHIP</span>
             </div>
-            <p className={isSlate ? 'text-sm text-slate-300 leading-relaxed' : isClay ? 'text-sm text-[#4B5478] leading-relaxed' : isSaas ? 'text-sm text-slate-600 leading-relaxed' : isNordic ? 'text-sm text-[#4E5A53] leading-relaxed' : isBrutal ? 'text-xs text-zinc-900 font-medium leading-relaxed' : isObsidian ? 'text-sm text-[#DDD6C8] leading-relaxed' : isGlass ? 'text-sm text-slate-200 leading-relaxed' : 'text-xs text-zinc-300 leading-relaxed'}>
+            <p className={isSkeuomorphic ? 'text-sm text-[#2C1B12] leading-relaxed' : isCyberpunk ? 'text-sm text-slate-200 leading-relaxed' : isMaterial ? 'text-sm text-[#334155] leading-relaxed' : isEditorial ? 'text-sm text-[#1D1814] leading-relaxed' : isSlate ? 'text-sm text-slate-300 leading-relaxed' : isClay ? 'text-sm text-[#4B5478] leading-relaxed' : isSaas ? 'text-sm text-slate-600 leading-relaxed' : isNordic ? 'text-sm text-[#4E5A53] leading-relaxed' : isBrutal ? 'text-xs text-zinc-900 font-medium leading-relaxed' : isObsidian ? 'text-sm text-[#DDD6C8] leading-relaxed' : isGlass ? 'text-sm text-slate-200 leading-relaxed' : 'text-xs text-zinc-300 leading-relaxed'}>
               Hedging phrases like <em>"Can I ask a question?"</em> or <em>"I might be totally wrong, but..."</em> serve as psychological defense mechanisms against critique. However, preemptive self-undermining diminishes audience confidence before you even deliver your point. Replacing them with <em>"I have a question"</em> or <em>"Here is what the data indicates"</em> assumes your legitimate place at the decision table.
             </p>
           </div>
@@ -818,7 +1110,15 @@ export const ThemesAndPsychology: React.FC = () => {
           {/* Pillar 4 */}
           <div
             className={
-              isSlate
+              isSkeuomorphic
+                ? 'skeuo-paper border border-[#B8A482] rounded-lg p-6 space-y-3 text-[#1F140E]'
+                : isCyberpunk
+                ? 'cyber-card border border-cyan-400/25 rounded-sm p-6 space-y-3'
+                : isMaterial
+                ? 'material-card rounded-xl p-6 space-y-3'
+                : isEditorial
+                ? 'border border-[#1D1814]/35 editorial-card rounded-none p-6 space-y-3'
+                : isSlate
                 ? 'border border-slate-700/80 slate-card rounded-lg p-6 space-y-3'
                 : isClay
                 ? 'border border-white/90 clay-card rounded-3xl p-6 space-y-3'
@@ -837,7 +1137,15 @@ export const ThemesAndPsychology: React.FC = () => {
           >
             <div
               className={
-                isSlate
+                isSkeuomorphic
+                  ? 'flex items-center gap-2 text-[#8C1D18] text-xs font-mono uppercase tracking-wider font-bold pb-2 border-b border-[#D2C1A1]'
+                  : isCyberpunk
+                  ? 'flex items-center gap-2 text-[#00F0FF] font-cyber text-xs uppercase tracking-[0.12em] font-bold'
+                  : isMaterial
+                  ? 'flex items-center gap-2 text-[#1565C0] text-xs uppercase tracking-wider font-bold'
+                  : isEditorial
+                  ? 'flex items-center gap-2 text-[#9B2226] text-xs font-mono uppercase tracking-wider font-semibold pb-2 border-b border-[#C9BFA9]'
+                  : isSlate
                   ? 'flex items-center gap-2 text-teal-300 text-xs uppercase tracking-wider font-semibold'
                   : isClay
                   ? 'flex items-center gap-2 text-indigo-600 text-xs uppercase tracking-wider font-semibold'
@@ -854,10 +1162,10 @@ export const ThemesAndPsychology: React.FC = () => {
                   : 'flex items-center gap-2 text-zinc-200 text-sm font-bold'
               }
             >
-              <CheckCircle2 className={isSlate ? 'w-4 h-4 text-teal-400' : isClay ? 'w-4 h-4 text-indigo-500' : isSaas ? 'w-4 h-4 text-indigo-600' : isNordic ? 'w-4 h-4 text-[#527360]' : isBrutal ? 'w-4 h-4 text-black' : isObsidian ? 'w-4 h-4 text-[#D4AF37]' : isGlass ? 'w-4 h-4 text-sky-300' : 'w-4 h-4 text-zinc-400'} />
+              <CheckCircle2 className={isSkeuomorphic ? 'w-4 h-4 text-[#8C1D18]' : isCyberpunk ? 'w-4 h-4 text-[#00F0FF]' : isMaterial ? 'w-4 h-4 text-[#1565C0]' : isEditorial ? 'w-4 h-4 text-[#9B2226]' : isSlate ? 'w-4 h-4 text-teal-400' : isClay ? 'w-4 h-4 text-indigo-500' : isSaas ? 'w-4 h-4 text-indigo-600' : isNordic ? 'w-4 h-4 text-[#527360]' : isBrutal ? 'w-4 h-4 text-black' : isObsidian ? 'w-4 h-4 text-[#D4AF37]' : isGlass ? 'w-4 h-4 text-sky-300' : 'w-4 h-4 text-zinc-400'} />
               <span>FROM VAGUE COMMITMENT TO DEFINITIVE RELIABILITY</span>
             </div>
-            <p className={isSlate ? 'text-sm text-slate-300 leading-relaxed' : isClay ? 'text-sm text-[#4B5478] leading-relaxed' : isSaas ? 'text-sm text-slate-600 leading-relaxed' : isNordic ? 'text-sm text-[#4E5A53] leading-relaxed' : isBrutal ? 'text-xs text-zinc-900 font-medium leading-relaxed' : isObsidian ? 'text-sm text-[#DDD6C8] leading-relaxed' : isGlass ? 'text-sm text-slate-200 leading-relaxed' : 'text-xs text-zinc-300 leading-relaxed'}>
+            <p className={isSkeuomorphic ? 'text-sm text-[#2C1B12] leading-relaxed' : isCyberpunk ? 'text-sm text-slate-200 leading-relaxed' : isMaterial ? 'text-sm text-[#334155] leading-relaxed' : isEditorial ? 'text-sm text-[#1D1814] leading-relaxed' : isSlate ? 'text-sm text-slate-300 leading-relaxed' : isClay ? 'text-sm text-[#4B5478] leading-relaxed' : isSaas ? 'text-sm text-slate-600 leading-relaxed' : isNordic ? 'text-sm text-[#4E5A53] leading-relaxed' : isBrutal ? 'text-xs text-zinc-900 font-medium leading-relaxed' : isObsidian ? 'text-sm text-[#DDD6C8] leading-relaxed' : isGlass ? 'text-sm text-slate-200 leading-relaxed' : 'text-xs text-zinc-300 leading-relaxed'}>
               Replacing <em>"I'll try"</em> with <em>"I will"</em>, or <em>"I don't know"</em> with <em>"I'll find out for you by 3 PM"</em> converts passive uncertainty into proactive stewardship. In organizational psychology, proactive communication is the single highest predictor of perceived executive presence and leadership readiness.
             </p>
           </div>

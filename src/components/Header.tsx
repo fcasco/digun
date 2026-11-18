@@ -18,7 +18,7 @@ export const Header: React.FC<HeaderProps> = ({
   dueCount,
   totalCards,
 }) => {
-  const { isSlate, isClay, isSaas, isNordic, isGlass, isBrutal, isObsidian } = useTheme();
+  const { isSkeuomorphic, isCyberpunk, isMaterial, isEditorial, isSlate, isClay, isSaas, isNordic, isGlass, isBrutal, isObsidian } = useTheme();
   const [isMuted, setIsMuted] = useState(soundEffects.isMuted());
 
   const handleToggleMute = () => {
@@ -27,7 +27,7 @@ export const Header: React.FC<HeaderProps> = ({
     if (!next) soundEffects.playKeyClick();
   };
 
-  const cleanEditorialHeader = isSlate || isObsidian || isGlass || isNordic || isSaas || isClay;
+  const cleanEditorialHeader = isSkeuomorphic || isCyberpunk || isMaterial || isEditorial || isSlate || isObsidian || isGlass || isNordic || isSaas || isClay;
 
   const navItems = [
     { id: 'flashcards', label: cleanEditorialHeader ? '01. Flashcards' : '[01] FLASHCARDS', badge: dueCount > 0 ? `${dueCount} DUE` : null },
@@ -39,7 +39,15 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <header
       className={
-        isSlate
+        isSkeuomorphic
+          ? 'border-b-2 border-[#160B05] skeuo-leather sticky top-0 z-40'
+          : isCyberpunk
+          ? 'border-b border-cyan-400/35 bg-[#070A1B]/92 backdrop-blur-md sticky top-0 z-40 shadow-[0_6px_30px_-10px_rgba(0,240,255,0.32)]'
+          : isMaterial
+          ? 'bg-[#1565C0] text-white sticky top-0 z-40 shadow-[0_3px_8px_rgba(15,23,42,0.22)]'
+          : isEditorial
+          ? 'border-b-2 border-[#1D1814] bg-[#FAF5EA]/95 backdrop-blur-xs sticky top-0 z-40'
+          : isSlate
           ? 'border-b border-slate-800 bg-[#0F172A]/95 sticky top-0 z-40 shadow-[inset_0_-1px_0_0_rgba(255,255,255,0.03)]'
           : isClay
           ? 'border-b border-white/80 bg-[#F4F7FF]/90 backdrop-blur-md sticky top-0 z-40 shadow-[0_8px_24px_-12px_rgba(79,92,165,0.2)]'
@@ -78,7 +86,23 @@ export const Header: React.FC<HeaderProps> = ({
             }}
             className="text-left group cursor-pointer focus:outline-none"
           >
-            {isSlate ? (
+            {isSkeuomorphic ? (
+              <div className="font-editorial-display text-xl font-bold tracking-[0.08em] text-[#F5ECD8] drop-shadow-[0_1px_1px_rgba(0,0,0,0.85)] group-hover:text-[#E8C978] transition-colors uppercase whitespace-nowrap">
+                ARTICULATION
+              </div>
+            ) : isCyberpunk ? (
+              <div className="font-cyber text-xl font-bold tracking-[0.14em] bg-gradient-to-r from-[#00F0FF] via-[#A5F3FC] to-[#FF2A85] bg-clip-text text-transparent group-hover:brightness-110 transition-all uppercase whitespace-nowrap">
+                ARTICULATION
+              </div>
+            ) : isMaterial ? (
+              <div className="font-material text-xl font-bold tracking-tight text-white group-hover:text-[#E3F2FD] transition-colors whitespace-nowrap">
+                ARTICULATION
+              </div>
+            ) : isEditorial ? (
+              <div className="font-editorial-display text-2xl font-extrabold tracking-tight text-[#1D1814] group-hover:text-[#9B2226] transition-colors whitespace-nowrap">
+                ARTICULATION
+              </div>
+            ) : isSlate ? (
               <div className="text-lg font-bold tracking-tight text-slate-50 group-hover:text-teal-300 transition-colors whitespace-nowrap">
                 ARTICULATION
               </div>
@@ -147,7 +171,31 @@ export const Header: React.FC<HeaderProps> = ({
                   onSelectTab(item.id);
                 }}
                 className={
-                  isSlate
+                  isSkeuomorphic
+                    ? `px-3 py-1.5 text-xs tracking-wide transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 rounded-md border ${
+                        isActive
+                          ? 'skeuo-brass-btn border-[#7A5915] font-bold'
+                          : 'text-[#E6D6B8] hover:text-[#FFF8EA] border-transparent hover:bg-[#3A2215]/75 font-medium'
+                      }`
+                    : isCyberpunk
+                    ? `px-3 py-1.5 text-xs font-cyber uppercase tracking-[0.08em] transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 border-b-2 ${
+                        isActive
+                          ? 'text-[#00F0FF] border-[#00F0FF] font-bold drop-shadow-[0_0_8px_rgba(0,240,255,0.65)]'
+                          : 'text-slate-300 hover:text-[#00F0FF] border-transparent font-medium'
+                      }`
+                    : isMaterial
+                    ? `px-3 py-1.5 text-xs tracking-wide transition-colors cursor-pointer whitespace-nowrap flex items-center gap-2 border-b-2 font-material ${
+                        isActive
+                          ? 'text-white border-white font-bold'
+                          : 'text-[#DBEAFE] hover:text-white border-transparent font-medium'
+                      }`
+                    : isEditorial
+                    ? `px-3 py-1.5 text-xs tracking-wide transition-colors cursor-pointer whitespace-nowrap flex items-center gap-2 border-b-2 font-editorial-body ${
+                        isActive
+                          ? 'text-[#9B2226] border-[#9B2226] font-bold'
+                          : 'text-[#574D42] hover:text-[#1D1814] border-transparent font-medium'
+                      }`
+                    : isSlate
                     ? `px-3 py-1.5 text-xs tracking-wide transition-colors cursor-pointer whitespace-nowrap flex items-center gap-2 border-b-2 ${
                         isActive
                           ? 'text-teal-300 border-teal-400 font-semibold'
@@ -200,7 +248,15 @@ export const Header: React.FC<HeaderProps> = ({
                 {item.badge && (
                   <span
                     className={
-                      isSlate
+                      isSkeuomorphic
+                        ? `text-[10px] font-mono font-bold tabular-nums ${isActive ? 'text-[#2C180E]' : 'text-[#E8C978]'}`
+                        : isCyberpunk
+                        ? 'text-[10px] text-[#FF4DA6] font-mono font-bold tabular-nums'
+                        : isMaterial
+                        ? 'text-[10px] text-[#E0F2FE] font-mono font-semibold tabular-nums'
+                        : isEditorial
+                        ? 'text-[10px] text-[#9B2226] font-mono font-semibold tabular-nums'
+                        : isSlate
                         ? 'text-[10px] text-teal-400 font-mono font-semibold tabular-nums'
                         : isClay
                         ? 'text-[10px] text-indigo-600 font-mono font-bold tabular-nums'
@@ -226,13 +282,37 @@ export const Header: React.FC<HeaderProps> = ({
         </nav>
 
         {/* Zone 3: Primary Action & Audio Utility HUD */}
-        <div className={`flex items-center gap-2 sm:gap-3 shrink-0 ${isSlate || isBrutal || isObsidian || isGlass || isNordic || isSaas || isClay ? 'font-sans' : 'font-mono'}`}>
+        <div className={`flex items-center gap-2 sm:gap-3 shrink-0 ${isMaterial ? 'font-material' : isEditorial ? 'font-editorial-body' : isSkeuomorphic || isCyberpunk || isSlate || isBrutal || isObsidian || isGlass || isNordic || isSaas || isClay ? 'font-sans' : 'font-mono'}`}>
           {/* Audio Synthesizer Toggle */}
           <button
             onClick={handleToggleMute}
             title={isMuted ? 'Unmute Sound Effects' : 'Mute Sound Effects'}
             className={
-              isSlate
+              isSkeuomorphic
+                ? `px-2.5 py-1.5 rounded-md border text-[11px] uppercase tracking-wider font-semibold cursor-pointer transition-all flex items-center gap-1.5 whitespace-nowrap ${
+                    isMuted
+                      ? 'skeuo-leather-well border-[#180C06] text-[#B5A082] hover:text-[#F5ECD8]'
+                      : 'skeuo-leather-btn border-[#6B462B] text-[#E8C978] hover:border-[#C89E3A]/60'
+                  }`
+                : isCyberpunk
+                ? `px-2.5 py-1.5 rounded-sm border text-[11px] font-cyber uppercase tracking-wider cursor-pointer transition-all flex items-center gap-1.5 whitespace-nowrap ${
+                    isMuted
+                      ? 'text-slate-400 border-cyan-400/20 bg-[#0B1024] hover:text-cyan-200'
+                      : 'text-[#00F0FF] border-cyan-400/45 bg-[#0C1532] hover:border-[#00F0FF] shadow-[0_0_14px_-6px_rgba(0,240,255,0.5)]'
+                  }`
+                : isMaterial
+                ? `px-3 py-1.5 rounded-lg text-[11px] font-semibold uppercase tracking-wider cursor-pointer transition-all flex items-center gap-1.5 whitespace-nowrap ${
+                    isMuted
+                      ? 'text-[#DBEAFE] bg-white/10 hover:bg-white/20'
+                      : 'text-white bg-white/20 hover:bg-white/30'
+                  }`
+                : isEditorial
+                ? `px-2.5 py-1.5 rounded-none border text-[11px] uppercase tracking-[0.12em] cursor-pointer transition-colors flex items-center gap-1.5 whitespace-nowrap ${
+                    isMuted
+                      ? 'text-[#574D42] border-[#C9BFA9] bg-[#F3ECE0] hover:text-[#1D1814]'
+                      : 'text-[#9B2226] border-[#1D1814]/45 bg-[#FFFDF7] hover:border-[#1D1814]'
+                  }`
+                : isSlate
                 ? `px-2.5 py-1.5 rounded-lg border text-[11px] uppercase tracking-wider cursor-pointer transition-colors flex items-center gap-1.5 whitespace-nowrap ${
                     isMuted
                       ? 'text-slate-400 border-slate-800 bg-[#0B1220] hover:text-slate-200'
@@ -295,7 +375,15 @@ export const Header: React.FC<HeaderProps> = ({
             }}
             title="View keyboard commands"
             className={
-              isSlate
+              isSkeuomorphic
+                ? 'px-2.5 py-1.5 rounded-md border border-[#6B462B] skeuo-leather-btn text-[#E6D6B8] hover:text-[#FFE39A] hover:border-[#C89E3A]/60 text-[11px] uppercase tracking-wider font-semibold cursor-pointer flex items-center gap-1.5 whitespace-nowrap'
+                : isCyberpunk
+                ? 'px-2.5 py-1.5 rounded-sm border border-cyan-400/35 bg-[#0C1532] text-cyan-200 hover:text-[#00F0FF] hover:border-[#00F0FF] text-[11px] font-cyber uppercase tracking-wider cursor-pointer transition-all flex items-center gap-1.5 whitespace-nowrap'
+                : isMaterial
+                ? 'px-3 py-1.5 rounded-lg bg-white/15 hover:bg-white/25 text-white text-[11px] font-semibold uppercase tracking-wider cursor-pointer transition-all flex items-center gap-1.5 whitespace-nowrap'
+                : isEditorial
+                ? 'px-2.5 py-1.5 rounded-none border border-[#1D1814]/45 bg-[#FFFDF7] text-[#433A31] hover:text-[#1D1814] hover:border-[#1D1814] text-[11px] uppercase tracking-[0.12em] cursor-pointer transition-colors flex items-center gap-1.5 whitespace-nowrap'
+                : isSlate
                 ? 'px-2.5 py-1.5 rounded-lg border border-slate-700/80 bg-[#1E293B] text-slate-300 hover:text-white hover:border-slate-600 text-[11px] uppercase tracking-wider cursor-pointer transition-colors flex items-center gap-1.5 whitespace-nowrap'
                 : isClay
                 ? 'px-3 py-1.5 rounded-2xl border border-white/80 clay-card clay-btn-soft text-[#4B5478] hover:text-[#1E2547] text-[11px] uppercase tracking-wider font-semibold cursor-pointer flex items-center gap-1.5 whitespace-nowrap'
@@ -323,7 +411,15 @@ export const Header: React.FC<HeaderProps> = ({
               onSelectTab('flashcards');
             }}
             className={
-              isSlate
+              isSkeuomorphic
+                ? 'px-4 py-1.5 rounded-md text-[11px] font-bold uppercase tracking-wider skeuo-brass-btn border border-[#7A5915] flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0'
+                : isCyberpunk
+                ? 'px-4 py-1.5 rounded-sm text-[11px] font-cyber font-bold uppercase tracking-[0.1em] bg-gradient-to-r from-[#00F0FF] to-[#FF2A85] text-[#060714] border border-cyan-200/80 flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 cyber-btn'
+                : isMaterial
+                ? 'px-4 py-1.5 rounded-lg text-[11px] font-bold uppercase tracking-wider bg-white hover:bg-[#F8FAFC] text-[#1565C0] flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 material-btn'
+                : isEditorial
+                ? 'px-4 py-1.5 rounded-none text-[11px] font-semibold uppercase tracking-[0.14em] bg-[#9B2226] hover:bg-[#7F1D1D] text-[#FAF5EA] border border-[#1D1814] transition-colors shadow-[2px_2px_0_#1D1814] flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0'
+                : isSlate
                 ? 'px-4 py-1.5 rounded-lg text-[11px] font-semibold uppercase tracking-wider bg-teal-400 hover:bg-teal-300 text-slate-950 border border-teal-300 transition-colors shadow-xs flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0'
                 : isClay
                 ? 'px-4 py-1.5 rounded-2xl text-[11px] font-bold uppercase tracking-wider bg-indigo-500 hover:bg-indigo-600 text-white border border-indigo-400 flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 clay-btn'
@@ -340,7 +436,7 @@ export const Header: React.FC<HeaderProps> = ({
                 : 'px-3.5 py-1.5 text-xs font-mono font-medium rounded bg-zinc-100 hover:bg-white text-zinc-950 transition-colors flex items-center gap-1.5 cursor-pointer shadow-sm whitespace-nowrap group'
             }
           >
-            <Sparkles className={isSlate ? 'w-3.5 h-3.5 text-slate-950' : isClay || isSaas ? 'w-3.5 h-3.5 text-white' : isNordic ? 'w-3.5 h-3.5 text-[#FDFBF7]' : isBrutal ? 'w-3.5 h-3.5 text-black' : isObsidian ? 'w-3.5 h-3.5 text-[#070709]' : isGlass ? 'w-3.5 h-3.5 text-slate-950' : 'w-3.5 h-3.5 text-amber-500'} />
+            <Sparkles className={isSkeuomorphic ? 'w-3.5 h-3.5 text-[#1F1209]' : isCyberpunk ? 'w-3.5 h-3.5 text-[#060714]' : isMaterial ? 'w-3.5 h-3.5 text-[#1565C0]' : isEditorial ? 'w-3.5 h-3.5 text-[#FAF5EA]' : isSlate ? 'w-3.5 h-3.5 text-slate-950' : isClay || isSaas ? 'w-3.5 h-3.5 text-white' : isNordic ? 'w-3.5 h-3.5 text-[#FDFBF7]' : isBrutal ? 'w-3.5 h-3.5 text-black' : isObsidian ? 'w-3.5 h-3.5 text-[#070709]' : isGlass ? 'w-3.5 h-3.5 text-slate-950' : 'w-3.5 h-3.5 text-amber-500'} />
             <span className={isBrutal ? 'font-black' : 'font-semibold'}>PRACTICE DECK</span>
           </button>
         </div>
@@ -350,7 +446,15 @@ export const Header: React.FC<HeaderProps> = ({
       {/* Mobile Nav Sub-row */}
       <div
         className={
-          isSlate
+          isSkeuomorphic
+            ? 'lg:hidden flex items-center gap-2 overflow-x-auto px-4 py-2 border-t border-[#4E3020] bg-[#24140C] scrollbar-none'
+            : isCyberpunk
+            ? 'lg:hidden flex items-center gap-2 overflow-x-auto px-4 py-2 border-t border-cyan-400/25 bg-[#070A1B] scrollbar-none'
+            : isMaterial
+            ? 'lg:hidden flex items-center gap-2 overflow-x-auto px-4 py-2 border-t border-white/15 bg-[#1976D2] scrollbar-none'
+            : isEditorial
+            ? 'lg:hidden flex items-center gap-2 overflow-x-auto px-4 py-2 border-t border-[#C9BFA9] bg-[#F3ECE0] scrollbar-none'
+            : isSlate
             ? 'lg:hidden flex items-center gap-2 overflow-x-auto px-4 py-2 border-t border-slate-800 bg-[#0B1220] scrollbar-none'
             : isClay
             ? 'lg:hidden flex items-center gap-2 overflow-x-auto px-4 py-2 border-t border-white/70 bg-[#EEF2FA] scrollbar-none'
@@ -377,7 +481,31 @@ export const Header: React.FC<HeaderProps> = ({
                 onSelectTab(item.id);
               }}
               className={
-                isSlate
+                isSkeuomorphic
+                  ? `px-2.5 py-1 rounded-md text-[11px] whitespace-nowrap border transition-all cursor-pointer ${
+                      isActive
+                        ? 'skeuo-brass-btn border-[#7A5915] font-bold'
+                        : 'skeuo-leather-btn border-[#5B3926] text-[#E6D6B8] font-medium'
+                    }`
+                  : isCyberpunk
+                  ? `px-2.5 py-1 rounded-sm text-[11px] font-cyber uppercase tracking-wider whitespace-nowrap border transition-all cursor-pointer ${
+                      isActive
+                        ? 'bg-[#00F0FF]/15 text-[#00F0FF] border-[#00F0FF] font-bold shadow-[0_0_12px_-3px_rgba(0,240,255,0.6)]'
+                        : 'text-slate-300 border-cyan-400/25 bg-[#0C122B]'
+                    }`
+                  : isMaterial
+                  ? `px-3 py-1 rounded-md text-[11px] whitespace-nowrap transition-all cursor-pointer ${
+                      isActive
+                        ? 'bg-white text-[#1565C0] font-bold shadow-xs'
+                        : 'text-[#DBEAFE] bg-white/10 hover:bg-white/20 font-medium'
+                    }`
+                  : isEditorial
+                  ? `px-2.5 py-1 rounded-none text-[11px] whitespace-nowrap border transition-colors cursor-pointer ${
+                      isActive
+                        ? 'bg-[#9B2226] text-[#FAF5EA] border-[#1D1814] font-semibold'
+                        : 'text-[#433A31] border-[#C9BFA9] bg-[#FAF5EA]'
+                    }`
+                  : isSlate
                   ? `px-2.5 py-1 rounded-md text-[11px] whitespace-nowrap border transition-colors cursor-pointer ${
                       isActive
                         ? 'bg-teal-400/15 text-teal-300 border-teal-400/50 font-semibold'
@@ -428,7 +556,7 @@ export const Header: React.FC<HeaderProps> = ({
             >
               {item.label}
               {item.badge && (
-                <span className={isSlate ? 'ml-1.5 text-[9px] text-teal-400 font-semibold' : isClay ? 'ml-1.5 text-[9px] font-bold opacity-90' : isSaas ? 'ml-1.5 text-[9px] text-indigo-600 font-semibold' : isNordic ? 'ml-1.5 text-[9px] text-[#527360] font-semibold' : isBrutal ? 'ml-1.5 text-[9px] bg-black text-[#FFE500] px-1' : isObsidian ? 'ml-1.5 text-[9px] text-[#D4AF37]' : isGlass ? 'ml-1.5 text-[9px] text-sky-300' : 'ml-1.5 text-[9px] text-amber-400'}>
+                <span className={isSkeuomorphic ? `ml-1.5 text-[9px] font-mono font-bold ${isActive ? 'text-[#2C180E]' : 'text-[#E8C978]'}` : isCyberpunk ? 'ml-1.5 text-[9px] text-[#FF4DA6] font-mono font-bold' : isMaterial ? 'ml-1.5 text-[9px] font-mono font-bold' : isEditorial ? 'ml-1.5 text-[9px] font-mono font-semibold' : isSlate ? 'ml-1.5 text-[9px] text-teal-400 font-semibold' : isClay ? 'ml-1.5 text-[9px] font-bold opacity-90' : isSaas ? 'ml-1.5 text-[9px] text-indigo-600 font-semibold' : isNordic ? 'ml-1.5 text-[9px] text-[#527360] font-semibold' : isBrutal ? 'ml-1.5 text-[9px] bg-black text-[#FFE500] px-1' : isObsidian ? 'ml-1.5 text-[9px] text-[#D4AF37]' : isGlass ? 'ml-1.5 text-[9px] text-sky-300' : 'ml-1.5 text-[9px] text-amber-400'}>
                   ({item.badge})
                 </span>
               )}

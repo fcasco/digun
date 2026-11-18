@@ -1,11 +1,15 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
-export type AppTheme = 'slate' | 'clay' | 'saas' | 'nordic' | 'glassmorphism' | 'obsidian' | 'neobrutalism' | 'terminal';
+export type AppTheme = 'skeuomorphic' | 'cyberpunk' | 'material' | 'editorial' | 'slate' | 'clay' | 'saas' | 'nordic' | 'glassmorphism' | 'obsidian' | 'neobrutalism' | 'terminal';
 
 interface ThemeContextValue {
   theme: AppTheme;
   setTheme: (theme: AppTheme) => void;
   toggleTheme: () => void;
+  isSkeuomorphic: boolean;
+  isCyberpunk: boolean;
+  isMaterial: boolean;
+  isEditorial: boolean;
   isSlate: boolean;
   isClay: boolean;
   isSaas: boolean;
@@ -15,16 +19,20 @@ interface ThemeContextValue {
   isObsidian: boolean;
 }
 
-const THEME_STORAGE_KEY = 'articulation_ui_theme_v7';
+const THEME_STORAGE_KEY = 'articulation_ui_theme_v11';
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [theme, setThemeState] = useState<AppTheme>(() => {
-    if (typeof window === 'undefined') return 'slate';
+    if (typeof window === 'undefined') return 'skeuomorphic';
     try {
       const saved = localStorage.getItem(THEME_STORAGE_KEY);
       if (
+        saved === 'skeuomorphic' ||
+        saved === 'cyberpunk' ||
+        saved === 'material' ||
+        saved === 'editorial' ||
         saved === 'slate' ||
         saved === 'clay' ||
         saved === 'saas' ||
@@ -36,9 +44,9 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       ) {
         return saved;
       }
-      return 'slate';
+      return 'skeuomorphic';
     } catch {
-      return 'slate';
+      return 'skeuomorphic';
     }
   });
 
@@ -54,7 +62,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, []);
 
   const toggleTheme = useCallback(() => {
-    const order: AppTheme[] = ['slate', 'clay', 'saas', 'nordic', 'glassmorphism', 'obsidian', 'neobrutalism', 'terminal'];
+    const order: AppTheme[] = ['skeuomorphic', 'cyberpunk', 'material', 'editorial', 'slate', 'clay', 'saas', 'nordic', 'glassmorphism', 'obsidian', 'neobrutalism', 'terminal'];
     const idx = order.indexOf(theme);
     setTheme(order[(idx + 1) % order.length]);
   }, [theme, setTheme]);
@@ -62,7 +70,23 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   // Sync root <html> & <body> attributes/classes for seamless background & scrollbar styling
   useEffect(() => {
     const root = document.documentElement;
-    if (theme === 'slate') {
+    if (theme === 'skeuomorphic') {
+      root.classList.remove('dark');
+      root.setAttribute('data-theme', 'skeuomorphic');
+      document.body.className = 'bg-[#23130B] text-[#F5ECD8] antialiased selection:bg-[#C89E3A]/30 selection:text-[#FFF8EA]';
+    } else if (theme === 'cyberpunk') {
+      root.classList.add('dark');
+      root.setAttribute('data-theme', 'cyberpunk');
+      document.body.className = 'bg-[#060714] text-[#E6F4FF] antialiased selection:bg-[#00F0FF]/25 selection:text-[#00F0FF]';
+    } else if (theme === 'material') {
+      root.classList.remove('dark');
+      root.setAttribute('data-theme', 'material');
+      document.body.className = 'bg-[#ECEFF4] text-[#111827] antialiased selection:bg-[#1565C0]/20 selection:text-[#0D47A1]';
+    } else if (theme === 'editorial') {
+      root.classList.remove('dark');
+      root.setAttribute('data-theme', 'editorial');
+      document.body.className = 'bg-[#F3ECE0] text-[#1D1814] antialiased selection:bg-[#9B2226]/20 selection:text-[#1D1814]';
+    } else if (theme === 'slate') {
       root.classList.add('dark');
       root.setAttribute('data-theme', 'slate');
       document.body.className = 'bg-[#0F172A] text-slate-100 antialiased selection:bg-teal-400/25 selection:text-teal-100';
@@ -103,6 +127,10 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         theme,
         setTheme,
         toggleTheme,
+        isSkeuomorphic: theme === 'skeuomorphic',
+        isCyberpunk: theme === 'cyberpunk',
+        isMaterial: theme === 'material',
+        isEditorial: theme === 'editorial',
         isSlate: theme === 'slate',
         isClay: theme === 'clay',
         isSaas: theme === 'saas',
