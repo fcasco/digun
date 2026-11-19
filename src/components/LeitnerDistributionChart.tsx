@@ -491,12 +491,19 @@ export const LeitnerDistributionChart: React.FC<LeitnerDistributionChartProps> =
       .attr('stroke', tokens.barStrokeColor)
       .attr('stroke-width', tokens.barStrokeWidth);
 
-    bars
-      .transition()
-      .duration(480)
-      .ease(d3.easeCubicOut)
-      .attr('y', (d) => yScale(d.count))
-      .attr('height', (d) => Math.max(d.count > 0 ? 4 : 0, innerHeight - yScale(d.count)));
+    const supportsTransition =
+      typeof d3.transition === 'function' && typeof bars.transition === 'function';
+
+    if (supportsTransition) {
+      bars
+        .transition(d3.transition().duration(480).ease(d3.easeCubicOut))
+        .attr('y', (d) => yScale(d.count))
+        .attr('height', (d) => Math.max(d.count > 0 ? 4 : 0, innerHeight - yScale(d.count)));
+    } else {
+      bars
+        .attr('y', (d) => yScale(d.count))
+        .attr('height', (d) => Math.max(d.count > 0 ? 4 : 0, innerHeight - yScale(d.count)));
+    }
 
     // Value count + percentage labels above bars
     const valueLabels = barGroups
@@ -512,12 +519,16 @@ export const LeitnerDistributionChart: React.FC<LeitnerDistributionChartProps> =
       .style('opacity', 0)
       .text((d) => (width < 420 ? `${d.count}` : `${d.count} (${d.percentage}%)`));
 
-    valueLabels
-      .transition()
-      .duration(480)
-      .ease(d3.easeCubicOut)
-      .attr('y', (d) => Math.max(12, yScale(d.count) - 7))
-      .style('opacity', 1);
+    if (supportsTransition && typeof valueLabels.transition === 'function') {
+      valueLabels
+        .transition(d3.transition().duration(480).ease(d3.easeCubicOut))
+        .attr('y', (d) => Math.max(12, yScale(d.count) - 7))
+        .style('opacity', 1);
+    } else {
+      valueLabels
+        .attr('y', (d) => Math.max(12, yScale(d.count) - 7))
+        .style('opacity', 1);
+    }
 
     // X-axis Box label & cadence sublabel
     barGroups
@@ -544,23 +555,35 @@ export const LeitnerDistributionChart: React.FC<LeitnerDistributionChartProps> =
     // Interactive hover highlighting
     barGroups
       .on('mouseenter', function (_event, d) {
-        d3.select(this)
-          .select('rect:nth-child(2)')
-          .transition()
-          .duration(140)
-          .attr('stroke', tokens.barHoverStroke)
-          .attr('stroke-width', Math.max(2, tokens.barStrokeWidth + 1))
-          .style('filter', 'brightness(1.08)');
+        const targetBar = d3.select(this).select('rect:nth-child(2)');
+        if (supportsTransition && typeof targetBar.transition === 'function') {
+          targetBar
+            .transition(d3.transition().duration(140))
+            .attr('stroke', tokens.barHoverStroke)
+            .attr('stroke-width', Math.max(2, tokens.barStrokeWidth + 1))
+            .style('filter', 'brightness(1.08)');
+        } else {
+          targetBar
+            .attr('stroke', tokens.barHoverStroke)
+            .attr('stroke-width', Math.max(2, tokens.barStrokeWidth + 1))
+            .style('filter', 'brightness(1.08)');
+        }
         setHoveredBox(d);
       })
       .on('mouseleave', function () {
-        d3.select(this)
-          .select('rect:nth-child(2)')
-          .transition()
-          .duration(140)
-          .attr('stroke', tokens.barStrokeColor)
-          .attr('stroke-width', tokens.barStrokeWidth)
-          .style('filter', 'none');
+        const targetBar = d3.select(this).select('rect:nth-child(2)');
+        if (supportsTransition && typeof targetBar.transition === 'function') {
+          targetBar
+            .transition(d3.transition().duration(140))
+            .attr('stroke', tokens.barStrokeColor)
+            .attr('stroke-width', tokens.barStrokeWidth)
+            .style('filter', 'none');
+        } else {
+          targetBar
+            .attr('stroke', tokens.barStrokeColor)
+            .attr('stroke-width', tokens.barStrokeWidth)
+            .style('filter', 'none');
+        }
         setHoveredBox(null);
       });
   }, [data, chartWidth, tokens, isBrutal, isEditorial, isSkeuomorphic]);
