@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Volume2, VolumeX, Keyboard, Terminal, Sparkles } from 'lucide-react';
+import React from 'react';
+import { Settings, Keyboard, Terminal, Sparkles } from 'lucide-react';
 import { soundEffects } from '../utils/soundEffects';
 import { useTheme } from '../context/ThemeContext';
 
@@ -7,6 +7,7 @@ interface HeaderProps {
   currentTab: 'flashcards' | 'quiz' | 'vault' | 'psychology';
   onSelectTab: (tab: 'flashcards' | 'quiz' | 'vault' | 'psychology') => void;
   onOpenShortcuts: () => void;
+  onOpenSettings: () => void;
   dueCount: number;
   totalCards: number;
 }
@@ -15,17 +16,11 @@ export const Header: React.FC<HeaderProps> = ({
   currentTab,
   onSelectTab,
   onOpenShortcuts,
+  onOpenSettings,
   dueCount,
   totalCards,
 }) => {
   const { isSkeuomorphic, isCyberpunk, isMaterial, isEditorial, isSlate, isClay, isSaas, isNordic, isGlass, isBrutal, isObsidian } = useTheme();
-  const [isMuted, setIsMuted] = useState(soundEffects.isMuted());
-
-  const handleToggleMute = () => {
-    const next = soundEffects.toggleMute();
-    setIsMuted(next);
-    if (!next) soundEffects.playKeyClick();
-  };
 
   const cleanEditorialHeader = isSkeuomorphic || isCyberpunk || isMaterial || isEditorial || isSlate || isObsidian || isGlass || isNordic || isSaas || isClay;
 
@@ -33,7 +28,7 @@ export const Header: React.FC<HeaderProps> = ({
     { id: 'flashcards', label: cleanEditorialHeader ? '01. Flashcards' : '[01] FLASHCARDS', badge: dueCount > 0 ? `${dueCount} DUE` : null },
     { id: 'quiz', label: cleanEditorialHeader ? '02. Scenario Drill' : '[02] SCENARIO DRILL', badge: null },
     { id: 'vault', label: cleanEditorialHeader ? `03. Leitner Vault (${totalCards})` : `[03] LEITNER VAULT (${totalCards})`, badge: null },
-    { id: 'psychology', label: cleanEditorialHeader ? '04. Themes & Psychology' : '[04] THEMES & PSYCHOLOGY', badge: null },
+    { id: 'psychology', label: cleanEditorialHeader ? '04. Psychology' : '[04] PSYCHOLOGY', badge: null },
   ] as const;
 
   return (
@@ -281,90 +276,44 @@ export const Header: React.FC<HeaderProps> = ({
           })}
         </nav>
 
-        {/* Zone 3: Primary Action & Audio Utility HUD */}
+        {/* Zone 3: Primary Action & Settings Utility */}
         <div className={`flex items-center gap-2 sm:gap-3 shrink-0 ${isMaterial ? 'font-material' : isEditorial ? 'font-editorial-body' : isSkeuomorphic || isCyberpunk || isSlate || isBrutal || isObsidian || isGlass || isNordic || isSaas || isClay ? 'font-sans' : 'font-mono'}`}>
-          {/* Audio Synthesizer Toggle */}
+          {/* Settings Menu Trigger (Theme Selection & Audio Options) */}
           <button
-            onClick={handleToggleMute}
-            title={isMuted ? 'Unmute Sound Effects' : 'Mute Sound Effects'}
+            type="button"
+            onClick={() => {
+              soundEffects.playKeyClick();
+              onOpenSettings();
+            }}
+            title="Open Settings (Themes & Audio)"
             className={
               isSkeuomorphic
-                ? `px-2.5 py-1.5 rounded-md border text-[11px] uppercase tracking-wider font-semibold cursor-pointer transition-all flex items-center gap-1.5 whitespace-nowrap ${
-                    isMuted
-                      ? 'skeuo-leather-well border-[#180C06] text-[#B5A082] hover:text-[#F5ECD8]'
-                      : 'skeuo-leather-btn border-[#6B462B] text-[#E8C978] hover:border-[#C89E3A]/60'
-                  }`
+                ? 'px-2.5 py-1.5 rounded-md border border-[#6B462B] skeuo-leather-btn text-[#E8C978] hover:text-[#FFE39A] hover:border-[#C89E3A]/60 text-[11px] uppercase tracking-wider font-semibold cursor-pointer transition-all flex items-center gap-1.5 whitespace-nowrap'
                 : isCyberpunk
-                ? `px-2.5 py-1.5 rounded-sm border text-[11px] font-cyber uppercase tracking-wider cursor-pointer transition-all flex items-center gap-1.5 whitespace-nowrap ${
-                    isMuted
-                      ? 'text-slate-400 border-cyan-400/20 bg-[#0B1024] hover:text-cyan-200'
-                      : 'text-[#00F0FF] border-cyan-400/45 bg-[#0C1532] hover:border-[#00F0FF] shadow-[0_0_14px_-6px_rgba(0,240,255,0.5)]'
-                  }`
+                ? 'px-2.5 py-1.5 rounded-sm border border-cyan-400/45 bg-[#0C1532] text-[#00F0FF] hover:border-[#00F0FF] shadow-[0_0_14px_-6px_rgba(0,240,255,0.45)] text-[11px] font-cyber uppercase tracking-wider cursor-pointer transition-all flex items-center gap-1.5 whitespace-nowrap'
                 : isMaterial
-                ? `px-3 py-1.5 rounded-lg text-[11px] font-semibold uppercase tracking-wider cursor-pointer transition-all flex items-center gap-1.5 whitespace-nowrap ${
-                    isMuted
-                      ? 'text-[#DBEAFE] bg-white/10 hover:bg-white/20'
-                      : 'text-white bg-white/20 hover:bg-white/30'
-                  }`
+                ? 'px-3 py-1.5 rounded-lg bg-white/15 hover:bg-white/25 text-white text-[11px] font-semibold uppercase tracking-wider cursor-pointer transition-all flex items-center gap-1.5 whitespace-nowrap'
                 : isEditorial
-                ? `px-2.5 py-1.5 rounded-none border text-[11px] uppercase tracking-[0.12em] cursor-pointer transition-colors flex items-center gap-1.5 whitespace-nowrap ${
-                    isMuted
-                      ? 'text-[#574D42] border-[#C9BFA9] bg-[#F3ECE0] hover:text-[#1D1814]'
-                      : 'text-[#9B2226] border-[#1D1814]/45 bg-[#FFFDF7] hover:border-[#1D1814]'
-                  }`
+                ? 'px-2.5 py-1.5 rounded-none border border-[#1D1814]/45 bg-[#FFFDF7] text-[#9B2226] hover:text-[#1D1814] hover:border-[#1D1814] text-[11px] uppercase tracking-[0.12em] cursor-pointer transition-colors flex items-center gap-1.5 whitespace-nowrap'
                 : isSlate
-                ? `px-2.5 py-1.5 rounded-lg border text-[11px] uppercase tracking-wider cursor-pointer transition-colors flex items-center gap-1.5 whitespace-nowrap ${
-                    isMuted
-                      ? 'text-slate-400 border-slate-800 bg-[#0B1220] hover:text-slate-200'
-                      : 'text-teal-300 border-slate-700/80 bg-[#1E293B] hover:border-teal-400/50'
-                  }`
+                ? 'px-2.5 py-1.5 rounded-lg border border-slate-700/80 bg-[#1E293B] text-teal-300 hover:border-teal-400/50 text-[11px] uppercase tracking-wider cursor-pointer transition-colors flex items-center gap-1.5 whitespace-nowrap'
                 : isClay
-                ? `px-3 py-1.5 rounded-2xl border border-white/80 text-[11px] uppercase tracking-wider font-semibold cursor-pointer transition-all flex items-center gap-1.5 whitespace-nowrap clay-btn-soft ${
-                    isMuted
-                      ? 'text-[#647094] clay-well'
-                      : 'text-indigo-700 clay-card'
-                  }`
+                ? 'px-3 py-1.5 rounded-2xl border border-white/80 clay-card clay-btn-soft text-indigo-700 text-[11px] uppercase tracking-wider font-semibold cursor-pointer transition-all flex items-center gap-1.5 whitespace-nowrap'
                 : isSaas
-                ? `px-2.5 py-1.5 rounded-lg border text-[11px] uppercase tracking-wider cursor-pointer transition-colors flex items-center gap-1.5 whitespace-nowrap ${
-                    isMuted
-                      ? 'text-slate-500 border-slate-200 bg-slate-50 hover:text-slate-900'
-                      : 'text-indigo-700 border-indigo-200 bg-indigo-50 hover:border-indigo-300'
-                  }`
+                ? 'px-2.5 py-1.5 rounded-lg border border-indigo-200 bg-indigo-50 text-indigo-700 hover:border-indigo-300 text-[11px] uppercase tracking-wider cursor-pointer transition-colors flex items-center gap-1.5 whitespace-nowrap'
                 : isNordic
-                ? `px-2.5 py-1.5 rounded-xl border text-[11px] uppercase tracking-wider cursor-pointer transition-colors flex items-center gap-1.5 ${
-                    isMuted
-                      ? 'text-[#6D7972] border-[#E4DFD4] bg-[#F6F3EC] hover:text-[#242E28]'
-                      : 'text-[#3B5948] border-[#B8CBBF] bg-[#E7EFEA] hover:border-[#527360]'
-                  }`
+                ? 'px-2.5 py-1.5 rounded-xl border border-[#B8CBBF] bg-[#E7EFEA] text-[#3B5948] hover:border-[#527360] text-[11px] uppercase tracking-wider cursor-pointer transition-colors flex items-center gap-1.5 whitespace-nowrap'
                 : isBrutal
-                ? `p-2 border-2 border-black text-xs font-extrabold cursor-pointer flex items-center gap-1.5 brutal-btn ${
-                    isMuted
-                      ? 'bg-[#F4F1EA] text-zinc-600'
-                      : 'bg-white text-black hover:bg-[#FEF9C3]'
-                  }`
+                ? 'p-2 border-2 border-black bg-white hover:bg-[#FEF9C3] text-black text-xs font-extrabold cursor-pointer flex items-center gap-1.5 brutal-btn whitespace-nowrap'
                 : isObsidian
-                ? `px-2.5 py-1.5 border text-[11px] uppercase tracking-[0.14em] cursor-pointer transition-colors flex items-center gap-1.5 ${
-                    isMuted
-                      ? 'text-[#736D63] border-[#2A241A] bg-[#0B0B0E] hover:text-[#F5F0E6]'
-                      : 'text-[#E5C77B] border-[#D4AF37]/35 bg-[#121216] hover:border-[#D4AF37]'
-                  }`
+                ? 'px-2.5 py-1.5 border border-[#D4AF37]/35 bg-[#121216] text-[#E5C77B] hover:border-[#D4AF37] text-[11px] uppercase tracking-[0.14em] cursor-pointer transition-colors flex items-center gap-1.5 whitespace-nowrap'
                 : isGlass
-                ? `px-2.5 py-1.5 rounded-xl border text-[11px] uppercase tracking-wider cursor-pointer transition-colors backdrop-blur-md flex items-center gap-1.5 ${
-                    isMuted
-                      ? 'text-slate-400 border-white/10 bg-white/[0.04] hover:text-white'
-                      : 'text-sky-200 border-white/20 bg-white/[0.08] hover:bg-white/[0.14] hover:border-sky-300/40'
-                  }`
-                : `p-2 rounded border text-xs cursor-pointer transition-colors flex items-center gap-1.5 ${
-                    isMuted
-                      ? 'text-zinc-500 border-zinc-800 bg-zinc-900/50 hover:text-zinc-300'
-                      : 'text-zinc-200 border-zinc-700 bg-zinc-900 hover:border-zinc-500'
-                  }`
+                ? 'px-2.5 py-1.5 rounded-xl border border-white/20 bg-white/[0.08] hover:bg-white/[0.14] text-sky-200 hover:border-sky-300/40 text-[11px] uppercase tracking-wider cursor-pointer transition-colors backdrop-blur-md flex items-center gap-1.5 whitespace-nowrap'
+                : 'p-2 rounded border border-zinc-700 bg-zinc-900 hover:border-zinc-500 text-zinc-200 text-xs cursor-pointer transition-colors flex items-center gap-1.5 whitespace-nowrap'
             }
           >
-            {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
-            <span className="hidden sm:inline text-[11px]">
-              {isMuted ? 'MUTE' : 'AUDIO'}
-            </span>
+            <Settings className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline text-[11px]">SETTINGS</span>
           </button>
 
           {/* Keyboard Shortcuts Prompt */}

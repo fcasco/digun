@@ -2,6 +2,7 @@ import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import { ThemeProvider } from './context/ThemeContext';
+import { AudioProvider } from './context/AudioContext';
 import './index.css';
 
 interface Props {
@@ -62,7 +63,9 @@ createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <TerminalErrorBoundary>
       <ThemeProvider>
-        <App />
+        <AudioProvider>
+          <App />
+        </AudioProvider>
       </ThemeProvider>
     </TerminalErrorBoundary>
   </React.StrictMode>

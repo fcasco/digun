@@ -6,7 +6,8 @@
 
 export interface SpeechOptions {
   rate?: number; // 0.8, 1.0, 1.2
-  pitch?: number; // 0.95 to 1.05
+  pitch?: number; // 0.9 to 1.1
+  voiceURI?: string;
   onStart?: () => void;
   onEnd?: () => void;
   onError?: (err: Error) => void;
@@ -94,6 +95,17 @@ class SpeechArticulationEngine {
     }
   }
 
+  public getEnglishVoices(): SpeechSynthesisVoice[] {
+    if (!this.isSupported) return [];
+    try {
+      const all = window.speechSynthesis.getVoices();
+      const english = all.filter(v => v.lang.toLowerCase().startsWith('en'));
+      return english.length > 0 ? english : all;
+    } catch {
+      return [];
+    }
+  }
+
   public stop() {
     this.clearTimers();
     if (!this.isSupported) return;
@@ -133,7 +145,11 @@ class SpeechArticulationEngine {
     const startSpeech = () => {
       try {
         // Refresh voice list in case voices loaded asynchronously after constructor
-        const voice = this.preferredVoice || this.initVoice();
+        const voices = window.speechSynthesis.getVoices();
+        const customVoice = options.voiceURI
+          ? voices.find(v => v.voiceURI === options.voiceURI) || null
+          : null;
+        const voice = customVoice || this.preferredVoice || this.initVoice();
 
         const utterance = new SpeechSynthesisUtterance(trimmed);
         utterance.lang = voice?.lang || 'en-US';

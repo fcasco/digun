@@ -16,6 +16,7 @@ import { soundEffects } from '../utils/soundEffects';
 import { speechEngine } from '../utils/speechSynthesis';
 import { leitnerStorage } from '../utils/leitnerStorage';
 import { useTheme } from '../context/ThemeContext';
+import { useAudio } from '../context/AudioContext';
 
 interface FlashcardDeckProps {
   cards: ReframeCard[];
@@ -64,6 +65,7 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
   resetSignal = 0,
 }) => {
   const { isCyberpunk, isMaterial, isEditorial, isSlate, isClay, isSaas, isNordic, isGlass, isBrutal, isObsidian, isSkeuomorphic } = useTheme();
+  const { speechRate, speechPitch, voiceURI, autoSpeakOnFlip } = useAudio();
 
   const initialProgress = React.useMemo(() => {
     const saved = leitnerStorage.loadFlashcardProgress();
@@ -79,7 +81,6 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
     return {
       filterCategory: saved.filterCategory || 'all',
       studyMode: saved.studyMode === 'all' ? ('all' as const) : ('due' as const),
-      speechRate: typeof saved.speechRate === 'number' ? saved.speechRate : 1.0,
       queue: hydratedQueue,
       currentIndex: safeIndex,
       sessionStats: saved.sessionStats || createEmptySessionStats(),
@@ -97,7 +98,6 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
   );
   const [currentIndex, setCurrentIndex] = useState<number>(initialProgress?.currentIndex ?? 0);
   const [isFlipped, setIsFlipped] = useState<boolean>(false);
-  const [speechRate, setSpeechRate] = useState<number>(initialProgress?.speechRate ?? 1.0);
   const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
   const [speechNotice, setSpeechNotice] = useState<string | null>(null);
 
@@ -145,7 +145,6 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
       setSpeechNotice(null);
       setFilterCategory('all');
       setStudyMode('due');
-      setSpeechRate(1.0);
       setActiveQueue(computeQueueFor(cards, 'all', 'due'));
       setCurrentIndex(0);
       setIsFlipped(false);
@@ -177,13 +176,6 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
 
   const currentCard: ReframeCard | undefined = activeQueue[currentIndex];
 
-  // Flip card handler
-  const handleFlip = useCallback(() => {
-    soundEffects.playCardFlip();
-    setSpeechNotice(null);
-    setIsFlipped(prev => !prev);
-  }, []);
-
   // Voice playback handler (toggles stop if already speaking)
   const handleSpeak = useCallback((text: string) => {
     if (isSpeaking) {
@@ -196,6 +188,8 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
     setIsSpeaking(true);
     speechEngine.speak(text, {
       rate: speechRate,
+      pitch: speechPitch,
+      voiceURI: voiceURI || undefined,
       onStart: () => {
         setIsSpeaking(true);
         setSpeechNotice(null);
@@ -208,7 +202,38 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
         setSpeechNotice(err.message || 'Browser speech synthesis unavailable.');
       },
     });
-  }, [isSpeaking, speechRate]);
+  }, [isSpeaking, speechRate, speechPitch, voiceURI]);
+
+  // Flip card handler
+  const handleFlip = useCallback(() => {
+    soundEffects.playCardFlip();
+    setSpeechNotice(null);
+    const nextFlipped = !isFlipped;
+    setIsFlipped(nextFlipped);
+
+    if (nextFlipped && autoSpeakOnFlip && currentCard) {
+      setIsSpeaking(true);
+      speechEngine.speak(currentCard.powerPhrase, {
+        rate: speechRate,
+        pitch: speechPitch,
+        voiceURI: voiceURI || undefined,
+        onStart: () => {
+          setIsSpeaking(true);
+          setSpeechNotice(null);
+        },
+        onEnd: () => {
+          setIsSpeaking(false);
+        },
+        onError: (err) => {
+          setIsSpeaking(false);
+          setSpeechNotice(err.message || 'Browser speech synthesis unavailable.');
+        },
+      });
+    } else if (!nextFlipped) {
+      speechEngine.stop();
+      setIsSpeaking(false);
+    }
+  }, [isFlipped, autoSpeakOnFlip, currentCard, speechRate, speechPitch, voiceURI]);
 
   // Rate card handler
   const handleRate = useCallback((rating: LeitnerRating) => {
@@ -974,43 +999,6 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({
           >
             {isSpeaking ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className={isSkeuomorphic ? (isSpeaking ? 'w-3.5 h-3.5 text-[#1F1209]' : 'w-3.5 h-3.5 text-[#E8C978]') : isCyberpunk || isMaterial || isEditorial || isSlate || isClay || isSaas ? 'w-3.5 h-3.5 text-current' : isNordic ? 'w-3.5 h-3.5 text-[#3B5948]' : isGlass ? 'w-3.5 h-3.5 text-sky-300' : isBrutal ? 'w-3.5 h-3.5 text-black' : isObsidian ? 'w-3.5 h-3.5 text-[#D4AF37]' : 'w-3.5 h-3.5 text-amber-400'} />}
             <span>{isSpeaking ? 'STOP [A]' : 'SPEAK [A]'}</span>
-          </button>
-
-          {/* Voice Speed Toggle */}
-          <button
-            type="button"
-            onClick={() => {
-              soundEffects.playKeyClick();
-              setSpeechRate(prev => (prev === 0.8 ? 1.0 : prev === 1.0 ? 1.2 : 0.8));
-            }}
-            title="Adjust Speech Cadence"
-            className={
-              isSkeuomorphic
-                ? 'skeuo-leather-btn rounded-md px-2.5 py-1.5 text-[11px] font-mono text-[#F5ECD8] cursor-pointer whitespace-nowrap shrink-0'
-                : isCyberpunk
-                ? 'text-[11px] font-cyber uppercase tracking-wider px-2.5 py-1.5 rounded-sm bg-[#0C1532] border border-cyan-400/35 text-slate-300 hover:text-cyan-100 hover:border-[#00F0FF] transition-colors cursor-pointer whitespace-nowrap shrink-0'
-                : isMaterial
-                ? 'text-[11px] px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-[#475569] hover:text-[#111827] hover:border-[#1565C0]/40 transition-colors cursor-pointer whitespace-nowrap font-medium'
-                : isEditorial
-                ? 'text-[11px] font-mono px-2.5 py-1.5 rounded-none bg-[#FFFDF7] border border-[#1D1814]/60 text-[#433A31] hover:text-[#1D1814] hover:bg-[#EAE1D0] transition-colors cursor-pointer whitespace-nowrap'
-                : isSlate
-                ? 'text-[11px] px-2.5 py-1.5 rounded-md bg-[#0B1220] border border-slate-700 text-slate-300 hover:text-white hover:border-teal-400/50 transition-colors cursor-pointer whitespace-nowrap'
-                : isClay
-                ? 'text-[11px] px-3 py-1.5 rounded-2xl bg-white border border-white/90 text-[#4B5478] hover:text-[#1E2547] font-semibold transition-all cursor-pointer whitespace-nowrap shrink-0 clay-btn-soft'
-                : isSaas
-                ? 'text-[11px] px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:border-slate-300 transition-colors cursor-pointer whitespace-nowrap'
-                : isNordic
-                ? 'text-[11px] px-2.5 py-1.5 rounded-xl nordic-well border border-[#DDD7C8] text-[#4E5A53] hover:text-[#242E28] hover:border-[#B8CBBF] transition-all cursor-pointer whitespace-nowrap'
-                : isGlass
-                ? 'text-[11px] px-2.5 py-1.5 rounded-xl glass-well border border-white/15 text-slate-200 hover:text-white hover:border-white/30 transition-all cursor-pointer whitespace-nowrap'
-                : isBrutal
-                ? 'text-[11px] px-2 py-1 border-2 border-black bg-white text-black hover:bg-[#FEF9C3] font-bold cursor-pointer whitespace-nowrap brutal-btn'
-                : isObsidian
-                ? 'text-[11px] px-2.5 py-1 border border-[#2A241A] bg-[#070709] text-[#A39E93] hover:text-[#F5F0E6] hover:border-[#D4AF37]/40 uppercase tracking-[0.14em] transition-colors cursor-pointer whitespace-nowrap'
-                : 'text-[11px] px-2 py-1 rounded border border-zinc-800 bg-zinc-900 text-zinc-300 hover:text-white hover:border-zinc-700 transition-colors cursor-pointer whitespace-nowrap'
-            }
-          >
-            VOICE: <span className={isSkeuomorphic ? 'text-[#E8C978] font-mono font-bold tabular-nums' : isCyberpunk ? 'text-[#00F0FF] font-mono font-bold tabular-nums' : isMaterial ? 'text-[#1565C0] font-mono font-semibold' : isEditorial ? 'text-[#9B2226] font-mono font-bold' : isSlate ? 'text-teal-300 font-mono font-semibold' : isClay ? 'text-indigo-600 font-mono font-semibold tabular-nums' : isSaas ? 'text-indigo-600 font-mono font-semibold' : isNordic ? 'text-[#2D4739] font-mono font-semibold' : isGlass ? 'text-sky-300 font-mono font-semibold' : isBrutal ? 'text-black font-black' : isObsidian ? 'text-[#E5C77B] font-mono font-semibold' : 'text-zinc-100 font-bold'}>{speechRate}x</span>
           </button>
         </div>
       </div>

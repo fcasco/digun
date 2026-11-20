@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
-import { Palette, RotateCcw } from 'lucide-react';
+import { RotateCcw } from 'lucide-react';
 import { Header } from './components/Header';
 import { FlashcardDeck } from './components/FlashcardDeck';
 import { ScenarioQuiz } from './components/ScenarioQuiz';
@@ -7,13 +7,14 @@ import { LeitnerVault } from './components/LeitnerVault';
 import { ThemesAndPsychology } from './components/ThemesAndPsychology';
 import { KeyboardShortcutsModal } from './components/KeyboardShortcutsModal';
 import { ClearProgressModal } from './components/ClearProgressModal';
+import { SettingsModal } from './components/SettingsModal';
 import { ReframeCard, LeitnerRating, ReviewSessionStats } from './types/reframe';
 import { leitnerStorage, GlobalStats, AppTab } from './utils/leitnerStorage';
 import { soundEffects } from './utils/soundEffects';
 import { useTheme } from './context/ThemeContext';
 
 export default function App() {
-  const { theme, setTheme, isSkeuomorphic, isCyberpunk, isMaterial, isEditorial, isSlate, isClay, isSaas, isNordic, isGlass, isBrutal, isObsidian } = useTheme();
+  const { theme, isSkeuomorphic, isCyberpunk, isMaterial, isEditorial, isSlate, isClay, isSaas, isNordic, isGlass, isBrutal, isObsidian } = useTheme();
   const [cards, setCards] = useState<ReframeCard[]>(() => {
     try {
       return leitnerStorage.loadCards();
@@ -30,6 +31,7 @@ export default function App() {
   });
   const [currentTab, setCurrentTab] = useState<AppTab>(() => leitnerStorage.loadActiveTab() ?? 'flashcards');
   const [isShortcutsOpen, setIsShortcutsOpen] = useState<boolean>(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
   const [isClearProgressOpen, setIsClearProgressOpen] = useState<boolean>(false);
   const [progressVersion, setProgressVersion] = useState<number>(0);
   const [progressClearedNotice, setProgressClearedNotice] = useState<boolean>(false);
@@ -141,30 +143,6 @@ export default function App() {
         isCrtScanlinesEnabled ? 'crt-scanlines' : ''
       }`;
 
-  const switcherInactiveClass = isSkeuomorphic
-    ? 'px-2.5 py-1 text-[11px] font-semibold tracking-wide rounded-md skeuo-leather-btn border border-[#5B3926] text-[#E6D6B8] hover:text-[#FFE39A] hover:border-[#C89E3A]/60 cursor-pointer whitespace-nowrap'
-    : isCyberpunk
-    ? 'px-2.5 py-1 text-[11px] font-cyber font-semibold uppercase tracking-wider rounded-sm bg-[#0C122B]/90 text-cyan-200/80 border border-cyan-400/25 hover:border-[#00F0FF] hover:text-[#00F0FF] hover:shadow-[0_0_12px_rgba(0,240,255,0.28)] cursor-pointer whitespace-nowrap transition-all'
-    : isMaterial
-    ? 'px-3 py-1 text-[11px] font-semibold rounded-md bg-white text-[#334155] border border-[#CBD5E1] hover:border-[#1565C0] hover:text-[#1565C0] shadow-[0_1px_2px_rgba(15,23,42,0.06)] cursor-pointer whitespace-nowrap transition-all'
-    : isEditorial
-    ? 'px-2.5 py-1 text-[11px] font-medium rounded-none bg-[#FAF5EA] text-[#433A31] border border-[#C9BFA9] hover:border-[#1D1814] hover:text-[#1D1814] cursor-pointer whitespace-nowrap transition-colors'
-    : isSlate
-    ? 'px-2.5 py-1 text-[11px] font-medium rounded-md bg-[#1E293B] text-slate-300 border border-slate-700/80 hover:border-teal-400/50 hover:text-white cursor-pointer whitespace-nowrap transition-colors'
-    : isClay
-    ? 'px-2.5 py-1 text-[11px] font-semibold rounded-xl clay-card clay-btn-soft text-[#4B5478] border border-white/80 hover:text-[#1E2547] cursor-pointer whitespace-nowrap transition-all'
-    : isSaas
-    ? 'px-2.5 py-1 text-[11px] font-medium rounded-lg bg-white text-slate-600 border border-slate-200 hover:border-slate-300 hover:text-slate-900 cursor-pointer whitespace-nowrap transition-colors'
-    : isNordic
-    ? 'px-2.5 py-1 text-[11px] font-medium rounded-lg bg-[#FDFBF7] text-[#4E5A53] border border-[#DDD7C8] hover:border-[#527360]/50 hover:text-[#242E28] cursor-pointer whitespace-nowrap transition-colors'
-    : isBrutal
-    ? 'px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-wide bg-white text-zinc-950 border-2 border-black hover:bg-zinc-100 cursor-pointer whitespace-nowrap brutal-btn'
-    : isObsidian
-    ? 'px-2.5 py-1 text-[11px] tracking-[0.12em] uppercase bg-[#121216] text-[#A39E93] border border-[#2A241A] hover:text-[#F5F0E6] hover:border-[#D4AF37]/50 cursor-pointer whitespace-nowrap transition-colors'
-    : isGlass
-    ? 'px-2.5 py-1 text-[11px] font-medium rounded-lg bg-white/[0.06] text-slate-300 border border-white/15 hover:bg-white/[0.12] hover:text-white cursor-pointer whitespace-nowrap transition-colors'
-    : 'px-2.5 py-1 text-[11px] font-mono rounded bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-zinc-100 hover:border-zinc-600 cursor-pointer whitespace-nowrap';
-
   return (
     <div className={rootClass}>
       {/* Top Bar Contract adhering to Header specifications */}
@@ -172,266 +150,10 @@ export default function App() {
         currentTab={currentTab}
         onSelectTab={setCurrentTab}
         onOpenShortcuts={() => setIsShortcutsOpen(true)}
+        onOpenSettings={() => setIsSettingsOpen(true)}
         dueCount={dueCount}
         totalCards={cards.length}
       />
-
-      {/* Workspace Theme Strip (outside top header to preserve 3-zone contract) */}
-      <div
-        className={
-          isSkeuomorphic
-            ? 'border-b border-[#160B05] bg-[#2D190F]/95 shadow-[inset_0_1px_0_rgba(255,224,175,0.12),0_6px_16px_-6px_rgba(0,0,0,0.65)]'
-            : isCyberpunk
-            ? 'border-b border-cyan-400/25 bg-[#080C20]/90 backdrop-blur-md shadow-[0_6px_24px_-12px_rgba(0,240,255,0.28)]'
-            : isMaterial
-            ? 'border-b border-[#D5DCE6] bg-[#FFFFFF] shadow-[0_1px_3px_rgba(15,23,42,0.06)]'
-            : isEditorial
-            ? 'border-b border-[#1D1814]/35 bg-[#EAE1D0]/75'
-            : isSlate
-            ? 'border-b border-slate-800 bg-[#0B1220]/90'
-            : isClay
-            ? 'border-b border-white/70 bg-[#E6ECFA]/80 backdrop-blur-md'
-            : isSaas
-            ? 'border-b border-slate-200 bg-white/80 backdrop-blur-sm'
-            : isNordic
-            ? 'border-b border-[#E4DFD4] bg-[#EFECE3]/75 backdrop-blur-sm'
-            : isBrutal
-            ? 'border-b-2 border-black bg-[#F4F1EA]'
-            : isObsidian
-            ? 'border-b border-[#2A241A] bg-[#0B0B0E]'
-            : isGlass
-            ? 'border-b border-white/12 bg-white/[0.03] backdrop-blur-xl'
-            : 'border-b border-zinc-800/70 bg-zinc-950/60'
-        }
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs">
-          <div
-            className={
-              isSkeuomorphic
-                ? 'flex items-center gap-2 text-[11px] uppercase tracking-[0.14em] text-[#E6D6B8] font-semibold'
-                : isCyberpunk
-                ? 'flex items-center gap-2 text-[11px] font-cyber uppercase tracking-[0.14em] text-[#00F0FF] font-semibold'
-                : isMaterial
-                ? 'flex items-center gap-2 text-[11px] uppercase tracking-[0.1em] text-[#334155] font-bold'
-                : isEditorial
-                ? 'flex items-center gap-2 text-[11px] uppercase tracking-[0.14em] text-[#433A31] font-semibold'
-                : isSlate
-                ? 'flex items-center gap-2 text-[11px] uppercase tracking-[0.08em] text-slate-400 font-semibold'
-                : isClay
-                ? 'flex items-center gap-2 text-[11px] uppercase tracking-[0.08em] text-[#4B5478] font-bold'
-                : isSaas
-                ? 'flex items-center gap-2 text-[11px] uppercase tracking-[0.08em] text-slate-500 font-semibold'
-                : isNordic
-                ? 'flex items-center gap-2 text-[11px] uppercase tracking-[0.12em] text-[#4E5A53] font-semibold'
-                : isBrutal
-                ? 'flex items-center gap-2 font-bold text-zinc-900'
-                : isObsidian
-                ? 'flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-[#C5A059] font-medium'
-                : isGlass
-                ? 'flex items-center gap-2 text-[11px] uppercase tracking-[0.14em] text-sky-200/90 font-medium'
-                : 'flex items-center gap-2 font-mono text-zinc-400'
-            }
-          >
-            <Palette className={isSkeuomorphic ? 'w-3.5 h-3.5 text-[#E8C978]' : isCyberpunk ? 'w-3.5 h-3.5 text-[#FF2A85]' : isMaterial ? 'w-3.5 h-3.5 text-[#1565C0]' : isEditorial ? 'w-3.5 h-3.5 text-[#9B2226]' : isSlate ? 'w-3.5 h-3.5 text-teal-400' : isClay ? 'w-3.5 h-3.5 text-indigo-600' : isSaas ? 'w-3.5 h-3.5 text-indigo-600' : isNordic ? 'w-3.5 h-3.5 text-[#527360]' : isBrutal ? 'w-3.5 h-3.5 text-black' : isObsidian ? 'w-3.5 h-3.5 text-[#D4AF37]' : isGlass ? 'w-3.5 h-3.5 text-sky-300' : 'w-3.5 h-3.5 text-amber-400'} />
-            <span className="uppercase">
-              {isSkeuomorphic
-                ? 'THEME #09 · SKEUOMORPHIC PHYSICAL DESK'
-                : isCyberpunk
-                ? 'THEME #08 · CYBERPUNK NEON GRID'
-                : isMaterial
-                ? 'THEME #07 · FLAT DESIGN 2.0 / MATERIAL'
-                : isEditorial
-                ? "THEME #05 · EDITORIAL NEWSPAPER ('50s BROADSHEET)"
-                : isSlate
-                ? 'THEME #02 · MODERN SLATE DARK MODE'
-                : isClay
-                ? 'THEME #06 · CLAYMORPHISM / SOFT 3D'
-                : isSaas
-                ? 'THEME #01 · CLEAN SAAS MINIMALIST'
-                : isNordic
-                ? 'THEME #11 · NORDIC ORGANIC PASTEL'
-                : isBrutal
-                ? 'THEME #04 · NEO-BRUTALISM'
-                : isObsidian
-                ? 'THEME #10 · LUXURY OBSIDIAN & WARM BRASS'
-                : isGlass
-                ? 'THEME #03 · GLASSMORPHISM / FROSTED GLASS'
-                : 'THEME #12 · MONOCHROME TERMINAL'}
-            </span>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-1.5">
-            <button
-              type="button"
-              onClick={() => {
-                soundEffects.playKeyClick();
-                setTheme('skeuomorphic');
-              }}
-              className={
-                isSkeuomorphic
-                  ? 'px-2.5 py-1 text-[11px] font-bold tracking-[0.06em] uppercase rounded-md skeuo-brass-btn border border-[#7A5915] cursor-pointer whitespace-nowrap'
-                  : switcherInactiveClass
-              }
-            >
-              #09 SKEUOMORPHIC DESK
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                soundEffects.playKeyClick();
-                setTheme('cyberpunk');
-              }}
-              className={
-                isCyberpunk
-                  ? 'px-2.5 py-1 text-[11px] font-cyber font-bold tracking-[0.08em] uppercase rounded-sm bg-gradient-to-r from-[#00F0FF] to-[#FF2A85] text-[#060714] border border-cyan-200/80 cursor-pointer whitespace-nowrap cyber-btn'
-                  : switcherInactiveClass
-              }
-            >
-              #08 CYBERPUNK NEON
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                soundEffects.playKeyClick();
-                setTheme('material');
-              }}
-              className={
-                isMaterial
-                  ? 'px-3 py-1 text-[11px] font-bold tracking-[0.06em] uppercase rounded-md bg-[#1565C0] text-white border border-[#0D47A1] cursor-pointer whitespace-nowrap material-btn'
-                  : switcherInactiveClass
-              }
-            >
-              #07 MATERIAL 2.0
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                soundEffects.playKeyClick();
-                setTheme('editorial');
-              }}
-              className={
-                isEditorial
-                  ? "px-2.5 py-1 text-[11px] font-semibold tracking-[0.08em] uppercase rounded-none bg-[#9B2226] text-[#FAF5EA] border border-[#1D1814] cursor-pointer whitespace-nowrap shadow-[1px_1px_0_#1D1814]"
-                  : switcherInactiveClass
-              }
-            >
-              #05 EDITORIAL '50s
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                soundEffects.playKeyClick();
-                setTheme('slate');
-              }}
-              className={
-                isSlate
-                  ? 'px-2.5 py-1 text-[11px] font-semibold tracking-wide uppercase rounded-md bg-teal-400 text-slate-950 border border-teal-300 cursor-pointer whitespace-nowrap shadow-xs'
-                  : switcherInactiveClass
-              }
-            >
-              #02 SLATE DARK
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                soundEffects.playKeyClick();
-                setTheme('clay');
-              }}
-              className={
-                isClay
-                  ? 'px-2.5 py-1 text-[11px] font-bold tracking-wide uppercase rounded-xl bg-indigo-500 text-white border border-indigo-400 cursor-pointer whitespace-nowrap clay-btn'
-                  : switcherInactiveClass
-              }
-            >
-              #06 CLAYMORPHISM
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                soundEffects.playKeyClick();
-                setTheme('saas');
-              }}
-              className={
-                isSaas
-                  ? 'px-2.5 py-1 text-[11px] font-semibold tracking-wide uppercase rounded-lg bg-indigo-600 text-white border border-indigo-600 cursor-pointer whitespace-nowrap shadow-xs'
-                  : switcherInactiveClass
-              }
-            >
-              #01 SAAS MINIMALIST
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                soundEffects.playKeyClick();
-                setTheme('nordic');
-              }}
-              className={
-                isNordic
-                  ? 'px-2.5 py-1 text-[11px] font-semibold tracking-wide uppercase rounded-lg bg-[#527360] text-[#FDFBF7] border border-[#425F4E] cursor-pointer whitespace-nowrap shadow-sm'
-                  : switcherInactiveClass
-              }
-            >
-              #11 NORDIC PASTEL
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                soundEffects.playKeyClick();
-                setTheme('glassmorphism');
-              }}
-              className={
-                isGlass
-                  ? 'px-2.5 py-1 text-[11px] font-semibold tracking-wide uppercase rounded-lg bg-sky-400 text-slate-950 border border-sky-300 cursor-pointer whitespace-nowrap shadow-sm shadow-sky-400/25'
-                  : switcherInactiveClass
-              }
-            >
-              #03 FROSTED GLASS
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                soundEffects.playKeyClick();
-                setTheme('obsidian');
-              }}
-              className={
-                isObsidian
-                  ? 'px-2.5 py-1 text-[11px] font-semibold tracking-[0.14em] uppercase bg-[#D4AF37] text-[#070709] border border-[#E5C77B] cursor-pointer whitespace-nowrap'
-                  : switcherInactiveClass
-              }
-            >
-              #10 OBSIDIAN & BRASS
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                soundEffects.playKeyClick();
-                setTheme('neobrutalism');
-              }}
-              className={
-                isBrutal
-                  ? 'px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-wide bg-[#FFE500] text-black border-2 border-black cursor-pointer whitespace-nowrap brutal-shadow-sm'
-                  : switcherInactiveClass
-              }
-            >
-              #04 NEO-BRUTALISM
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                soundEffects.playKeyClick();
-                setTheme('terminal');
-              }}
-              className={
-                theme === 'terminal'
-                  ? 'px-2.5 py-1 text-[11px] font-mono font-bold rounded bg-zinc-800 text-zinc-100 border border-zinc-600 cursor-pointer whitespace-nowrap'
-                  : switcherInactiveClass
-              }
-            >
-              #12 TERMINAL
-            </button>
-          </div>
-        </div>
-      </div>
 
       {/* Main Interactive Stage */}
       <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6">
@@ -729,6 +451,16 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {/* Settings menu modal (Theme Selection & Audio Options) */}
+      <SettingsModal
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        isCrtScanlinesEnabled={isCrtScanlinesEnabled}
+        onToggleCrtScanlines={() => setIsCrtScanlinesEnabled(prev => !prev)}
+        onOpenShortcuts={() => setIsShortcutsOpen(true)}
+        onOpenClearProgress={() => setIsClearProgressOpen(true)}
+      />
 
       {/* Keyboard shortcuts modal */}
       <KeyboardShortcutsModal
