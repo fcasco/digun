@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import * as d3 from 'd3';
+import 'd3-transition';
 import { BarChart3, TrendingUp } from 'lucide-react';
 import { ReframeCard } from '../types/reframe';
 import { LEITNER_INTERVALS } from '../utils/leitnerStorage';
@@ -491,12 +492,13 @@ export const LeitnerDistributionChart: React.FC<LeitnerDistributionChartProps> =
       .attr('stroke', tokens.barStrokeColor)
       .attr('stroke-width', tokens.barStrokeWidth);
 
-    const supportsTransition =
-      typeof d3.transition === 'function' && typeof bars.transition === 'function';
+    const supportsTransition = typeof bars.transition === 'function';
 
     if (supportsTransition) {
       bars
-        .transition(d3.transition().duration(480).ease(d3.easeCubicOut))
+        .transition()
+        .duration(480)
+        .ease(d3.easeCubicOut)
         .attr('y', (d) => yScale(d.count))
         .attr('height', (d) => Math.max(d.count > 0 ? 4 : 0, innerHeight - yScale(d.count)));
     } else {
@@ -521,7 +523,9 @@ export const LeitnerDistributionChart: React.FC<LeitnerDistributionChartProps> =
 
     if (supportsTransition && typeof valueLabels.transition === 'function') {
       valueLabels
-        .transition(d3.transition().duration(480).ease(d3.easeCubicOut))
+        .transition()
+        .duration(480)
+        .ease(d3.easeCubicOut)
         .attr('y', (d) => Math.max(12, yScale(d.count) - 7))
         .style('opacity', 1);
     } else {
@@ -555,10 +559,12 @@ export const LeitnerDistributionChart: React.FC<LeitnerDistributionChartProps> =
     // Interactive hover highlighting
     barGroups
       .on('mouseenter', function (_event, d) {
-        const targetBar = d3.select(this).select('rect:nth-child(2)');
+        const targetBar = d3.select(this).select<SVGRectElement>('rect:nth-child(2)');
         if (supportsTransition && typeof targetBar.transition === 'function') {
           targetBar
-            .transition(d3.transition().duration(140))
+            .interrupt()
+            .transition()
+            .duration(140)
             .attr('stroke', tokens.barHoverStroke)
             .attr('stroke-width', Math.max(2, tokens.barStrokeWidth + 1))
             .style('filter', 'brightness(1.08)');
@@ -571,10 +577,12 @@ export const LeitnerDistributionChart: React.FC<LeitnerDistributionChartProps> =
         setHoveredBox(d);
       })
       .on('mouseleave', function () {
-        const targetBar = d3.select(this).select('rect:nth-child(2)');
+        const targetBar = d3.select(this).select<SVGRectElement>('rect:nth-child(2)');
         if (supportsTransition && typeof targetBar.transition === 'function') {
           targetBar
-            .transition(d3.transition().duration(140))
+            .interrupt()
+            .transition()
+            .duration(140)
             .attr('stroke', tokens.barStrokeColor)
             .attr('stroke-width', tokens.barStrokeWidth)
             .style('filter', 'none');
